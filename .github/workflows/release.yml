@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       startsWith(github.event.pull_request.head.ref, 'release/'))
+    runs-on: ubuntu-22.04-2cpu-8ram-75ssd
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Get version
+        id: get_version
+        uses: ./.github/actions/get-version
+
+      - name: Get prerelease
+        id: get_prerelease
+        uses: ./.github/actions/get-prerelease
+        with:
+          version: ${{ steps.get_version.outputs.version }}
+
+      - name: Get release notes
+        id: get_release_notes
+        uses: ./.github/actions/get-release-notes
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ steps.get_version.outputs.version }}
+          repo_owner: ${{ github.repository_owner }}
+          repo_name: ${{ github.event.repository.name }}
+
+      - name: Check if tag exists
+        id: tag_exists
+        uses: ./.github/actions/tag-exists
+        with:
+          tag: ${{ steps.get_version.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if tag exists
+        if: steps.tag_exists.outputs.exists == 'true'
+        run: |
+          echo "::error::Tag ${{ steps.get_version.outputs.version }} already exists"
+          exit 1
+
+      - name: Create release
+        uses: ./.github/actions/release-create
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.get_version.outputs.version }}
+          body: ${{ steps.get_release_notes.outputs.release-notes }}
+          tag: ${{ steps.get_version.outputs.version }}
+          commit: ${{ github.sha }}
+          prerelease: ${{ steps.get_prerelease.outputs.prerelease }}

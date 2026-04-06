@@ -1,0 +1,68 @@
+================================================================================
+================================================================================
+
+              Third-Party Software for myorganization-go
+
+                    https://github.com/auth0/myorganization-go
+
+--------------------------------------------------------------------------------
+
+The following 3rd-party software packages may be used by or distributed with
+myorganization-go. Any information relevant to third-party vendors listed
+below are collected using common, reasonable means.
+
+Date generated: 2026-03-03
+
+================================================================================
+================================================================================
+
+
+
+================================================================================
+
+                                Declared License
+
+================================================================================
+
+Apache-2.0
+
+
+
+================================================================================
+
+                              First Party Licenses
+
+================================================================================
+
+Copyright 2026 Okta, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+
+================================================================================
+
+                                  Dependencies
+
+================================================================================
+
+- github.com/google/uuid (v1.6.0) [BSD-3-Clause]
+- github.com/lestrrat-go/blackmagic (v1.0.4) [MIT]
+- github.com/lestrrat-go/dsig (v1.0.0) [MIT]
+- github.com/lestrrat-go/httpcc (v1.0.1) [MIT]
+- github.com/lestrrat-go/httprc/v3 (v3.0.4) [MIT]
+- github.com/lestrrat-go/jwx/v3 (v3.0.13) [MIT]
+- github.com/lestrrat-go/option/v2 (v2.0.0) [MIT]
+- github.com/valyala/fastjson (v1.6.7) [MIT]
+- golang.org/x/crypto (v0.48.0) [BSD-3-Clause]
+- golang.org/x/oauth2 (v0.35.0) [BSD-3-Clause]

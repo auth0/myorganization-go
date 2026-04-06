@@ -1,0 +1,13 @@
+# Coverage
+coverage.out
+.coverage/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.fern/

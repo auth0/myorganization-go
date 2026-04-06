@@ -1,0 +1,58 @@
+# Specify files that shouldn't be modified by Fern
+
+# Module files
+go.mod
+go.sum
+
+# Version file
+.version
+
+# GitHub configuration
+.github
+
+# Documentation
+README.md
+CLAUDE.md
+
+# Legal
+LICENSE
+NOTICE
+
+# Build
+Makefile
+
+# Linting
+.golangci.yml
+
+# SDK metadata (version, name)
+meta.go
+
+# Auth option extensions
+core/request_option.go
+core/request_option_auth.go
+option/request_option_auth.go
+
+# Client
+client/doc.go
+client/client_wrapper.go
+client/client_wrapper_test.go
+
+# Internal packages
+internal/auth0/auth0.go
+internal/auth0/auth0_test.go
+internal/transport/transport.go
+internal/transport/transport_test.go
+internal/transport/private_key_jwt.go
+internal/transport/private_key_jwt_test.go
+internal/telemetry/telemetry.go
+internal/telemetry/telemetry_test.go
+
+# Package documentation
+doc.go
+option/doc.go
+internal/transport/doc.go
+internal/auth0/doc.go
+internal/telemetry/doc.go
+internal/transport/debug.go
+internal/transport/debug_test.go
+.fern/
