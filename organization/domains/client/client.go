@@ -10,6 +10,7 @@ import (
 	option "github.com/auth0/myorganization-go/option"
 	identityproviders "github.com/auth0/myorganization-go/organization/domains/identityproviders"
 	verify "github.com/auth0/myorganization-go/organization/domains/verify"
+	http "net/http"
 )
 
 type Client struct {
@@ -38,22 +39,72 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Lists all domains pending and verified for an organization.
+// Retrieve a list of all pending and verified domains for this Organization.
 func (c *Client) List(
 	ctx context.Context,
+	request *myorganization.ListOrganizationDomainsRequestParameters,
 	opts ...option.RequestOption,
-) (*myorganization.ListOrganizationDomainsResponseContent, error) {
-	response, err := c.WithRawResponse.List(
-		ctx,
-		opts...,
+) (*core.Page[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://%7BTENANT%7D.auth0.com/my-org",
+	)
+	endpointURL := baseURL + "/domains"
+	queryParams, err := internal.QueryValuesWithDefaults(
+		request,
+		map[string]any{
+			"take": 50,
+		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return response.Body, nil
+	headers := internal.MergeHeaders(
+		c.options.ToHeader(),
+		options.ToHeader(),
+	)
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("from", *pageRequest.Cursor)
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        pageRequest.Response,
+			ErrorDecoder:    internal.NewErrorDecoder(myorganization.ErrorCodes),
+		}
+	}
+	readPageResponse := func(response *myorganization.ListOrganizationDomainsResponseContent) *core.PageResponse[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent] {
+		var zeroValue *string
+		next := response.Next
+		results := response.OrganizationDomains
+		return &core.PageResponse[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.From)
 }
 
-// Create a new domain for an organization.
+// Create a new domain for this Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	request *myorganization.CreateOrganizationDomainRequestContent,
@@ -70,7 +121,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Retrieve a domain for an organization.
+// Retrieve details of a domain specified by ID for this Organization.
 func (c *Client) Get(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,
@@ -87,7 +138,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Remove a domain from this organization.
+// Remove a domain specified by ID from this Organization.
 func (c *Client) Delete(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,

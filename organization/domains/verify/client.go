@@ -32,7 +32,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Get a verification text and start the domain verification process for a particular domain.
+// Initiate the verification process for a domain specified by ID for this Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,

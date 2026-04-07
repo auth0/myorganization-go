@@ -32,7 +32,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// List the Provisioning SCIM tokens for this identity provider.
+// Retrieve a list of [SCIM tokens](https://auth0.com/docs/authenticate/protocols/scim/configure-inbound-scim#scim-endpoints-and-tokens) for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 func (c *Client) List(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -49,7 +49,7 @@ func (c *Client) List(
 	return response.Body, nil
 }
 
-// Create a Provisioning SCIM token for this identity provider.
+// Create a new SCIM token for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -68,7 +68,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Delete a Provisioning SCIM configuration for an identity provider.
+// Revoke a SCIM token specified by token ID for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,

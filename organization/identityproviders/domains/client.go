@@ -32,7 +32,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Add a domain to the identity provider's list of domains for [Home Realm Discovery (HRD)](https://auth0.com/docs/get-started/architecture-scenarios/business-to-business/authentication#home-realm-discovery). The domain passed must be claimed and verified by this organization.
+// Associate a domain with an Identity Provider specified by ID for this Organization. The domain must be claimed and verified.
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -51,7 +51,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Remove a domain from an identity provider.
+// Remove a domain specified by name from an Identity Provider specified by ID for this Organization.
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,

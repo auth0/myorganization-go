@@ -10,215 +10,6 @@ import (
 	time "time"
 )
 
-var (
-	allowedAPIFieldIdentifier = big.NewInt(1 << 0)
-	allowedAPIFieldName       = big.NewInt(1 << 1)
-	allowedAPIFieldScopes     = big.NewInt(1 << 2)
-)
-
-type AllowedAPI struct {
-	// Unique identifier for the API. This value will be used as the audience parameter on authorization calls.
-	Identifier string `json:"identifier" url:"identifier"`
-	// A friendly name for the API. The following characters are not allowed < >
-	Name string `json:"name" url:"name"`
-	// The scopes available for this API.
-	Scopes []*AllowedAPIScope `json:"scopes" url:"scopes"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (a *AllowedAPI) GetIdentifier() string {
-	if a == nil {
-		return ""
-	}
-	return a.Identifier
-}
-
-func (a *AllowedAPI) GetName() string {
-	if a == nil {
-		return ""
-	}
-	return a.Name
-}
-
-func (a *AllowedAPI) GetScopes() []*AllowedAPIScope {
-	if a == nil {
-		return nil
-	}
-	return a.Scopes
-}
-
-func (a *AllowedAPI) GetExtraProperties() map[string]interface{} {
-	return a.extraProperties
-}
-
-func (a *AllowedAPI) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
-	}
-	a.explicitFields.Or(a.explicitFields, field)
-}
-
-// SetIdentifier sets the Identifier field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AllowedAPI) SetIdentifier(identifier string) {
-	a.Identifier = identifier
-	a.require(allowedAPIFieldIdentifier)
-}
-
-// SetName sets the Name field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AllowedAPI) SetName(name string) {
-	a.Name = name
-	a.require(allowedAPIFieldName)
-}
-
-// SetScopes sets the Scopes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AllowedAPI) SetScopes(scopes []*AllowedAPIScope) {
-	a.Scopes = scopes
-	a.require(allowedAPIFieldScopes)
-}
-
-func (a *AllowedAPI) UnmarshalJSON(data []byte) error {
-	type unmarshaler AllowedAPI
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*a = AllowedAPI(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *a)
-	if err != nil {
-		return err
-	}
-	a.extraProperties = extraProperties
-	a.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (a *AllowedAPI) MarshalJSON() ([]byte, error) {
-	type embed AllowedAPI
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*a),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (a *AllowedAPI) String() string {
-	if len(a.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(a); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", a)
-}
-
-var (
-	allowedAPIScopeFieldValue       = big.NewInt(1 << 0)
-	allowedAPIScopeFieldDescription = big.NewInt(1 << 1)
-)
-
-type AllowedAPIScope struct {
-	// The scope value.
-	Value string `json:"value" url:"value"`
-	// A description of the scope.
-	Description string `json:"description" url:"description"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (a *AllowedAPIScope) GetValue() string {
-	if a == nil {
-		return ""
-	}
-	return a.Value
-}
-
-func (a *AllowedAPIScope) GetDescription() string {
-	if a == nil {
-		return ""
-	}
-	return a.Description
-}
-
-func (a *AllowedAPIScope) GetExtraProperties() map[string]interface{} {
-	return a.extraProperties
-}
-
-func (a *AllowedAPIScope) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
-	}
-	a.explicitFields.Or(a.explicitFields, field)
-}
-
-// SetValue sets the Value field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AllowedAPIScope) SetValue(value string) {
-	a.Value = value
-	a.require(allowedAPIScopeFieldValue)
-}
-
-// SetDescription sets the Description field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AllowedAPIScope) SetDescription(description string) {
-	a.Description = description
-	a.require(allowedAPIScopeFieldDescription)
-}
-
-func (a *AllowedAPIScope) UnmarshalJSON(data []byte) error {
-	type unmarshaler AllowedAPIScope
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*a = AllowedAPIScope(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *a)
-	if err != nil {
-		return err
-	}
-	a.extraProperties = extraProperties
-	a.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (a *AllowedAPIScope) MarshalJSON() ([]byte, error) {
-	type embed AllowedAPIScope
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*a),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (a *AllowedAPIScope) String() string {
-	if len(a.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(a); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", a)
-}
-
 type BadRequestErrorBody struct {
 	ErrorResponseContent           *ErrorResponseContent
 	ValidationErrorResponseContent *ValidationErrorResponseContent
@@ -292,7 +83,7 @@ var (
 
 type BaseUserAttributeMapItem struct {
 	// The name of the user attribute.
-	UserAttribute string `json:"user_attribute" url:"user_attribute"`
+	UserAttribute *string `json:"user_attribute,omitempty" url:"user_attribute,omitempty"`
 	// The description of the user attribute.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// The label of the user attribute.
@@ -301,7 +92,7 @@ type BaseUserAttributeMapItem struct {
 	IsRequired bool `json:"is_required" url:"is_required"`
 	// Indicates whether this attribute is not part of the admin defined schema but is provided by the source. The property will be removed when a refresh operation is performed.
 	IsExtra bool `json:"is_extra" url:"is_extra"`
-	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will   be added when a refresh operation is performed.
+	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will be added when a refresh operation is performed.
 	IsMissing bool `json:"is_missing" url:"is_missing"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -312,10 +103,10 @@ type BaseUserAttributeMapItem struct {
 }
 
 func (b *BaseUserAttributeMapItem) GetUserAttribute() string {
-	if b == nil {
+	if b == nil || b.UserAttribute == nil {
 		return ""
 	}
-	return b.UserAttribute
+	return *b.UserAttribute
 }
 
 func (b *BaseUserAttributeMapItem) GetDescription() string {
@@ -366,7 +157,7 @@ func (b *BaseUserAttributeMapItem) require(field *big.Int) {
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BaseUserAttributeMapItem) SetUserAttribute(userAttribute string) {
+func (b *BaseUserAttributeMapItem) SetUserAttribute(userAttribute *string) {
 	b.UserAttribute = userAttribute
 	b.require(baseUserAttributeMapItemFieldUserAttribute)
 }
@@ -445,633 +236,6 @@ func (b *BaseUserAttributeMapItem) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// The type of application this client represents
-type ClientAppTypeEnum string
-
-const (
-	ClientAppTypeEnumNonInteractive ClientAppTypeEnum = "non_interactive"
-)
-
-func NewClientAppTypeEnumFromString(s string) (ClientAppTypeEnum, error) {
-	switch s {
-	case "non_interactive":
-		return ClientAppTypeEnumNonInteractive, nil
-	}
-	var t ClientAppTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (c ClientAppTypeEnum) Ptr() *ClientAppTypeEnum {
-	return &c
-}
-
-// Free text description of this client (max length: 140 characters).
-type ClientDescription = string
-
-// OAuth 2.0 grant type
-type ClientGrantTypeEnum string
-
-const (
-	ClientGrantTypeEnumClientCredentials ClientGrantTypeEnum = "client_credentials"
-)
-
-func NewClientGrantTypeEnumFromString(s string) (ClientGrantTypeEnum, error) {
-	switch s {
-	case "client_credentials":
-		return ClientGrantTypeEnumClientCredentials, nil
-	}
-	var t ClientGrantTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (c ClientGrantTypeEnum) Ptr() *ClientGrantTypeEnum {
-	return &c
-}
-
-// List of grant types supported for this application. Only accepts ['client_credentials']
-type ClientGrantTypes = []ClientGrantTypeEnum
-
-// ID of this client.
-type ClientID = string
-
-// Algorithm used to sign JWTs.
-type ClientJwtAlgEnum string
-
-const (
-	ClientJwtAlgEnumHs256 ClientJwtAlgEnum = "HS256"
-	ClientJwtAlgEnumRs256 ClientJwtAlgEnum = "RS256"
-	ClientJwtAlgEnumRs512 ClientJwtAlgEnum = "RS512"
-	ClientJwtAlgEnumPs256 ClientJwtAlgEnum = "PS256"
-)
-
-func NewClientJwtAlgEnumFromString(s string) (ClientJwtAlgEnum, error) {
-	switch s {
-	case "HS256":
-		return ClientJwtAlgEnumHs256, nil
-	case "RS256":
-		return ClientJwtAlgEnumRs256, nil
-	case "RS512":
-		return ClientJwtAlgEnumRs512, nil
-	case "PS256":
-		return ClientJwtAlgEnumPs256, nil
-	}
-	var t ClientJwtAlgEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (c ClientJwtAlgEnum) Ptr() *ClientJwtAlgEnum {
-	return &c
-}
-
-var (
-	clientJwtConfigurationFieldAlg               = big.NewInt(1 << 0)
-	clientJwtConfigurationFieldLifetimeInSeconds = big.NewInt(1 << 1)
-	clientJwtConfigurationFieldSecretEncoded     = big.NewInt(1 << 2)
-)
-
-type ClientJwtConfiguration struct {
-	Alg *ClientJwtAlgEnum `json:"alg,omitempty" url:"alg,omitempty"`
-	// Number of seconds the JWT will be valid
-	LifetimeInSeconds *float64 `json:"lifetime_in_seconds,omitempty" url:"lifetime_in_seconds,omitempty"`
-	// Whether the client secret is base64 encoded
-	SecretEncoded *bool `json:"secret_encoded,omitempty" url:"secret_encoded,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *ClientJwtConfiguration) GetAlg() ClientJwtAlgEnum {
-	if c == nil || c.Alg == nil {
-		return ""
-	}
-	return *c.Alg
-}
-
-func (c *ClientJwtConfiguration) GetLifetimeInSeconds() float64 {
-	if c == nil || c.LifetimeInSeconds == nil {
-		return 0
-	}
-	return *c.LifetimeInSeconds
-}
-
-func (c *ClientJwtConfiguration) GetSecretEncoded() bool {
-	if c == nil || c.SecretEncoded == nil {
-		return false
-	}
-	return *c.SecretEncoded
-}
-
-func (c *ClientJwtConfiguration) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *ClientJwtConfiguration) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetAlg sets the Alg field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ClientJwtConfiguration) SetAlg(alg *ClientJwtAlgEnum) {
-	c.Alg = alg
-	c.require(clientJwtConfigurationFieldAlg)
-}
-
-// SetLifetimeInSeconds sets the LifetimeInSeconds field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ClientJwtConfiguration) SetLifetimeInSeconds(lifetimeInSeconds *float64) {
-	c.LifetimeInSeconds = lifetimeInSeconds
-	c.require(clientJwtConfigurationFieldLifetimeInSeconds)
-}
-
-// SetSecretEncoded sets the SecretEncoded field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ClientJwtConfiguration) SetSecretEncoded(secretEncoded *bool) {
-	c.SecretEncoded = secretEncoded
-	c.require(clientJwtConfigurationFieldSecretEncoded)
-}
-
-func (c *ClientJwtConfiguration) UnmarshalJSON(data []byte) error {
-	type unmarshaler ClientJwtConfiguration
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = ClientJwtConfiguration(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ClientJwtConfiguration) MarshalJSON() ([]byte, error) {
-	type embed ClientJwtConfiguration
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *ClientJwtConfiguration) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// Name of this client (min length: 1 character, does not allow < or >).
-type ClientName = string
-
-// Authentication method for the token endpoint
-type ClientTokenEndpointAuthMethodEnum string
-
-const (
-	ClientTokenEndpointAuthMethodEnumClientSecretPost  ClientTokenEndpointAuthMethodEnum = "client_secret_post"
-	ClientTokenEndpointAuthMethodEnumClientSecretBasic ClientTokenEndpointAuthMethodEnum = "client_secret_basic"
-	ClientTokenEndpointAuthMethodEnumPrivateKeyJwt     ClientTokenEndpointAuthMethodEnum = "private_key_jwt"
-)
-
-func NewClientTokenEndpointAuthMethodEnumFromString(s string) (ClientTokenEndpointAuthMethodEnum, error) {
-	switch s {
-	case "client_secret_post":
-		return ClientTokenEndpointAuthMethodEnumClientSecretPost, nil
-	case "client_secret_basic":
-		return ClientTokenEndpointAuthMethodEnumClientSecretBasic, nil
-	case "private_key_jwt":
-		return ClientTokenEndpointAuthMethodEnumPrivateKeyJwt, nil
-	}
-	var t ClientTokenEndpointAuthMethodEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (c ClientTokenEndpointAuthMethodEnum) Ptr() *ClientTokenEndpointAuthMethodEnum {
-	return &c
-}
-
-var (
-	createClientGrantResponseContentFieldID          = big.NewInt(1 << 0)
-	createClientGrantResponseContentFieldClientID    = big.NewInt(1 << 1)
-	createClientGrantResponseContentFieldAudience    = big.NewInt(1 << 2)
-	createClientGrantResponseContentFieldScope       = big.NewInt(1 << 3)
-	createClientGrantResponseContentFieldSubjectType = big.NewInt(1 << 4)
-	createClientGrantResponseContentFieldCreatedAt   = big.NewInt(1 << 5)
-)
-
-type CreateClientGrantResponseContent struct {
-	// ID of the client grant.
-	ID string `json:"id" url:"id"`
-	// ID of the client.
-	ClientID string `json:"client_id" url:"client_id"`
-	// The audience (API identifier) of this client grant.
-	Audience string `json:"audience" url:"audience"`
-	// The scopes allowed for this client grant.
-	Scope       []string        `json:"scope" url:"scope"`
-	SubjectType SubjectTypeEnum `json:"subject_type" url:"subject_type"`
-	// The ISO 8601 date and time when the client grant was created.
-	CreatedAt time.Time `json:"created_at" url:"created_at"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CreateClientGrantResponseContent) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreateClientGrantResponseContent) GetClientID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ClientID
-}
-
-func (c *CreateClientGrantResponseContent) GetAudience() string {
-	if c == nil {
-		return ""
-	}
-	return c.Audience
-}
-
-func (c *CreateClientGrantResponseContent) GetScope() []string {
-	if c == nil {
-		return nil
-	}
-	return c.Scope
-}
-
-func (c *CreateClientGrantResponseContent) GetSubjectType() SubjectTypeEnum {
-	if c == nil {
-		return ""
-	}
-	return c.SubjectType
-}
-
-func (c *CreateClientGrantResponseContent) GetCreatedAt() time.Time {
-	if c == nil {
-		return time.Time{}
-	}
-	return c.CreatedAt
-}
-
-func (c *CreateClientGrantResponseContent) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CreateClientGrantResponseContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetID(id string) {
-	c.ID = id
-	c.require(createClientGrantResponseContentFieldID)
-}
-
-// SetClientID sets the ClientID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetClientID(clientID string) {
-	c.ClientID = clientID
-	c.require(createClientGrantResponseContentFieldClientID)
-}
-
-// SetAudience sets the Audience field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetAudience(audience string) {
-	c.Audience = audience
-	c.require(createClientGrantResponseContentFieldAudience)
-}
-
-// SetScope sets the Scope field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetScope(scope []string) {
-	c.Scope = scope
-	c.require(createClientGrantResponseContentFieldScope)
-}
-
-// SetSubjectType sets the SubjectType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetSubjectType(subjectType SubjectTypeEnum) {
-	c.SubjectType = subjectType
-	c.require(createClientGrantResponseContentFieldSubjectType)
-}
-
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantResponseContent) SetCreatedAt(createdAt time.Time) {
-	c.CreatedAt = createdAt
-	c.require(createClientGrantResponseContentFieldCreatedAt)
-}
-
-func (c *CreateClientGrantResponseContent) UnmarshalJSON(data []byte) error {
-	type embed CreateClientGrantResponseContent
-	var unmarshaler = struct {
-		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*c = CreateClientGrantResponseContent(unmarshaler.embed)
-	c.CreatedAt = unmarshaler.CreatedAt.Time()
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CreateClientGrantResponseContent) MarshalJSON() ([]byte, error) {
-	type embed CreateClientGrantResponseContent
-	var marshaler = struct {
-		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-	}{
-		embed:     embed(*c),
-		CreatedAt: internal.NewDateTime(c.CreatedAt),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CreateClientGrantResponseContent) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-var (
-	createClientResponseContentFieldClientID                = big.NewInt(1 << 0)
-	createClientResponseContentFieldName                    = big.NewInt(1 << 1)
-	createClientResponseContentFieldDescription             = big.NewInt(1 << 2)
-	createClientResponseContentFieldAppType                 = big.NewInt(1 << 3)
-	createClientResponseContentFieldTokenEndpointAuthMethod = big.NewInt(1 << 4)
-	createClientResponseContentFieldGrantTypes              = big.NewInt(1 << 5)
-	createClientResponseContentFieldJwtConfiguration        = big.NewInt(1 << 6)
-	createClientResponseContentFieldCreatedAt               = big.NewInt(1 << 7)
-	createClientResponseContentFieldUpdatedAt               = big.NewInt(1 << 8)
-	createClientResponseContentFieldClientSecret            = big.NewInt(1 << 9)
-)
-
-type CreateClientResponseContent struct {
-	ClientID                ClientID                           `json:"client_id" url:"client_id"`
-	Name                    ClientName                         `json:"name" url:"name"`
-	Description             *ClientDescription                 `json:"description,omitempty" url:"description,omitempty"`
-	AppType                 ClientAppTypeEnum                  `json:"app_type" url:"app_type"`
-	TokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum `json:"token_endpoint_auth_method,omitempty" url:"token_endpoint_auth_method,omitempty"`
-	GrantTypes              *ClientGrantTypes                  `json:"grant_types,omitempty" url:"grant_types,omitempty"`
-	JwtConfiguration        *ClientJwtConfiguration            `json:"jwt_configuration,omitempty" url:"jwt_configuration,omitempty"`
-	// Timestamp when the client was created
-	CreatedAt time.Time `json:"created_at" url:"created_at"`
-	// Timestamp when the client was last updated
-	UpdatedAt *time.Time `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// Client secret (ONLY returned on creation, never again)
-	ClientSecret string `json:"client_secret" url:"client_secret"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CreateClientResponseContent) GetClientID() ClientID {
-	if c == nil {
-		return ""
-	}
-	return c.ClientID
-}
-
-func (c *CreateClientResponseContent) GetName() ClientName {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CreateClientResponseContent) GetDescription() ClientDescription {
-	if c == nil || c.Description == nil {
-		return ""
-	}
-	return *c.Description
-}
-
-func (c *CreateClientResponseContent) GetAppType() ClientAppTypeEnum {
-	if c == nil {
-		return ""
-	}
-	return c.AppType
-}
-
-func (c *CreateClientResponseContent) GetTokenEndpointAuthMethod() ClientTokenEndpointAuthMethodEnum {
-	if c == nil || c.TokenEndpointAuthMethod == nil {
-		return ""
-	}
-	return *c.TokenEndpointAuthMethod
-}
-
-func (c *CreateClientResponseContent) GetGrantTypes() ClientGrantTypes {
-	if c == nil || c.GrantTypes == nil {
-		return nil
-	}
-	return *c.GrantTypes
-}
-
-func (c *CreateClientResponseContent) GetJwtConfiguration() ClientJwtConfiguration {
-	if c == nil || c.JwtConfiguration == nil {
-		return ClientJwtConfiguration{}
-	}
-	return *c.JwtConfiguration
-}
-
-func (c *CreateClientResponseContent) GetCreatedAt() time.Time {
-	if c == nil {
-		return time.Time{}
-	}
-	return c.CreatedAt
-}
-
-func (c *CreateClientResponseContent) GetUpdatedAt() time.Time {
-	if c == nil || c.UpdatedAt == nil {
-		return time.Time{}
-	}
-	return *c.UpdatedAt
-}
-
-func (c *CreateClientResponseContent) GetClientSecret() string {
-	if c == nil {
-		return ""
-	}
-	return c.ClientSecret
-}
-
-func (c *CreateClientResponseContent) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CreateClientResponseContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetClientID sets the ClientID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetClientID(clientID ClientID) {
-	c.ClientID = clientID
-	c.require(createClientResponseContentFieldClientID)
-}
-
-// SetName sets the Name field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetName(name ClientName) {
-	c.Name = name
-	c.require(createClientResponseContentFieldName)
-}
-
-// SetDescription sets the Description field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetDescription(description *ClientDescription) {
-	c.Description = description
-	c.require(createClientResponseContentFieldDescription)
-}
-
-// SetAppType sets the AppType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetAppType(appType ClientAppTypeEnum) {
-	c.AppType = appType
-	c.require(createClientResponseContentFieldAppType)
-}
-
-// SetTokenEndpointAuthMethod sets the TokenEndpointAuthMethod field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetTokenEndpointAuthMethod(tokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum) {
-	c.TokenEndpointAuthMethod = tokenEndpointAuthMethod
-	c.require(createClientResponseContentFieldTokenEndpointAuthMethod)
-}
-
-// SetGrantTypes sets the GrantTypes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetGrantTypes(grantTypes *ClientGrantTypes) {
-	c.GrantTypes = grantTypes
-	c.require(createClientResponseContentFieldGrantTypes)
-}
-
-// SetJwtConfiguration sets the JwtConfiguration field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetJwtConfiguration(jwtConfiguration *ClientJwtConfiguration) {
-	c.JwtConfiguration = jwtConfiguration
-	c.require(createClientResponseContentFieldJwtConfiguration)
-}
-
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetCreatedAt(createdAt time.Time) {
-	c.CreatedAt = createdAt
-	c.require(createClientResponseContentFieldCreatedAt)
-}
-
-// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetUpdatedAt(updatedAt *time.Time) {
-	c.UpdatedAt = updatedAt
-	c.require(createClientResponseContentFieldUpdatedAt)
-}
-
-// SetClientSecret sets the ClientSecret field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientResponseContent) SetClientSecret(clientSecret string) {
-	c.ClientSecret = clientSecret
-	c.require(createClientResponseContentFieldClientSecret)
-}
-
-func (c *CreateClientResponseContent) UnmarshalJSON(data []byte) error {
-	type embed CreateClientResponseContent
-	var unmarshaler = struct {
-		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-		UpdatedAt *internal.DateTime `json:"updated_at,omitempty"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*c = CreateClientResponseContent(unmarshaler.embed)
-	c.CreatedAt = unmarshaler.CreatedAt.Time()
-	c.UpdatedAt = unmarshaler.UpdatedAt.TimePtr()
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CreateClientResponseContent) MarshalJSON() ([]byte, error) {
-	type embed CreateClientResponseContent
-	var marshaler = struct {
-		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-		UpdatedAt *internal.DateTime `json:"updated_at,omitempty"`
-	}{
-		embed:     embed(*c),
-		CreatedAt: internal.NewDateTime(c.CreatedAt),
-		UpdatedAt: internal.NewOptionalDateTime(c.UpdatedAt),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CreateClientResponseContent) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 var (
 	createIDPProvisioningConfigResponseContentFieldIdentityProviderID   = big.NewInt(1 << 0)
 	createIDPProvisioningConfigResponseContentFieldIdentityProviderName = big.NewInt(1 << 1)
@@ -1086,14 +250,14 @@ var (
 type CreateIDPProvisioningConfigResponseContent struct {
 	IdentityProviderID IdpID `json:"identity_provider_id" url:"identity_provider_id"`
 	// The name of the identity provider
-	IdentityProviderName *string                                `json:"identity_provider_name,omitempty" url:"identity_provider_name,omitempty"`
+	IdentityProviderName string                                 `json:"identity_provider_name" url:"identity_provider_name"`
 	Strategy             IdpStrategyEnum                        `json:"strategy" url:"strategy"`
 	Method               IdpProvisioningMethodEnum              `json:"method" url:"method"`
 	Attributes           []*IdpProvisioningUserAttributeMapItem `json:"attributes" url:"attributes"`
 	// The ID of the user
-	UserIDAttribute string     `json:"user_id_attribute" url:"user_id_attribute"`
-	CreatedAt       *time.Time `json:"created_at,omitempty" url:"created_at,omitempty"`
-	UpdatedOn       *time.Time `json:"updated_on,omitempty" url:"updated_on,omitempty"`
+	UserIDAttribute string    `json:"user_id_attribute" url:"user_id_attribute"`
+	CreatedAt       time.Time `json:"created_at" url:"created_at"`
+	UpdatedOn       time.Time `json:"updated_on" url:"updated_on"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1110,10 +274,10 @@ func (c *CreateIDPProvisioningConfigResponseContent) GetIdentityProviderID() Idp
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetIdentityProviderName() string {
-	if c == nil || c.IdentityProviderName == nil {
+	if c == nil {
 		return ""
 	}
-	return *c.IdentityProviderName
+	return c.IdentityProviderName
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetStrategy() IdpStrategyEnum {
@@ -1145,17 +309,17 @@ func (c *CreateIDPProvisioningConfigResponseContent) GetUserIDAttribute() string
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetCreatedAt() time.Time {
-	if c == nil || c.CreatedAt == nil {
+	if c == nil {
 		return time.Time{}
 	}
-	return *c.CreatedAt
+	return c.CreatedAt
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetUpdatedOn() time.Time {
-	if c == nil || c.UpdatedOn == nil {
+	if c == nil {
 		return time.Time{}
 	}
-	return *c.UpdatedOn
+	return c.UpdatedOn
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetExtraProperties() map[string]interface{} {
@@ -1178,7 +342,7 @@ func (c *CreateIDPProvisioningConfigResponseContent) SetIdentityProviderID(ident
 
 // SetIdentityProviderName sets the IdentityProviderName field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateIDPProvisioningConfigResponseContent) SetIdentityProviderName(identityProviderName *string) {
+func (c *CreateIDPProvisioningConfigResponseContent) SetIdentityProviderName(identityProviderName string) {
 	c.IdentityProviderName = identityProviderName
 	c.require(createIDPProvisioningConfigResponseContentFieldIdentityProviderName)
 }
@@ -1213,14 +377,14 @@ func (c *CreateIDPProvisioningConfigResponseContent) SetUserIDAttribute(userIDAt
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateIDPProvisioningConfigResponseContent) SetCreatedAt(createdAt *time.Time) {
+func (c *CreateIDPProvisioningConfigResponseContent) SetCreatedAt(createdAt time.Time) {
 	c.CreatedAt = createdAt
 	c.require(createIDPProvisioningConfigResponseContentFieldCreatedAt)
 }
 
 // SetUpdatedOn sets the UpdatedOn field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateIDPProvisioningConfigResponseContent) SetUpdatedOn(updatedOn *time.Time) {
+func (c *CreateIDPProvisioningConfigResponseContent) SetUpdatedOn(updatedOn time.Time) {
 	c.UpdatedOn = updatedOn
 	c.require(createIDPProvisioningConfigResponseContentFieldUpdatedOn)
 }
@@ -1229,8 +393,8 @@ func (c *CreateIDPProvisioningConfigResponseContent) UnmarshalJSON(data []byte) 
 	type embed CreateIDPProvisioningConfigResponseContent
 	var unmarshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
-		UpdatedOn *internal.DateTime `json:"updated_on,omitempty"`
+		CreatedAt *internal.DateTime `json:"created_at"`
+		UpdatedOn *internal.DateTime `json:"updated_on"`
 	}{
 		embed: embed(*c),
 	}
@@ -1238,8 +402,8 @@ func (c *CreateIDPProvisioningConfigResponseContent) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*c = CreateIDPProvisioningConfigResponseContent(unmarshaler.embed)
-	c.CreatedAt = unmarshaler.CreatedAt.TimePtr()
-	c.UpdatedOn = unmarshaler.UpdatedOn.TimePtr()
+	c.CreatedAt = unmarshaler.CreatedAt.Time()
+	c.UpdatedOn = unmarshaler.UpdatedOn.Time()
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
@@ -1253,12 +417,12 @@ func (c *CreateIDPProvisioningConfigResponseContent) MarshalJSON() ([]byte, erro
 	type embed CreateIDPProvisioningConfigResponseContent
 	var marshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
-		UpdatedOn *internal.DateTime `json:"updated_on,omitempty"`
+		CreatedAt *internal.DateTime `json:"created_at"`
+		UpdatedOn *internal.DateTime `json:"updated_on"`
 	}{
 		embed:     embed(*c),
-		CreatedAt: internal.NewOptionalDateTime(c.CreatedAt),
-		UpdatedOn: internal.NewOptionalDateTime(c.UpdatedOn),
+		CreatedAt: internal.NewDateTime(c.CreatedAt),
+		UpdatedOn: internal.NewDateTime(c.UpdatedOn),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -1359,8 +523,6 @@ func (c *CreateIdpDomainResponseContent) String() string {
 }
 
 type CreateIdpProvisioningSCIMTokenResponseContent = *IdpSCIMTokenCreate
-
-type CreateMemberInvitationResponseContent = *MemberInvitation
 
 type CreateOrganizationDomainResponseContent = *OrgDomain
 
@@ -1474,32 +636,6 @@ func (d *DomainIdp) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
-}
-
-// Sets the policy for domain verification requirements
-type DomainVerificationEnum string
-
-const (
-	DomainVerificationEnumNone     DomainVerificationEnum = "none"
-	DomainVerificationEnumOptional DomainVerificationEnum = "optional"
-	DomainVerificationEnumRequired DomainVerificationEnum = "required"
-)
-
-func NewDomainVerificationEnumFromString(s string) (DomainVerificationEnum, error) {
-	switch s {
-	case "none":
-		return DomainVerificationEnumNone, nil
-	case "optional":
-		return DomainVerificationEnumOptional, nil
-	case "required":
-		return DomainVerificationEnumRequired, nil
-	}
-	var t DomainVerificationEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (d DomainVerificationEnum) Ptr() *DomainVerificationEnum {
-	return &d
 }
 
 var (
@@ -1633,84 +769,6 @@ func (e *ErrorResponseContent) String() string {
 }
 
 var (
-	getAllowedAPIsResponseContentFieldAPIs = big.NewInt(1 << 0)
-)
-
-type GetAllowedAPIsResponseContent struct {
-	APIs []*AllowedAPI `json:"apis" url:"apis"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (g *GetAllowedAPIsResponseContent) GetAPIs() []*AllowedAPI {
-	if g == nil {
-		return nil
-	}
-	return g.APIs
-}
-
-func (g *GetAllowedAPIsResponseContent) GetExtraProperties() map[string]interface{} {
-	return g.extraProperties
-}
-
-func (g *GetAllowedAPIsResponseContent) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetAPIs sets the APIs field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetAllowedAPIsResponseContent) SetAPIs(apis []*AllowedAPI) {
-	g.APIs = apis
-	g.require(getAllowedAPIsResponseContentFieldAPIs)
-}
-
-func (g *GetAllowedAPIsResponseContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetAllowedAPIsResponseContent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetAllowedAPIsResponseContent(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GetAllowedAPIsResponseContent) MarshalJSON() ([]byte, error) {
-	type embed GetAllowedAPIsResponseContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetAllowedAPIsResponseContent) String() string {
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
-}
-
-var (
 	getConfigurationResponseContentFieldAllowedStrategies          = big.NewInt(1 << 0)
 	getConfigurationResponseContentFieldConnectionDeletionBehavior = big.NewInt(1 << 1)
 )
@@ -1819,14 +877,14 @@ var (
 type GetIDPProvisioningConfigResponseContent struct {
 	IdentityProviderID IdpID `json:"identity_provider_id" url:"identity_provider_id"`
 	// The name of the identity provider
-	IdentityProviderName *string                                `json:"identity_provider_name,omitempty" url:"identity_provider_name,omitempty"`
+	IdentityProviderName string                                 `json:"identity_provider_name" url:"identity_provider_name"`
 	Strategy             IdpStrategyEnum                        `json:"strategy" url:"strategy"`
 	Method               IdpProvisioningMethodEnum              `json:"method" url:"method"`
 	Attributes           []*IdpProvisioningUserAttributeMapItem `json:"attributes" url:"attributes"`
 	// The ID of the user
-	UserIDAttribute string     `json:"user_id_attribute" url:"user_id_attribute"`
-	CreatedAt       *time.Time `json:"created_at,omitempty" url:"created_at,omitempty"`
-	UpdatedOn       *time.Time `json:"updated_on,omitempty" url:"updated_on,omitempty"`
+	UserIDAttribute string    `json:"user_id_attribute" url:"user_id_attribute"`
+	CreatedAt       time.Time `json:"created_at" url:"created_at"`
+	UpdatedOn       time.Time `json:"updated_on" url:"updated_on"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1843,10 +901,10 @@ func (g *GetIDPProvisioningConfigResponseContent) GetIdentityProviderID() IdpID 
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetIdentityProviderName() string {
-	if g == nil || g.IdentityProviderName == nil {
+	if g == nil {
 		return ""
 	}
-	return *g.IdentityProviderName
+	return g.IdentityProviderName
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetStrategy() IdpStrategyEnum {
@@ -1878,17 +936,17 @@ func (g *GetIDPProvisioningConfigResponseContent) GetUserIDAttribute() string {
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetCreatedAt() time.Time {
-	if g == nil || g.CreatedAt == nil {
+	if g == nil {
 		return time.Time{}
 	}
-	return *g.CreatedAt
+	return g.CreatedAt
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetUpdatedOn() time.Time {
-	if g == nil || g.UpdatedOn == nil {
+	if g == nil {
 		return time.Time{}
 	}
-	return *g.UpdatedOn
+	return g.UpdatedOn
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetExtraProperties() map[string]interface{} {
@@ -1911,7 +969,7 @@ func (g *GetIDPProvisioningConfigResponseContent) SetIdentityProviderID(identity
 
 // SetIdentityProviderName sets the IdentityProviderName field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetIDPProvisioningConfigResponseContent) SetIdentityProviderName(identityProviderName *string) {
+func (g *GetIDPProvisioningConfigResponseContent) SetIdentityProviderName(identityProviderName string) {
 	g.IdentityProviderName = identityProviderName
 	g.require(getIDPProvisioningConfigResponseContentFieldIdentityProviderName)
 }
@@ -1946,14 +1004,14 @@ func (g *GetIDPProvisioningConfigResponseContent) SetUserIDAttribute(userIDAttri
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetIDPProvisioningConfigResponseContent) SetCreatedAt(createdAt *time.Time) {
+func (g *GetIDPProvisioningConfigResponseContent) SetCreatedAt(createdAt time.Time) {
 	g.CreatedAt = createdAt
 	g.require(getIDPProvisioningConfigResponseContentFieldCreatedAt)
 }
 
 // SetUpdatedOn sets the UpdatedOn field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetIDPProvisioningConfigResponseContent) SetUpdatedOn(updatedOn *time.Time) {
+func (g *GetIDPProvisioningConfigResponseContent) SetUpdatedOn(updatedOn time.Time) {
 	g.UpdatedOn = updatedOn
 	g.require(getIDPProvisioningConfigResponseContentFieldUpdatedOn)
 }
@@ -1962,8 +1020,8 @@ func (g *GetIDPProvisioningConfigResponseContent) UnmarshalJSON(data []byte) err
 	type embed GetIDPProvisioningConfigResponseContent
 	var unmarshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
-		UpdatedOn *internal.DateTime `json:"updated_on,omitempty"`
+		CreatedAt *internal.DateTime `json:"created_at"`
+		UpdatedOn *internal.DateTime `json:"updated_on"`
 	}{
 		embed: embed(*g),
 	}
@@ -1971,8 +1029,8 @@ func (g *GetIDPProvisioningConfigResponseContent) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*g = GetIDPProvisioningConfigResponseContent(unmarshaler.embed)
-	g.CreatedAt = unmarshaler.CreatedAt.TimePtr()
-	g.UpdatedOn = unmarshaler.UpdatedOn.TimePtr()
+	g.CreatedAt = unmarshaler.CreatedAt.Time()
+	g.UpdatedOn = unmarshaler.UpdatedOn.Time()
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
@@ -1986,12 +1044,12 @@ func (g *GetIDPProvisioningConfigResponseContent) MarshalJSON() ([]byte, error) 
 	type embed GetIDPProvisioningConfigResponseContent
 	var marshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
-		UpdatedOn *internal.DateTime `json:"updated_on,omitempty"`
+		CreatedAt *internal.DateTime `json:"created_at"`
+		UpdatedOn *internal.DateTime `json:"updated_on"`
 	}{
 		embed:     embed(*g),
-		CreatedAt: internal.NewOptionalDateTime(g.CreatedAt),
-		UpdatedOn: internal.NewOptionalDateTime(g.UpdatedOn),
+		CreatedAt: internal.NewDateTime(g.CreatedAt),
+		UpdatedOn: internal.NewDateTime(g.UpdatedOn),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -2034,15 +1092,13 @@ type IdentityProviderConfigSamlp = *IdentityProvidersConfigStrategyBase
 type IdentityProviderConfigWaad = *IdentityProvidersConfigStrategyBase
 
 var (
-	identityProvidersConfigFieldOrganization        = big.NewInt(1 << 0)
-	identityProvidersConfigFieldStrategies          = big.NewInt(1 << 1)
-	identityProvidersConfigFieldDomainAliasesConfig = big.NewInt(1 << 2)
+	identityProvidersConfigFieldOrganization = big.NewInt(1 << 0)
+	identityProvidersConfigFieldStrategies   = big.NewInt(1 << 1)
 )
 
 type IdentityProvidersConfig struct {
-	Organization        *IdentityProvidersConfigOrganization     `json:"organization" url:"organization"`
-	Strategies          *IdentityProvidersConfigStrategyOverride `json:"strategies" url:"strategies"`
-	DomainAliasesConfig *IdentityProvidersConfigDomainAlias      `json:"domain_aliases_config" url:"domain_aliases_config"`
+	Organization *IdentityProvidersConfigOrganization     `json:"organization" url:"organization"`
+	Strategies   *IdentityProvidersConfigStrategyOverride `json:"strategies" url:"strategies"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2063,13 +1119,6 @@ func (i *IdentityProvidersConfig) GetStrategies() *IdentityProvidersConfigStrate
 		return nil
 	}
 	return i.Strategies
-}
-
-func (i *IdentityProvidersConfig) GetDomainAliasesConfig() *IdentityProvidersConfigDomainAlias {
-	if i == nil {
-		return nil
-	}
-	return i.DomainAliasesConfig
 }
 
 func (i *IdentityProvidersConfig) GetExtraProperties() map[string]interface{} {
@@ -2095,13 +1144,6 @@ func (i *IdentityProvidersConfig) SetOrganization(organization *IdentityProvider
 func (i *IdentityProvidersConfig) SetStrategies(strategies *IdentityProvidersConfigStrategyOverride) {
 	i.Strategies = strategies
 	i.require(identityProvidersConfigFieldStrategies)
-}
-
-// SetDomainAliasesConfig sets the DomainAliasesConfig field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdentityProvidersConfig) SetDomainAliasesConfig(domainAliasesConfig *IdentityProvidersConfigDomainAlias) {
-	i.DomainAliasesConfig = domainAliasesConfig
-	i.require(identityProvidersConfigFieldDomainAliasesConfig)
 }
 
 func (i *IdentityProvidersConfig) UnmarshalJSON(data []byte) error {
@@ -2143,99 +1185,20 @@ func (i *IdentityProvidersConfig) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// It is an object which contains domain verification related rules and restrictions.
-var (
-	identityProvidersConfigDomainAliasFieldDomainVerification = big.NewInt(1 << 0)
-)
-
-type IdentityProvidersConfigDomainAlias struct {
-	DomainVerification DomainVerificationEnum `json:"domain_verification" url:"domain_verification"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (i *IdentityProvidersConfigDomainAlias) GetDomainVerification() DomainVerificationEnum {
-	if i == nil {
-		return ""
-	}
-	return i.DomainVerification
-}
-
-func (i *IdentityProvidersConfigDomainAlias) GetExtraProperties() map[string]interface{} {
-	return i.extraProperties
-}
-
-func (i *IdentityProvidersConfigDomainAlias) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
-	}
-	i.explicitFields.Or(i.explicitFields, field)
-}
-
-// SetDomainVerification sets the DomainVerification field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdentityProvidersConfigDomainAlias) SetDomainVerification(domainVerification DomainVerificationEnum) {
-	i.DomainVerification = domainVerification
-	i.require(identityProvidersConfigDomainAliasFieldDomainVerification)
-}
-
-func (i *IdentityProvidersConfigDomainAlias) UnmarshalJSON(data []byte) error {
-	type unmarshaler IdentityProvidersConfigDomainAlias
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*i = IdentityProvidersConfigDomainAlias(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *i)
-	if err != nil {
-		return err
-	}
-	i.extraProperties = extraProperties
-	i.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (i *IdentityProvidersConfigDomainAlias) MarshalJSON() ([]byte, error) {
-	type embed IdentityProvidersConfigDomainAlias
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*i),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (i *IdentityProvidersConfigDomainAlias) String() string {
-	if len(i.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(i); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", i)
-}
-
 // The enabled features for the identity provider
 type IdentityProvidersConfigEnabledFeaturesEnum string
 
 const (
-	IdentityProvidersConfigEnabledFeaturesEnumProvisioning IdentityProvidersConfigEnabledFeaturesEnum = "provisioning"
-	IdentityProvidersConfigEnabledFeaturesEnumLogout       IdentityProvidersConfigEnabledFeaturesEnum = "logout"
+	IdentityProvidersConfigEnabledFeaturesEnumProvisioning    IdentityProvidersConfigEnabledFeaturesEnum = "provisioning"
+	IdentityProvidersConfigEnabledFeaturesEnumUniversalLogout IdentityProvidersConfigEnabledFeaturesEnum = "universal_logout"
 )
 
 func NewIdentityProvidersConfigEnabledFeaturesEnumFromString(s string) (IdentityProvidersConfigEnabledFeaturesEnum, error) {
 	switch s {
 	case "provisioning":
 		return IdentityProvidersConfigEnabledFeaturesEnumProvisioning, nil
-	case "logout":
-		return IdentityProvidersConfigEnabledFeaturesEnumLogout, nil
+	case "universal_logout":
+		return IdentityProvidersConfigEnabledFeaturesEnumUniversalLogout, nil
 	}
 	var t IdentityProvidersConfigEnabledFeaturesEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2346,16 +1309,13 @@ func (i *IdentityProvidersConfigOrganization) String() string {
 type IdentityProvidersConfigProvisioningMethodsEnum string
 
 const (
-	IdentityProvidersConfigProvisioningMethodsEnumSCIM       IdentityProvidersConfigProvisioningMethodsEnum = "scim"
-	IdentityProvidersConfigProvisioningMethodsEnumGoogleSync IdentityProvidersConfigProvisioningMethodsEnum = "google-sync"
+	IdentityProvidersConfigProvisioningMethodsEnumSCIM IdentityProvidersConfigProvisioningMethodsEnum = "scim"
 )
 
 func NewIdentityProvidersConfigProvisioningMethodsEnumFromString(s string) (IdentityProvidersConfigProvisioningMethodsEnum, error) {
 	switch s {
 	case "scim":
 		return IdentityProvidersConfigProvisioningMethodsEnumSCIM, nil
-	case "google-sync":
-		return IdentityProvidersConfigProvisioningMethodsEnumGoogleSync, nil
 	}
 	var t IdentityProvidersConfigProvisioningMethodsEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3564,19 +2524,16 @@ func (i *IdpAdfsUpdateRequest) String() string {
 }
 
 var (
-	idpBaseRequestFieldID                      = big.NewInt(1 << 0)
-	idpBaseRequestFieldName                    = big.NewInt(1 << 1)
-	idpBaseRequestFieldStrategy                = big.NewInt(1 << 2)
-	idpBaseRequestFieldDomains                 = big.NewInt(1 << 3)
-	idpBaseRequestFieldDisplayName             = big.NewInt(1 << 4)
-	idpBaseRequestFieldShowAsButton            = big.NewInt(1 << 5)
-	idpBaseRequestFieldAssignMembershipOnLogin = big.NewInt(1 << 6)
-	idpBaseRequestFieldIsEnabled               = big.NewInt(1 << 7)
-	idpBaseRequestFieldAccessLevel             = big.NewInt(1 << 8)
+	idpBaseRequestFieldName                    = big.NewInt(1 << 0)
+	idpBaseRequestFieldStrategy                = big.NewInt(1 << 1)
+	idpBaseRequestFieldDomains                 = big.NewInt(1 << 2)
+	idpBaseRequestFieldDisplayName             = big.NewInt(1 << 3)
+	idpBaseRequestFieldShowAsButton            = big.NewInt(1 << 4)
+	idpBaseRequestFieldAssignMembershipOnLogin = big.NewInt(1 << 5)
+	idpBaseRequestFieldIsEnabled               = big.NewInt(1 << 6)
 )
 
 type IdpBaseRequest struct {
-	ID *IdpID `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name     string          `json:"name" url:"name"`
 	Strategy IdpStrategyEnum `json:"strategy" url:"strategy"`
@@ -3589,21 +2546,13 @@ type IdpBaseRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (i *IdpBaseRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpBaseRequest) GetName() string {
@@ -3655,13 +2604,6 @@ func (i *IdpBaseRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpBaseRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpBaseRequest) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
@@ -3671,13 +2613,6 @@ func (i *IdpBaseRequest) require(field *big.Int) {
 		i.explicitFields = big.NewInt(0)
 	}
 	i.explicitFields.Or(i.explicitFields, field)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpBaseRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpBaseRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -3727,13 +2662,6 @@ func (i *IdpBaseRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *boo
 func (i *IdpBaseRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpBaseRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpBaseRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpBaseRequestFieldAccessLevel)
 }
 
 func (i *IdpBaseRequest) UnmarshalJSON(data []byte) error {
@@ -8235,7 +7163,7 @@ var (
 type IdpProvisioningConfig struct {
 	IdentityProviderID IdpID `json:"identity_provider_id" url:"identity_provider_id"`
 	// The name of the identity provider
-	IdentityProviderName *string                                `json:"identity_provider_name,omitempty" url:"identity_provider_name,omitempty"`
+	IdentityProviderName string                                 `json:"identity_provider_name" url:"identity_provider_name"`
 	Strategy             IdpStrategyEnum                        `json:"strategy" url:"strategy"`
 	Method               IdpProvisioningMethodEnum              `json:"method" url:"method"`
 	Attributes           []*IdpProvisioningUserAttributeMapItem `json:"attributes" url:"attributes"`
@@ -8257,10 +7185,10 @@ func (i *IdpProvisioningConfig) GetIdentityProviderID() IdpID {
 }
 
 func (i *IdpProvisioningConfig) GetIdentityProviderName() string {
-	if i == nil || i.IdentityProviderName == nil {
+	if i == nil {
 		return ""
 	}
-	return *i.IdentityProviderName
+	return i.IdentityProviderName
 }
 
 func (i *IdpProvisioningConfig) GetStrategy() IdpStrategyEnum {
@@ -8311,7 +7239,7 @@ func (i *IdpProvisioningConfig) SetIdentityProviderID(identityProviderID IdpID) 
 
 // SetIdentityProviderName sets the IdentityProviderName field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpProvisioningConfig) SetIdentityProviderName(identityProviderName *string) {
+func (i *IdpProvisioningConfig) SetIdentityProviderName(identityProviderName string) {
 	i.IdentityProviderName = identityProviderName
 	i.require(idpProvisioningConfigFieldIdentityProviderName)
 }
@@ -8387,15 +7315,12 @@ func (i *IdpProvisioningConfig) String() string {
 type IdpProvisioningMethodEnum string
 
 const (
-	IdpProvisioningMethodEnumGoogleSync IdpProvisioningMethodEnum = "google-sync"
-	IdpProvisioningMethodEnumNone       IdpProvisioningMethodEnum = "none"
-	IdpProvisioningMethodEnumSCIM       IdpProvisioningMethodEnum = "scim"
+	IdpProvisioningMethodEnumNone IdpProvisioningMethodEnum = "none"
+	IdpProvisioningMethodEnumSCIM IdpProvisioningMethodEnum = "scim"
 )
 
 func NewIdpProvisioningMethodEnumFromString(s string) (IdpProvisioningMethodEnum, error) {
 	switch s {
-	case "google-sync":
-		return IdpProvisioningMethodEnumGoogleSync, nil
 	case "none":
 		return IdpProvisioningMethodEnumNone, nil
 	case "scim":
@@ -8424,7 +7349,7 @@ var (
 
 type IdpProvisioningUserAttributeMapItem struct {
 	// The name of the user attribute.
-	UserAttribute string `json:"user_attribute" url:"user_attribute"`
+	UserAttribute *string `json:"user_attribute,omitempty" url:"user_attribute,omitempty"`
 	// The description of the user attribute.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// The label of the user attribute.
@@ -8433,7 +7358,7 @@ type IdpProvisioningUserAttributeMapItem struct {
 	IsRequired bool `json:"is_required" url:"is_required"`
 	// Indicates whether this attribute is not part of the admin defined schema but is provided by the source. The property will be removed when a refresh operation is performed.
 	IsExtra bool `json:"is_extra" url:"is_extra"`
-	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will   be added when a refresh operation is performed.
+	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will be added when a refresh operation is performed.
 	IsMissing bool `json:"is_missing" url:"is_missing"`
 	// The name of the provisioning field.
 	ProvisioningField string `json:"provisioning_field" url:"provisioning_field"`
@@ -8446,10 +7371,10 @@ type IdpProvisioningUserAttributeMapItem struct {
 }
 
 func (i *IdpProvisioningUserAttributeMapItem) GetUserAttribute() string {
-	if i == nil {
+	if i == nil || i.UserAttribute == nil {
 		return ""
 	}
-	return i.UserAttribute
+	return *i.UserAttribute
 }
 
 func (i *IdpProvisioningUserAttributeMapItem) GetDescription() string {
@@ -8507,7 +7432,7 @@ func (i *IdpProvisioningUserAttributeMapItem) require(field *big.Int) {
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpProvisioningUserAttributeMapItem) SetUserAttribute(userAttribute string) {
+func (i *IdpProvisioningUserAttributeMapItem) SetUserAttribute(userAttribute *string) {
 	i.UserAttribute = userAttribute
 	i.require(idpProvisioningUserAttributeMapItemFieldUserAttribute)
 }
@@ -9539,7 +8464,7 @@ type IdpSCIMTokenCreate struct {
 	// The token's valid until at timestamp (will not exist for non-expiring tokens).
 	ValidUntil *time.Time `json:"valid_until,omitempty" url:"valid_until,omitempty"`
 	// The SCIM client's token.
-	Token *string `json:"token,omitempty" url:"token,omitempty"`
+	Token string `json:"token" url:"token"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -9577,10 +8502,10 @@ func (i *IdpSCIMTokenCreate) GetValidUntil() time.Time {
 }
 
 func (i *IdpSCIMTokenCreate) GetToken() string {
-	if i == nil || i.Token == nil {
+	if i == nil {
 		return ""
 	}
-	return *i.Token
+	return i.Token
 }
 
 func (i *IdpSCIMTokenCreate) GetExtraProperties() map[string]interface{} {
@@ -9624,7 +8549,7 @@ func (i *IdpSCIMTokenCreate) SetValidUntil(validUntil *time.Time) {
 
 // SetToken sets the Token field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpSCIMTokenCreate) SetToken(token *string) {
+func (i *IdpSCIMTokenCreate) SetToken(token string) {
 	i.Token = token
 	i.require(idpSCIMTokenCreateFieldToken)
 }
@@ -10242,7 +9167,7 @@ var (
 
 type IdpUserAttributeMapItem struct {
 	// The name of the user attribute.
-	UserAttribute string `json:"user_attribute" url:"user_attribute"`
+	UserAttribute *string `json:"user_attribute,omitempty" url:"user_attribute,omitempty"`
 	// The description of the user attribute.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// The label of the user attribute.
@@ -10251,7 +9176,7 @@ type IdpUserAttributeMapItem struct {
 	IsRequired bool `json:"is_required" url:"is_required"`
 	// Indicates whether this attribute is not part of the admin defined schema but is provided by the source. The property will be removed when a refresh operation is performed.
 	IsExtra bool `json:"is_extra" url:"is_extra"`
-	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will   be added when a refresh operation is performed.
+	// Indicates whether this attribute is expected but not provided by the admin defined schema. The property will be added when a refresh operation is performed.
 	IsMissing bool `json:"is_missing" url:"is_missing"`
 	// The name(s) of the sso field.
 	SSOField []string `json:"sso_field" url:"sso_field"`
@@ -10264,10 +9189,10 @@ type IdpUserAttributeMapItem struct {
 }
 
 func (i *IdpUserAttributeMapItem) GetUserAttribute() string {
-	if i == nil {
+	if i == nil || i.UserAttribute == nil {
 		return ""
 	}
-	return i.UserAttribute
+	return *i.UserAttribute
 }
 
 func (i *IdpUserAttributeMapItem) GetDescription() string {
@@ -10325,7 +9250,7 @@ func (i *IdpUserAttributeMapItem) require(field *big.Int) {
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpUserAttributeMapItem) SetUserAttribute(userAttribute string) {
+func (i *IdpUserAttributeMapItem) SetUserAttribute(userAttribute *string) {
 	i.UserAttribute = userAttribute
 	i.require(idpUserAttributeMapItemFieldUserAttribute)
 }
@@ -11304,84 +10229,6 @@ func (i *IdpWaadUpdateRequest) String() string {
 type InvitationID = string
 
 var (
-	listClientsResponseContentFieldClients = big.NewInt(1 << 0)
-)
-
-type ListClientsResponseContent struct {
-	Clients []*OrgClient `json:"clients" url:"clients"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *ListClientsResponseContent) GetClients() []*OrgClient {
-	if l == nil {
-		return nil
-	}
-	return l.Clients
-}
-
-func (l *ListClientsResponseContent) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *ListClientsResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
-	}
-	l.explicitFields.Or(l.explicitFields, field)
-}
-
-// SetClients sets the Clients field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListClientsResponseContent) SetClients(clients []*OrgClient) {
-	l.Clients = clients
-	l.require(listClientsResponseContentFieldClients)
-}
-
-func (l *ListClientsResponseContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListClientsResponseContent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListClientsResponseContent(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *ListClientsResponseContent) MarshalJSON() ([]byte, error) {
-	type embed ListClientsResponseContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*l),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (l *ListClientsResponseContent) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
-}
-
-var (
 	listDomainIdentityProvidersResponseContentFieldIdentityProviders = big.NewInt(1 << 0)
 )
 
@@ -11724,20 +10571,20 @@ var (
 )
 
 type MemberInvitation struct {
-	ID                 InvitationID             `json:"id" url:"id"`
-	OrganizationID     OrgID                    `json:"organization_id" url:"organization_id"`
-	Inviter            *MemberInvitationInviter `json:"inviter" url:"inviter"`
-	Invitee            *MemberInvitationInvitee `json:"invitee" url:"invitee"`
+	ID                 *InvitationID            `json:"id,omitempty" url:"id,omitempty"`
+	OrganizationID     *OrgID                   `json:"organization_id,omitempty" url:"organization_id,omitempty"`
+	Inviter            *MemberInvitationInviter `json:"inviter,omitempty" url:"inviter,omitempty"`
+	Invitee            *MemberInvitationInvitee `json:"invitee,omitempty" url:"invitee,omitempty"`
 	IdentityProviderID *IdpID                   `json:"identity_provider_id,omitempty" url:"identity_provider_id,omitempty"`
 	// The ISO 8601 formatted timestamp representing the creation time of the invitation.
-	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	CreatedAt *time.Time `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The ISO 8601 formatted timestamp representing the expiration time of the invitation.
-	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
-	Roles     []string  `json:"roles,omitempty" url:"roles,omitempty"`
+	ExpiresAt *time.Time        `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	Roles     []OrgMemberRoleID `json:"roles,omitempty" url:"roles,omitempty"`
 	// The invitation url to be sent to the invitee.
-	InvitationURL string `json:"invitation_url" url:"invitation_url"`
+	InvitationURL *string `json:"invitation_url,omitempty" url:"invitation_url,omitempty"`
 	// The ID of the invitation ticket.
-	TicketID string `json:"ticket_id" url:"ticket_id"`
+	TicketID *string `json:"ticket_id,omitempty" url:"ticket_id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -11747,31 +10594,31 @@ type MemberInvitation struct {
 }
 
 func (m *MemberInvitation) GetID() InvitationID {
-	if m == nil {
+	if m == nil || m.ID == nil {
 		return ""
 	}
-	return m.ID
+	return *m.ID
 }
 
 func (m *MemberInvitation) GetOrganizationID() OrgID {
-	if m == nil {
+	if m == nil || m.OrganizationID == nil {
 		return ""
 	}
-	return m.OrganizationID
+	return *m.OrganizationID
 }
 
-func (m *MemberInvitation) GetInviter() *MemberInvitationInviter {
-	if m == nil {
-		return nil
+func (m *MemberInvitation) GetInviter() MemberInvitationInviter {
+	if m == nil || m.Inviter == nil {
+		return MemberInvitationInviter{}
 	}
-	return m.Inviter
+	return *m.Inviter
 }
 
-func (m *MemberInvitation) GetInvitee() *MemberInvitationInvitee {
-	if m == nil {
-		return nil
+func (m *MemberInvitation) GetInvitee() MemberInvitationInvitee {
+	if m == nil || m.Invitee == nil {
+		return MemberInvitationInvitee{}
 	}
-	return m.Invitee
+	return *m.Invitee
 }
 
 func (m *MemberInvitation) GetIdentityProviderID() IdpID {
@@ -11782,20 +10629,20 @@ func (m *MemberInvitation) GetIdentityProviderID() IdpID {
 }
 
 func (m *MemberInvitation) GetCreatedAt() time.Time {
-	if m == nil {
+	if m == nil || m.CreatedAt == nil {
 		return time.Time{}
 	}
-	return m.CreatedAt
+	return *m.CreatedAt
 }
 
 func (m *MemberInvitation) GetExpiresAt() time.Time {
-	if m == nil {
+	if m == nil || m.ExpiresAt == nil {
 		return time.Time{}
 	}
-	return m.ExpiresAt
+	return *m.ExpiresAt
 }
 
-func (m *MemberInvitation) GetRoles() []string {
+func (m *MemberInvitation) GetRoles() []OrgMemberRoleID {
 	if m == nil || m.Roles == nil {
 		return nil
 	}
@@ -11803,17 +10650,17 @@ func (m *MemberInvitation) GetRoles() []string {
 }
 
 func (m *MemberInvitation) GetInvitationURL() string {
-	if m == nil {
+	if m == nil || m.InvitationURL == nil {
 		return ""
 	}
-	return m.InvitationURL
+	return *m.InvitationURL
 }
 
 func (m *MemberInvitation) GetTicketID() string {
-	if m == nil {
+	if m == nil || m.TicketID == nil {
 		return ""
 	}
-	return m.TicketID
+	return *m.TicketID
 }
 
 func (m *MemberInvitation) GetExtraProperties() map[string]interface{} {
@@ -11829,14 +10676,14 @@ func (m *MemberInvitation) require(field *big.Int) {
 
 // SetID sets the ID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetID(id InvitationID) {
+func (m *MemberInvitation) SetID(id *InvitationID) {
 	m.ID = id
 	m.require(memberInvitationFieldID)
 }
 
 // SetOrganizationID sets the OrganizationID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetOrganizationID(organizationID OrgID) {
+func (m *MemberInvitation) SetOrganizationID(organizationID *OrgID) {
 	m.OrganizationID = organizationID
 	m.require(memberInvitationFieldOrganizationID)
 }
@@ -11864,35 +10711,35 @@ func (m *MemberInvitation) SetIdentityProviderID(identityProviderID *IdpID) {
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetCreatedAt(createdAt time.Time) {
+func (m *MemberInvitation) SetCreatedAt(createdAt *time.Time) {
 	m.CreatedAt = createdAt
 	m.require(memberInvitationFieldCreatedAt)
 }
 
 // SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetExpiresAt(expiresAt time.Time) {
+func (m *MemberInvitation) SetExpiresAt(expiresAt *time.Time) {
 	m.ExpiresAt = expiresAt
 	m.require(memberInvitationFieldExpiresAt)
 }
 
 // SetRoles sets the Roles field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetRoles(roles []string) {
+func (m *MemberInvitation) SetRoles(roles []OrgMemberRoleID) {
 	m.Roles = roles
 	m.require(memberInvitationFieldRoles)
 }
 
 // SetInvitationURL sets the InvitationURL field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetInvitationURL(invitationURL string) {
+func (m *MemberInvitation) SetInvitationURL(invitationURL *string) {
 	m.InvitationURL = invitationURL
 	m.require(memberInvitationFieldInvitationURL)
 }
 
 // SetTicketID sets the TicketID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *MemberInvitation) SetTicketID(ticketID string) {
+func (m *MemberInvitation) SetTicketID(ticketID *string) {
 	m.TicketID = ticketID
 	m.require(memberInvitationFieldTicketID)
 }
@@ -11901,8 +10748,8 @@ func (m *MemberInvitation) UnmarshalJSON(data []byte) error {
 	type embed MemberInvitation
 	var unmarshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-		ExpiresAt *internal.DateTime `json:"expires_at"`
+		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
+		ExpiresAt *internal.DateTime `json:"expires_at,omitempty"`
 	}{
 		embed: embed(*m),
 	}
@@ -11910,8 +10757,8 @@ func (m *MemberInvitation) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MemberInvitation(unmarshaler.embed)
-	m.CreatedAt = unmarshaler.CreatedAt.Time()
-	m.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	m.CreatedAt = unmarshaler.CreatedAt.TimePtr()
+	m.ExpiresAt = unmarshaler.ExpiresAt.TimePtr()
 	extraProperties, err := internal.ExtractExtraProperties(data, *m)
 	if err != nil {
 		return err
@@ -11925,12 +10772,12 @@ func (m *MemberInvitation) MarshalJSON() ([]byte, error) {
 	type embed MemberInvitation
 	var marshaler = struct {
 		embed
-		CreatedAt *internal.DateTime `json:"created_at"`
-		ExpiresAt *internal.DateTime `json:"expires_at"`
+		CreatedAt *internal.DateTime `json:"created_at,omitempty"`
+		ExpiresAt *internal.DateTime `json:"expires_at,omitempty"`
 	}{
 		embed:     embed(*m),
-		CreatedAt: internal.NewDateTime(m.CreatedAt),
-		ExpiresAt: internal.NewDateTime(m.ExpiresAt),
+		CreatedAt: internal.NewOptionalDateTime(m.CreatedAt),
+		ExpiresAt: internal.NewOptionalDateTime(m.ExpiresAt),
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
 	return json.Marshal(explicitMarshaler)
@@ -12139,6 +10986,8 @@ const (
 	OauthScopeDeleteMyOrgDomains OauthScope = "delete:my_org:domains"
 	// Create provisioning configuration for identity provider
 	OauthScopeCreateMyOrgIdentityProvidersProvisioning OauthScope = "create:my_org:identity_providers_provisioning"
+	// Update provisioning configuration for identity provider
+	OauthScopeUpdateMyOrgIdentityProvidersProvisioning OauthScope = "update:my_org:identity_providers_provisioning"
 	// Read provisioning configuration for identity provider
 	OauthScopeReadMyOrgIdentityProvidersProvisioning OauthScope = "read:my_org:identity_providers_provisioning"
 	// Delete provisioning configuration for identity provider
@@ -12157,8 +11006,10 @@ const (
 	OauthScopeDeleteMyOrgMemberInvitations OauthScope = "delete:my_org:member_invitations"
 	// List members for organization
 	OauthScopeReadMyOrgMembers OauthScope = "read:my_org:members"
-	// Delete members from organization
+	// Delete members from organization and the underlying users
 	OauthScopeDeleteMyOrgMembers OauthScope = "delete:my_org:members"
+	// Delete members from organization without deleting underlying users
+	OauthScopeDeleteMyOrgMemberships OauthScope = "delete:my_org:memberships"
 	// List Roles for members in organization
 	OauthScopeReadMyOrgMemberRoles OauthScope = "read:my_org:member_roles"
 	// Create Roles for members in organization
@@ -12209,6 +11060,8 @@ func NewOauthScopeFromString(s string) (OauthScope, error) {
 		return OauthScopeDeleteMyOrgDomains, nil
 	case "create:my_org:identity_providers_provisioning":
 		return OauthScopeCreateMyOrgIdentityProvidersProvisioning, nil
+	case "update:my_org:identity_providers_provisioning":
+		return OauthScopeUpdateMyOrgIdentityProvidersProvisioning, nil
 	case "read:my_org:identity_providers_provisioning":
 		return OauthScopeReadMyOrgIdentityProvidersProvisioning, nil
 	case "delete:my_org:identity_providers_provisioning":
@@ -12229,6 +11082,8 @@ func NewOauthScopeFromString(s string) (OauthScope, error) {
 		return OauthScopeReadMyOrgMembers, nil
 	case "delete:my_org:members":
 		return OauthScopeDeleteMyOrgMembers, nil
+	case "delete:my_org:memberships":
+		return OauthScopeDeleteMyOrgMemberships, nil
 	case "read:my_org:member_roles":
 		return OauthScopeReadMyOrgMemberRoles, nil
 	case "create:my_org:member_roles":
@@ -12252,165 +11107,6 @@ func NewOauthScopeFromString(s string) (OauthScope, error) {
 
 func (o OauthScope) Ptr() *OauthScope {
 	return &o
-}
-
-// API Client associated with the organization. Currently only supports M2M (non_interactive) clients.
-var (
-	orgClientFieldClientID                = big.NewInt(1 << 0)
-	orgClientFieldName                    = big.NewInt(1 << 1)
-	orgClientFieldDescription             = big.NewInt(1 << 2)
-	orgClientFieldAppType                 = big.NewInt(1 << 3)
-	orgClientFieldTokenEndpointAuthMethod = big.NewInt(1 << 4)
-	orgClientFieldGrantTypes              = big.NewInt(1 << 5)
-)
-
-type OrgClient struct {
-	ClientID                ClientID                           `json:"client_id" url:"client_id"`
-	Name                    ClientName                         `json:"name" url:"name"`
-	Description             *ClientDescription                 `json:"description,omitempty" url:"description,omitempty"`
-	AppType                 ClientAppTypeEnum                  `json:"app_type" url:"app_type"`
-	TokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum `json:"token_endpoint_auth_method,omitempty" url:"token_endpoint_auth_method,omitempty"`
-	GrantTypes              *ClientGrantTypes                  `json:"grant_types,omitempty" url:"grant_types,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (o *OrgClient) GetClientID() ClientID {
-	if o == nil {
-		return ""
-	}
-	return o.ClientID
-}
-
-func (o *OrgClient) GetName() ClientName {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *OrgClient) GetDescription() ClientDescription {
-	if o == nil || o.Description == nil {
-		return ""
-	}
-	return *o.Description
-}
-
-func (o *OrgClient) GetAppType() ClientAppTypeEnum {
-	if o == nil {
-		return ""
-	}
-	return o.AppType
-}
-
-func (o *OrgClient) GetTokenEndpointAuthMethod() ClientTokenEndpointAuthMethodEnum {
-	if o == nil || o.TokenEndpointAuthMethod == nil {
-		return ""
-	}
-	return *o.TokenEndpointAuthMethod
-}
-
-func (o *OrgClient) GetGrantTypes() ClientGrantTypes {
-	if o == nil || o.GrantTypes == nil {
-		return nil
-	}
-	return *o.GrantTypes
-}
-
-func (o *OrgClient) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OrgClient) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
-	}
-	o.explicitFields.Or(o.explicitFields, field)
-}
-
-// SetClientID sets the ClientID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetClientID(clientID ClientID) {
-	o.ClientID = clientID
-	o.require(orgClientFieldClientID)
-}
-
-// SetName sets the Name field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetName(name ClientName) {
-	o.Name = name
-	o.require(orgClientFieldName)
-}
-
-// SetDescription sets the Description field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetDescription(description *ClientDescription) {
-	o.Description = description
-	o.require(orgClientFieldDescription)
-}
-
-// SetAppType sets the AppType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetAppType(appType ClientAppTypeEnum) {
-	o.AppType = appType
-	o.require(orgClientFieldAppType)
-}
-
-// SetTokenEndpointAuthMethod sets the TokenEndpointAuthMethod field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetTokenEndpointAuthMethod(tokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum) {
-	o.TokenEndpointAuthMethod = tokenEndpointAuthMethod
-	o.require(orgClientFieldTokenEndpointAuthMethod)
-}
-
-// SetGrantTypes sets the GrantTypes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgClient) SetGrantTypes(grantTypes *ClientGrantTypes) {
-	o.GrantTypes = grantTypes
-	o.require(orgClientFieldGrantTypes)
-}
-
-func (o *OrgClient) UnmarshalJSON(data []byte) error {
-	type unmarshaler OrgClient
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = OrgClient(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *o)
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-	o.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OrgClient) MarshalJSON() ([]byte, error) {
-	type embed OrgClient
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*o),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (o *OrgClient) String() string {
-	if len(o.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
 }
 
 var (
@@ -12615,11 +11311,10 @@ var (
 	orgMemberFieldGivenName  = big.NewInt(1 << 3)
 	orgMemberFieldFamilyName = big.NewInt(1 << 4)
 	orgMemberFieldUserID     = big.NewInt(1 << 5)
-	orgMemberFieldIsGuest    = big.NewInt(1 << 6)
-	orgMemberFieldRoles      = big.NewInt(1 << 7)
-	orgMemberFieldCreatedAt  = big.NewInt(1 << 8)
-	orgMemberFieldUpdatedAt  = big.NewInt(1 << 9)
-	orgMemberFieldLastLogin  = big.NewInt(1 << 10)
+	orgMemberFieldRoles      = big.NewInt(1 << 6)
+	orgMemberFieldCreatedAt  = big.NewInt(1 << 7)
+	orgMemberFieldUpdatedAt  = big.NewInt(1 << 8)
+	orgMemberFieldLastLogin  = big.NewInt(1 << 9)
 )
 
 type OrgMember struct {
@@ -12632,11 +11327,9 @@ type OrgMember struct {
 	// First name
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
 	// Last name
-	FamilyName *string      `json:"family_name,omitempty" url:"family_name,omitempty"`
-	UserID     *OrgMemberID `json:"user_id,omitempty" url:"user_id,omitempty"`
-	// Is member a guest.
-	IsGuest *bool            `json:"is_guest,omitempty" url:"is_guest,omitempty"`
-	Roles   []*OrgMemberRole `json:"roles,omitempty" url:"roles,omitempty"`
+	FamilyName *string              `json:"family_name,omitempty" url:"family_name,omitempty"`
+	UserID     *OrgMemberIDReadOnly `json:"user_id,omitempty" url:"user_id,omitempty"`
+	Roles      []*OrgMemberRole     `json:"roles,omitempty" url:"roles,omitempty"`
 	// Date and time when this user was created (ISO_8601 format).
 	CreatedAt *time.Time `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// Date and time when this user was last updated (ISO_8601 format).
@@ -12686,18 +11379,11 @@ func (o *OrgMember) GetFamilyName() string {
 	return *o.FamilyName
 }
 
-func (o *OrgMember) GetUserID() OrgMemberID {
+func (o *OrgMember) GetUserID() OrgMemberIDReadOnly {
 	if o == nil || o.UserID == nil {
 		return ""
 	}
 	return *o.UserID
-}
-
-func (o *OrgMember) GetIsGuest() bool {
-	if o == nil || o.IsGuest == nil {
-		return false
-	}
-	return *o.IsGuest
 }
 
 func (o *OrgMember) GetRoles() []*OrgMemberRole {
@@ -12776,16 +11462,9 @@ func (o *OrgMember) SetFamilyName(familyName *string) {
 
 // SetUserID sets the UserID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgMember) SetUserID(userID *OrgMemberID) {
+func (o *OrgMember) SetUserID(userID *OrgMemberIDReadOnly) {
 	o.UserID = userID
 	o.require(orgMemberFieldUserID)
-}
-
-// SetIsGuest sets the IsGuest field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgMember) SetIsGuest(isGuest *bool) {
-	o.IsGuest = isGuest
-	o.require(orgMemberFieldIsGuest)
 }
 
 // SetRoles sets the Roles field and marks it as non-optional;
@@ -12872,7 +11551,7 @@ func (o *OrgMember) String() string {
 }
 
 // The user ID.
-type OrgMemberID = string
+type OrgMemberIDReadOnly = string
 
 var (
 	orgMemberRoleFieldID          = big.NewInt(1 << 0)
@@ -13016,29 +11695,6 @@ func (o OrganizationAccessLevelEnum) Ptr() *OrganizationAccessLevelEnum {
 }
 
 type StartOrganizationDomainVerificationResponseContent = *OrgDomain
-
-// The type of subject type
-type SubjectTypeEnum string
-
-const (
-	SubjectTypeEnumClient SubjectTypeEnum = "client"
-	SubjectTypeEnumUser   SubjectTypeEnum = "user"
-)
-
-func NewSubjectTypeEnumFromString(s string) (SubjectTypeEnum, error) {
-	switch s {
-	case "client":
-		return SubjectTypeEnumClient, nil
-	case "user":
-		return SubjectTypeEnumUser, nil
-	}
-	var t SubjectTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (s SubjectTypeEnum) Ptr() *SubjectTypeEnum {
-	return &s
-}
 
 type UpdateIdentityProviderRequestContent = *IdpUpdateKnownRequest
 

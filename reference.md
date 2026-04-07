@@ -12,7 +12,7 @@
 <dl>
 <dd>
 
-Retrieve details for an Organization.
+Retrieve details for this Organization, including display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
 </dd>
 </dl>
 </dd>
@@ -54,7 +54,7 @@ client.OrganizationDetails.Get(
 <dl>
 <dd>
 
-Update the details of a specific Organization, such as display name and branding options.
+Update details for this Organization, such as display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
 </dd>
 </dl>
 </dd>
@@ -78,7 +78,7 @@ request := &myorganization.OrgDetails{
         ),
         Branding: &myorganization.OrgBranding{
             LogoURL: myorganization.String(
-                "http://example.com/logo.png",
+                "https://example.com/logo.png",
             ),
             Colors: &myorganization.OrgBrandingColors{
                 Primary: "#000000",
@@ -130,7 +130,7 @@ client.OrganizationDetails.Update(
 <dl>
 <dd>
 
-Retrieve the configuration for the /my-org API. This will return all stored client information with the exception of attributes that are identifiers. Identifier attributes will be given their own endpoint that will return the full object. This will give the components all of the information they will need to be successful. The SDK provider for the components should manage fetching and caching this information for all components.
+Retrieve the My Organization API configuration. Returns only the `connection_deletion_behavior` and `allowed_strategies`. Identifier attributes such as `user_attribute_profile_id` and `connection_profile_id` are not included. Cache this information, as it does not change frequently.
 </dd>
 </dl>
 </dd>
@@ -173,7 +173,7 @@ client.Organization.Configuration.Get(
 <dl>
 <dd>
 
-Lists all domains pending and verified for an organization.
+Retrieve a list of all pending and verified domains for this Organization.
 </dd>
 </dl>
 </dd>
@@ -188,11 +188,43 @@ Lists all domains pending and verified for an organization.
 <dd>
 
 ```go
+request := &myorganization.ListOrganizationDomainsRequestParameters{
+        From: myorganization.String(
+            "from",
+        ),
+        Take: myorganization.Int(
+            1,
+        ),
+    }
 client.Organization.Domains.List(
         context.TODO(),
+        request,
     )
 }
 ```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**from:** `*string` — An optional cursor from which to start the selection (exclusive).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**take:** `*int` — Number of results per page. Defaults to 50.
+    
 </dd>
 </dl>
 </dd>
@@ -215,7 +247,7 @@ client.Organization.Domains.List(
 <dl>
 <dd>
 
-Create a new domain for an organization.
+Create a new domain for this Organization.
 </dd>
 </dl>
 </dd>
@@ -276,7 +308,7 @@ client.Organization.Domains.Create(
 <dl>
 <dd>
 
-Retrieve a domain for an organization.
+Retrieve details of a domain specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -334,7 +366,7 @@ client.Organization.Domains.Get(
 <dl>
 <dd>
 
-Remove a domain from this organization.
+Remove a domain specified by ID from this Organization.
 </dd>
 </dl>
 </dd>
@@ -393,7 +425,7 @@ client.Organization.Domains.Delete(
 <dl>
 <dd>
 
-List the identity providers associated with this organization.
+Retrieve a list of all Identity Providers for this Organization.
 </dd>
 </dl>
 </dd>
@@ -435,7 +467,7 @@ client.Organization.IdentityProviders.List(
 <dl>
 <dd>
 
-Create an identity provider associated with this organization.
+Create a new Identity Provider for this Organization.
 </dd>
 </dl>
 </dd>
@@ -516,7 +548,7 @@ client.Organization.IdentityProviders.Create(
 <dl>
 <dd>
 
-Retrieve the details for one particular identity-provider.
+Retrieve details of an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -574,7 +606,7 @@ client.Organization.IdentityProviders.Get(
 <dl>
 <dd>
 
-Delete an identity provider from this organization.
+Delete an Identity Provider specified by ID from this Organization. This will remove the association and delete the underlying Identity Provider. Members will no longer be able to authenticate using this Identity Provider.
 </dd>
 </dl>
 </dd>
@@ -632,7 +664,7 @@ client.Organization.IdentityProviders.Delete(
 <dl>
 <dd>
 
-Update an identity provider associated with this organization.
+Update the details of an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -718,7 +750,7 @@ client.Organization.IdentityProviders.Update(
 <dl>
 <dd>
 
-Triggers a refresh of attribute mappings on the identity provider by overriding it with the admin defined defaults. The endpoint doesn't accept any body parameters.
+Refresh the attribute mapping for an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
 </dd>
 </dl>
 </dd>
@@ -788,7 +820,7 @@ client.Organization.IdentityProviders.UpdateAttributes(
 <dl>
 <dd>
 
-Delete underlying identity provider from this organization.
+Remove an Identity Provider specified by ID from this Organization. This only removes the association; the underlying Identity Provider is not deleted. Members will no longer be able to authenticate using this Identity Provider.
 </dd>
 </dl>
 </dd>
@@ -834,341 +866,6 @@ client.Organization.IdentityProviders.Detach(
 </dl>
 </details>
 
-## Organization ClientGrants
-<details><summary><code>client.Organization.ClientGrants.Create(request) -> *myorganization.CreateClientGrantResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new client grant for the provided client.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-request := &myorganization.CreateClientGrantRequestContent{
-        ClientID: "client_id",
-        Audience: "audience",
-        Scope: []string{
-            "scope",
-        },
-    }
-client.Organization.ClientGrants.Create(
-        context.TODO(),
-        request,
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**clientID:** `string` — ID of the client.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**audience:** `string` — The audience (API identifier) of this client grant.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**scope:** `[]string` — Scopes allowed for this client grant.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**subjectType:** `*myorganization.SubjectTypeEnum` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Organization Clients
-<details><summary><code>client.Organization.Clients.List() -> *myorganization.ListClientsResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Lists all API clients associated with the developer organization. Clients are used to obtain credentials for programmatic API access.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-client.Organization.Clients.List(
-        context.TODO(),
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.Organization.Clients.Create(request) -> *myorganization.CreateClientResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new API client for the developer organization. The client can be used to obtain access tokens for calling tenant APIs.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-request := &myorganization.CreateClientRequestContent{
-        Name: "name",
-    }
-client.Organization.Clients.Create(
-        context.TODO(),
-        request,
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `myorganization.ClientName` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `*myorganization.ClientDescription` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**appType:** `*myorganization.ClientAppTypeEnum` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tokenEndpointAuthMethod:** `*myorganization.ClientTokenEndpointAuthMethodEnum` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**grantTypes:** `*myorganization.ClientGrantTypes` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**jwtConfiguration:** `*myorganization.ClientJwtConfiguration` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.Organization.Clients.Delete(ClientID) -> error</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an API client from the organization.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-client.Organization.Clients.Delete(
-        context.TODO(),
-        "client_id",
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**clientID:** `myorganization.ClientID` — The ID of the client
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Organization Configuration APIs
-<details><summary><code>client.Organization.Configuration.APIs.Get() -> *myorganization.GetAllowedAPIsResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve the list of allowed APIs/resource servers for this organization.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-client.Organization.Configuration.APIs.Get(
-        context.TODO(),
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Organization Configuration IdentityProviders
 <details><summary><code>client.Organization.Configuration.IdentityProviders.Get() -> myorganization.GetIdpConfigurationResponseContent</code></summary>
 <dl>
@@ -1182,7 +879,7 @@ client.Organization.Configuration.APIs.Get(
 <dl>
 <dd>
 
-Retrieve the connection profile for the application. This will give the components all of the information they will need to be successful. The SDK provider for the components should manage fetching and caching this information for all components.
+Retrieve the [Connection Profile](https://auth0.com/docs/authenticate/enterprise-connections/connection-profile) for this application. You should cache this information as it does not change frequently.
 </dd>
 </dl>
 </dd>
@@ -1225,7 +922,7 @@ client.Organization.Configuration.IdentityProviders.Get(
 <dl>
 <dd>
 
-Get a verification text and start the domain verification process for a particular domain.
+Initiate the verification process for a domain specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1284,7 +981,7 @@ client.Organization.Domains.Verify.Create(
 <dl>
 <dd>
 
-Retrieve the list of identity providers that have a specific organization domain alias.
+Retrieve the list of Identity Providers associated with a domain specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1343,7 +1040,7 @@ client.Organization.Domains.IdentityProviders.Get(
 <dl>
 <dd>
 
-Add a domain to the identity provider's list of domains for [Home Realm Discovery (HRD)](https://auth0.com/docs/get-started/architecture-scenarios/business-to-business/authentication#home-realm-discovery). The domain passed must be claimed and verified by this organization.
+Associate a domain with an Identity Provider specified by ID for this Organization. The domain must be claimed and verified.
 </dd>
 </dl>
 </dd>
@@ -1413,7 +1110,7 @@ client.Organization.IdentityProviders.Domains.Create(
 <dl>
 <dd>
 
-Remove a domain from an identity provider.
+Remove a domain specified by name from an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1481,7 +1178,7 @@ client.Organization.IdentityProviders.Domains.Delete(
 <dl>
 <dd>
 
-Retrieve the Provisioning configuration for this identity provider.
+Retrieve the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1539,7 +1236,7 @@ client.Organization.IdentityProviders.Provisioning.Get(
 <dl>
 <dd>
 
-Create the Provisioning configuration for this identity provider.
+Create a new Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1597,7 +1294,7 @@ client.Organization.IdentityProviders.Provisioning.Create(
 <dl>
 <dd>
 
-Delete the Provisioning configuration for an identity provider.
+Delete the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1655,7 +1352,7 @@ client.Organization.IdentityProviders.Provisioning.Delete(
 <dl>
 <dd>
 
-Triggers a refresh of attribute mappings on the provisioning configuration by overriding it with the admin defined defaults. The endpoint doesn't accept any body parameters.
+Refresh the attribute mapping for the Provisioning Configuration of an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
 </dd>
 </dl>
 </dd>
@@ -1726,7 +1423,7 @@ client.Organization.IdentityProviders.Provisioning.UpdateAttributes(
 <dl>
 <dd>
 
-List the Provisioning SCIM tokens for this identity provider.
+Retrieve a list of [SCIM tokens](https://auth0.com/docs/authenticate/protocols/scim/configure-inbound-scim#scim-endpoints-and-tokens) for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1784,7 +1481,7 @@ client.Organization.IdentityProviders.Provisioning.SCIMTokens.List(
 <dl>
 <dd>
 
-Create a Provisioning SCIM token for this identity provider.
+Create a new SCIM token for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>
@@ -1856,7 +1553,7 @@ client.Organization.IdentityProviders.Provisioning.SCIMTokens.Create(
 <dl>
 <dd>
 
-Delete a Provisioning SCIM configuration for an identity provider.
+Revoke a SCIM token specified by token ID for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
 </dd>
 </dl>
 </dd>

@@ -9,7 +9,7 @@ import (
 	big "math/big"
 )
 
-type GetOrganizationDetailsResponseContent = *OrgDetails
+type GetOrganizationDetailsResponseContent = *OrgDetailsRead
 
 // Theme defines how to style the login pages.
 var (
@@ -205,14 +205,12 @@ func (o *OrgBrandingColors) String() string {
 }
 
 var (
-	orgDetailsFieldID          = big.NewInt(1 << 0)
-	orgDetailsFieldName        = big.NewInt(1 << 1)
-	orgDetailsFieldDisplayName = big.NewInt(1 << 2)
-	orgDetailsFieldBranding    = big.NewInt(1 << 3)
+	orgDetailsFieldName        = big.NewInt(1 << 0)
+	orgDetailsFieldDisplayName = big.NewInt(1 << 1)
+	orgDetailsFieldBranding    = big.NewInt(1 << 2)
 )
 
 type OrgDetails struct {
-	ID *OrgID `json:"id,omitempty" url:"id,omitempty"`
 	// The name of this organization.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// Friendly name of this organization.
@@ -224,13 +222,6 @@ type OrgDetails struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (o *OrgDetails) GetID() OrgID {
-	if o == nil || o.ID == nil {
-		return ""
-	}
-	return *o.ID
 }
 
 func (o *OrgDetails) GetName() string {
@@ -263,13 +254,6 @@ func (o *OrgDetails) require(field *big.Int) {
 		o.explicitFields = big.NewInt(0)
 	}
 	o.explicitFields.Or(o.explicitFields, field)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (o *OrgDetails) SetID(id *OrgID) {
-	o.ID = id
-	o.require(orgDetailsFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -332,6 +316,134 @@ func (o *OrgDetails) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
+var (
+	orgDetailsReadFieldID          = big.NewInt(1 << 0)
+	orgDetailsReadFieldName        = big.NewInt(1 << 1)
+	orgDetailsReadFieldDisplayName = big.NewInt(1 << 2)
+	orgDetailsReadFieldBranding    = big.NewInt(1 << 3)
+)
+
+type OrgDetailsRead struct {
+	ID *OrgID `json:"id,omitempty" url:"id,omitempty"`
+	// The name of this organization.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// Friendly name of this organization.
+	DisplayName *string      `json:"display_name,omitempty" url:"display_name,omitempty"`
+	Branding    *OrgBranding `json:"branding,omitempty" url:"branding,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrgDetailsRead) GetID() OrgID {
+	if o == nil || o.ID == nil {
+		return ""
+	}
+	return *o.ID
+}
+
+func (o *OrgDetailsRead) GetName() string {
+	if o == nil || o.Name == nil {
+		return ""
+	}
+	return *o.Name
+}
+
+func (o *OrgDetailsRead) GetDisplayName() string {
+	if o == nil || o.DisplayName == nil {
+		return ""
+	}
+	return *o.DisplayName
+}
+
+func (o *OrgDetailsRead) GetBranding() OrgBranding {
+	if o == nil || o.Branding == nil {
+		return OrgBranding{}
+	}
+	return *o.Branding
+}
+
+func (o *OrgDetailsRead) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrgDetailsRead) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetailsRead) SetID(id *OrgID) {
+	o.ID = id
+	o.require(orgDetailsReadFieldID)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetailsRead) SetName(name *string) {
+	o.Name = name
+	o.require(orgDetailsReadFieldName)
+}
+
+// SetDisplayName sets the DisplayName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetailsRead) SetDisplayName(displayName *string) {
+	o.DisplayName = displayName
+	o.require(orgDetailsReadFieldDisplayName)
+}
+
+// SetBranding sets the Branding field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetailsRead) SetBranding(branding *OrgBranding) {
+	o.Branding = branding
+	o.require(orgDetailsReadFieldBranding)
+}
+
+func (o *OrgDetailsRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrgDetailsRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrgDetailsRead(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrgDetailsRead) MarshalJSON() ([]byte, error) {
+	type embed OrgDetailsRead
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (o *OrgDetailsRead) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
 type UpdateOrganizationDetailsRequestContent = *OrgDetails
 
-type UpdateOrganizationDetailsResponseContent = *OrgDetails
+type UpdateOrganizationDetailsResponseContent = *OrgDetailsRead

@@ -73,15 +73,24 @@ func TestOrganizationDomainsListWithWireMock(
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
 	)
+	request := &myorganization.ListOrganizationDomainsRequestParameters{
+		From: myorganization.String(
+			"from",
+		),
+		Take: myorganization.Int(
+			1,
+		),
+	}
 	_, invocationErr := client.Organization.Domains.List(
 		context.TODO(),
+		request,
 		option.WithHTTPHeader(
 			http.Header{"X-Test-Id": []string{"TestOrganizationDomainsListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationDomainsListWithWireMock", "GET", "/domains", nil, 1)
+	VerifyRequestCount(t, "TestOrganizationDomainsListWithWireMock", "GET", "/domains", map[string]string{"from": "from", "take": "1"}, 1)
 }
 
 func TestOrganizationDomainsCreateWithWireMock(

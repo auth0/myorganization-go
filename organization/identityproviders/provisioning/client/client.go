@@ -35,7 +35,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve the Provisioning configuration for this identity provider.
+// Retrieve the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 func (c *Client) Get(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -52,7 +52,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Create the Provisioning configuration for this identity provider.
+// Create a new Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -69,7 +69,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Delete the Provisioning configuration for an identity provider.
+// Delete the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -86,7 +86,7 @@ func (c *Client) Delete(
 	return nil
 }
 
-// Triggers a refresh of attribute mappings on the provisioning configuration by overriding it with the admin defined defaults. The endpoint doesn't accept any body parameters.
+// Refresh the attribute mapping for the Provisioning Configuration of an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
 func (c *Client) UpdateAttributes(
 	ctx context.Context,
 	idpID myorganization.IdpID,
