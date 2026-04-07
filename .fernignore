@@ -55,4 +55,20 @@ internal/auth0/doc.go
 internal/telemetry/doc.go
 internal/transport/debug.go
 internal/transport/debug_test.go
+
+# Fuzz tests
+internal/auth0/auth0_fuzz_test.go
+internal/telemetry/telemetry_fuzz_test.go
+internal/transport/private_key_jwt_fuzz_test.go
+
+# Fuzz test corpus
+internal/auth0/testdata/
+
+# Repo configuration
+.gitignore
+.fernignore
+
+# Documentation
+examples.md
+
 .fern/
