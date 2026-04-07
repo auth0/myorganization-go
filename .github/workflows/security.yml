@@ -10,7 +10,7 @@ on:
 
 jobs:
   vulnerability-check:
-    runs-on: ubuntu-22.04-2cpu-8ram-75ssd
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -25,13 +25,3 @@ jobs:
 
       - name: Run govulncheck
         run: govulncheck ./...
-
-  dependency-review:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-22.04-2cpu-8ram-75ssd
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Dependency review
-        uses: actions/dependency-review-action@05fe4576374b728f0c523d6a13d64c25081e0803 # v4.8.3

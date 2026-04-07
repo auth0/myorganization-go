@@ -120,6 +120,10 @@ func (s *privateKeyJwtTokenSource) createClientAssertion() (string, error) {
 		return "", fmt.Errorf("failed to build JWT: %w", err)
 	}
 
+	// Serialize "aud" as a string instead of a single-element array,
+	// as required by some authorization servers for client assertions.
+	token.Options().Enable(jwt.FlattenAudience)
+
 	signed, err := jwt.Sign(token, jwt.WithKey(s.alg, s.key))
 	if err != nil {
 		return "", fmt.Errorf("failed to sign JWT: %w", err)
