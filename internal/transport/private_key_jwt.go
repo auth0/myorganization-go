@@ -15,12 +15,6 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-func init() {
-	// Serialize single-element "aud" claims as a string instead of an array,
-	// e.g. "aud": "https://example.com/" rather than "aud": ["https://example.com/"].
-	jwt.Settings(jwt.WithFlattenAudience(true))
-}
-
 // allowedAlgorithms is the set of signing algorithms supported for Private Key JWT.
 var allowedAlgorithms = map[string]jwa.SignatureAlgorithm{
 	"RS256": jwa.RS256(),
@@ -125,6 +119,10 @@ func (s *privateKeyJwtTokenSource) createClientAssertion() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to build JWT: %w", err)
 	}
+
+	// Serialize "aud" as a string instead of a single-element array,
+	// as required by some authorization servers for client assertions.
+	token.Options().Enable(jwt.FlattenAudience)
 
 	signed, err := jwt.Sign(token, jwt.WithKey(s.alg, s.key))
 	if err != nil {
