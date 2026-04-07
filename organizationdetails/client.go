@@ -32,7 +32,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve details for an Organization.
+// Retrieve details for this Organization, including display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
 func (c *Client) Get(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -47,7 +47,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Update the details of a specific Organization, such as display name and branding options.
+// Update details for this Organization, such as display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
 func (c *Client) Update(
 	ctx context.Context,
 	request myorganization.UpdateOrganizationDetailsRequestContent,

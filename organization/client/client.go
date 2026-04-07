@@ -5,8 +5,6 @@ package client
 import (
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
-	clientgrants "github.com/auth0/myorganization-go/organization/clientgrants"
-	clients "github.com/auth0/myorganization-go/organization/clients"
 	client "github.com/auth0/myorganization-go/organization/configuration/client"
 	domainsclient "github.com/auth0/myorganization-go/organization/domains/client"
 	identityprovidersclient "github.com/auth0/myorganization-go/organization/identityproviders/client"
@@ -16,8 +14,6 @@ type Client struct {
 	Configuration     *client.Client
 	Domains           *domainsclient.Client
 	IdentityProviders *identityprovidersclient.Client
-	ClientGrants      *clientgrants.Client
-	Clients           *clients.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -29,8 +25,6 @@ func NewClient(options *core.RequestOptions) *Client {
 		Configuration:     client.NewClient(options),
 		Domains:           domainsclient.NewClient(options),
 		IdentityProviders: identityprovidersclient.NewClient(options),
-		ClientGrants:      clientgrants.NewClient(options),
-		Clients:           clients.NewClient(options),
 		options:           options,
 		baseURL:           options.BaseURL,
 		caller: internal.NewCaller(
