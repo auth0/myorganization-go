@@ -32,7 +32,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve the list of identity providers that have a specific organization domain alias.
+// Retrieve the list of Identity Providers associated with a domain specified by ID for this Organization.
 func (c *Client) Get(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,

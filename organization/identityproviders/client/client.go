@@ -38,7 +38,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// List the identity providers associated with this organization.
+// Retrieve a list of all Identity Providers for this Organization.
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -53,7 +53,7 @@ func (c *Client) List(
 	return response.Body, nil
 }
 
-// Create an identity provider associated with this organization.
+// Create a new Identity Provider for this Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	request myorganization.CreateIdentityProviderRequestContent,
@@ -70,7 +70,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Retrieve the details for one particular identity-provider.
+// Retrieve details of an Identity Provider specified by ID for this Organization.
 func (c *Client) Get(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -87,7 +87,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Delete an identity provider from this organization.
+// Delete an Identity Provider specified by ID from this Organization. This will remove the association and delete the underlying Identity Provider. Members will no longer be able to authenticate using this Identity Provider.
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -104,7 +104,7 @@ func (c *Client) Delete(
 	return nil
 }
 
-// Update an identity provider associated with this organization.
+// Update the details of an Identity Provider specified by ID for this Organization.
 func (c *Client) Update(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -123,7 +123,7 @@ func (c *Client) Update(
 	return response.Body, nil
 }
 
-// Triggers a refresh of attribute mappings on the identity provider by overriding it with the admin defined defaults. The endpoint doesn't accept any body parameters.
+// Refresh the attribute mapping for an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
 func (c *Client) UpdateAttributes(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -142,7 +142,7 @@ func (c *Client) UpdateAttributes(
 	return response.Body, nil
 }
 
-// Delete underlying identity provider from this organization.
+// Remove an Identity Provider specified by ID from this Organization. This only removes the association; the underlying Identity Provider is not deleted. Members will no longer be able to authenticate using this Identity Provider.
 func (c *Client) Detach(
 	ctx context.Context,
 	idpID myorganization.IdpID,

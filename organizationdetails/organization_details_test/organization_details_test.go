@@ -104,7 +104,7 @@ func TestOrganizationDetailsUpdateWithWireMock(
 		),
 		Branding: &myorganization.OrgBranding{
 			LogoURL: myorganization.String(
-				"http://example.com/logo.png",
+				"https://example.com/logo.png",
 			),
 			Colors: &myorganization.OrgBrandingColors{
 				Primary:        "#000000",

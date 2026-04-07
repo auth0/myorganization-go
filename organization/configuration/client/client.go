@@ -8,13 +8,11 @@ import (
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
-	apis "github.com/auth0/myorganization-go/organization/configuration/apis"
 	identityproviders "github.com/auth0/myorganization-go/organization/configuration/identityproviders"
 )
 
 type Client struct {
 	WithRawResponse   *RawClient
-	APIs              *apis.Client
 	IdentityProviders *identityproviders.Client
 
 	options *core.RequestOptions
@@ -24,7 +22,6 @@ type Client struct {
 
 func NewClient(options *core.RequestOptions) *Client {
 	return &Client{
-		APIs:              apis.NewClient(options),
 		IdentityProviders: identityproviders.NewClient(options),
 		WithRawResponse:   NewRawClient(options),
 		options:           options,
@@ -38,7 +35,7 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve the configuration for the /my-org API. This will return all stored client information with the exception of attributes that are identifiers. Identifier attributes will be given their own endpoint that will return the full object. This will give the components all of the information they will need to be successful. The SDK provider for the components should manage fetching and caching this information for all components.
+// Retrieve the My Organization API configuration. Returns only the `connection_deletion_behavior` and `allowed_strategies`. Identifier attributes such as `user_attribute_profile_id` and `connection_profile_id` are not included. Cache this information, as it does not change frequently.
 func (c *Client) Get(
 	ctx context.Context,
 	opts ...option.RequestOption,

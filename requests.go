@@ -9,52 +9,6 @@ import (
 )
 
 var (
-	createIdpDomainRequestContentFieldDomain = big.NewInt(1 << 0)
-)
-
-type CreateIdpDomainRequestContent struct {
-	Domain OrgDomainName `json:"domain" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (c *CreateIdpDomainRequestContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetDomain sets the Domain field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateIdpDomainRequestContent) SetDomain(domain OrgDomainName) {
-	c.Domain = domain
-	c.require(createIdpDomainRequestContentFieldDomain)
-}
-
-func (c *CreateIdpDomainRequestContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateIdpDomainRequestContent
-	var body unmarshaler
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	*c = CreateIdpDomainRequestContent(body)
-	return nil
-}
-
-func (c *CreateIdpDomainRequestContent) MarshalJSON() ([]byte, error) {
-	type embed CreateIdpDomainRequestContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-var (
 	createOrganizationDomainRequestContentFieldDomain = big.NewInt(1 << 0)
 )
 
@@ -91,173 +45,6 @@ func (c *CreateOrganizationDomainRequestContent) UnmarshalJSON(data []byte) erro
 
 func (c *CreateOrganizationDomainRequestContent) MarshalJSON() ([]byte, error) {
 	type embed CreateOrganizationDomainRequestContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-var (
-	createClientGrantRequestContentFieldClientID    = big.NewInt(1 << 0)
-	createClientGrantRequestContentFieldAudience    = big.NewInt(1 << 1)
-	createClientGrantRequestContentFieldScope       = big.NewInt(1 << 2)
-	createClientGrantRequestContentFieldSubjectType = big.NewInt(1 << 3)
-)
-
-type CreateClientGrantRequestContent struct {
-	// ID of the client.
-	ClientID string `json:"client_id" url:"-"`
-	// The audience (API identifier) of this client grant.
-	Audience string `json:"audience" url:"-"`
-	// Scopes allowed for this client grant.
-	Scope       []string         `json:"scope" url:"-"`
-	SubjectType *SubjectTypeEnum `json:"subject_type,omitempty" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (c *CreateClientGrantRequestContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetClientID sets the ClientID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantRequestContent) SetClientID(clientID string) {
-	c.ClientID = clientID
-	c.require(createClientGrantRequestContentFieldClientID)
-}
-
-// SetAudience sets the Audience field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantRequestContent) SetAudience(audience string) {
-	c.Audience = audience
-	c.require(createClientGrantRequestContentFieldAudience)
-}
-
-// SetScope sets the Scope field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantRequestContent) SetScope(scope []string) {
-	c.Scope = scope
-	c.require(createClientGrantRequestContentFieldScope)
-}
-
-// SetSubjectType sets the SubjectType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientGrantRequestContent) SetSubjectType(subjectType *SubjectTypeEnum) {
-	c.SubjectType = subjectType
-	c.require(createClientGrantRequestContentFieldSubjectType)
-}
-
-func (c *CreateClientGrantRequestContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateClientGrantRequestContent
-	var body unmarshaler
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	*c = CreateClientGrantRequestContent(body)
-	return nil
-}
-
-func (c *CreateClientGrantRequestContent) MarshalJSON() ([]byte, error) {
-	type embed CreateClientGrantRequestContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-var (
-	createClientRequestContentFieldName                    = big.NewInt(1 << 0)
-	createClientRequestContentFieldDescription             = big.NewInt(1 << 1)
-	createClientRequestContentFieldAppType                 = big.NewInt(1 << 2)
-	createClientRequestContentFieldTokenEndpointAuthMethod = big.NewInt(1 << 3)
-	createClientRequestContentFieldGrantTypes              = big.NewInt(1 << 4)
-	createClientRequestContentFieldJwtConfiguration        = big.NewInt(1 << 5)
-)
-
-type CreateClientRequestContent struct {
-	Name                    ClientName                         `json:"name" url:"-"`
-	Description             *ClientDescription                 `json:"description,omitempty" url:"-"`
-	AppType                 *ClientAppTypeEnum                 `json:"app_type,omitempty" url:"-"`
-	TokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum `json:"token_endpoint_auth_method,omitempty" url:"-"`
-	GrantTypes              *ClientGrantTypes                  `json:"grant_types,omitempty" url:"-"`
-	JwtConfiguration        *ClientJwtConfiguration            `json:"jwt_configuration,omitempty" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (c *CreateClientRequestContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetName sets the Name field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetName(name ClientName) {
-	c.Name = name
-	c.require(createClientRequestContentFieldName)
-}
-
-// SetDescription sets the Description field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetDescription(description *ClientDescription) {
-	c.Description = description
-	c.require(createClientRequestContentFieldDescription)
-}
-
-// SetAppType sets the AppType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetAppType(appType *ClientAppTypeEnum) {
-	c.AppType = appType
-	c.require(createClientRequestContentFieldAppType)
-}
-
-// SetTokenEndpointAuthMethod sets the TokenEndpointAuthMethod field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetTokenEndpointAuthMethod(tokenEndpointAuthMethod *ClientTokenEndpointAuthMethodEnum) {
-	c.TokenEndpointAuthMethod = tokenEndpointAuthMethod
-	c.require(createClientRequestContentFieldTokenEndpointAuthMethod)
-}
-
-// SetGrantTypes sets the GrantTypes field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetGrantTypes(grantTypes *ClientGrantTypes) {
-	c.GrantTypes = grantTypes
-	c.require(createClientRequestContentFieldGrantTypes)
-}
-
-// SetJwtConfiguration sets the JwtConfiguration field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateClientRequestContent) SetJwtConfiguration(jwtConfiguration *ClientJwtConfiguration) {
-	c.JwtConfiguration = jwtConfiguration
-	c.require(createClientRequestContentFieldJwtConfiguration)
-}
-
-func (c *CreateClientRequestContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateClientRequestContent
-	var body unmarshaler
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	*c = CreateClientRequestContent(body)
-	return nil
-}
-
-func (c *CreateClientRequestContent) MarshalJSON() ([]byte, error) {
-	type embed CreateClientRequestContent
 	var marshaler = struct {
 		embed
 	}{
@@ -312,4 +99,86 @@ func (c *CreateIdpProvisioningSCIMTokenRequestContent) MarshalJSON() ([]byte, er
 	}
 	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
 	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	createIdpDomainRequestContentFieldDomain = big.NewInt(1 << 0)
+)
+
+type CreateIdpDomainRequestContent struct {
+	Domain OrgDomainName `json:"domain" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateIdpDomainRequestContent) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetDomain sets the Domain field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpDomainRequestContent) SetDomain(domain OrgDomainName) {
+	c.Domain = domain
+	c.require(createIdpDomainRequestContentFieldDomain)
+}
+
+func (c *CreateIdpDomainRequestContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateIdpDomainRequestContent
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateIdpDomainRequestContent(body)
+	return nil
+}
+
+func (c *CreateIdpDomainRequestContent) MarshalJSON() ([]byte, error) {
+	type embed CreateIdpDomainRequestContent
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	listOrganizationDomainsRequestParametersFieldFrom = big.NewInt(1 << 0)
+	listOrganizationDomainsRequestParametersFieldTake = big.NewInt(1 << 1)
+)
+
+type ListOrganizationDomainsRequestParameters struct {
+	// An optional cursor from which to start the selection (exclusive).
+	From *string `json:"-" url:"from,omitempty"`
+	// Number of results per page. Defaults to 50.
+	Take *int `json:"-" url:"take,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListOrganizationDomainsRequestParameters) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetFrom sets the From field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationDomainsRequestParameters) SetFrom(from *string) {
+	l.From = from
+	l.require(listOrganizationDomainsRequestParametersFieldFrom)
+}
+
+// SetTake sets the Take field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationDomainsRequestParameters) SetTake(take *int) {
+	l.Take = take
+	l.require(listOrganizationDomainsRequestParametersFieldTake)
 }
