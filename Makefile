@@ -95,7 +95,7 @@ test-wiremock: ## Run WireMock integration tests. Usage: `make test-wiremock FIL
 		done; \
 		echo "==> WireMock is ready at $$WIREMOCK_URL"; \
 		echo "==> Running WireMock integration tests..."; \
-		WIREMOCK_PORT="$$WIREMOCK_PORT" go test \
+		WIREMOCK_URL="$$WIREMOCK_URL" go test \
 			-run "$(FILTER)" \
 			-cover \
 			-coverpkg=./... \
