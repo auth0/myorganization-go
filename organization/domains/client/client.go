@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+
 	myorganization "github.com/auth0/myorganization-go"
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
 	identityproviders "github.com/auth0/myorganization-go/organization/domains/identityproviders"
 	verify "github.com/auth0/myorganization-go/organization/domains/verify"
-	http "net/http"
 )
 
 type Client struct {

@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	myorganization "github.com/auth0/myorganization-go"
 	client "github.com/auth0/myorganization-go/client"
 	option "github.com/auth0/myorganization-go/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -23,11 +24,11 @@ func VerifyRequestCount(
 	queryParams map[string]string,
 	expected int,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	wiremockURL := os.Getenv("WIREMOCK_URL")
+	if wiremockURL == "" {
+		wiremockURL = "http://localhost:8080"
 	}
-	WiremockAdminURL := "http://localhost:" + wiremockPort + "/__admin"
+	WiremockAdminURL := wiremockURL + "/__admin"
 	var reqBody bytes.Buffer
 	reqBody.WriteString(`{"method":"`)
 	reqBody.WriteString(method)
@@ -65,13 +66,13 @@ func VerifyRequestCount(
 func TestOrganizationIdentityProvidersListWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	_, invocationErr := client.Organization.IdentityProviders.List(
 		context.TODO(),
@@ -87,13 +88,13 @@ func TestOrganizationIdentityProvidersListWithWireMock(
 func TestOrganizationIdentityProvidersCreateWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &myorganization.IdpKnownRequest{
 		IdpAdfsRequest: &myorganization.IdpAdfsRequest{
@@ -133,13 +134,13 @@ func TestOrganizationIdentityProvidersCreateWithWireMock(
 func TestOrganizationIdentityProvidersGetWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	_, invocationErr := client.Organization.IdentityProviders.Get(
 		context.TODO(),
@@ -156,13 +157,13 @@ func TestOrganizationIdentityProvidersGetWithWireMock(
 func TestOrganizationIdentityProvidersDeleteWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	invocationErr := client.Organization.IdentityProviders.Delete(
 		context.TODO(),
@@ -179,13 +180,13 @@ func TestOrganizationIdentityProvidersDeleteWithWireMock(
 func TestOrganizationIdentityProvidersUpdateWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &myorganization.IdpUpdateKnownRequest{
 		IdpAdfsUpdateRequest: &myorganization.IdpAdfsUpdateRequest{
@@ -222,13 +223,13 @@ func TestOrganizationIdentityProvidersUpdateWithWireMock(
 func TestOrganizationIdentityProvidersUpdateAttributesWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := map[string]any{
 		"key": "value",
@@ -249,13 +250,13 @@ func TestOrganizationIdentityProvidersUpdateAttributesWithWireMock(
 func TestOrganizationIdentityProvidersDetachWithWireMock(
 	t *testing.T,
 ) {
-	wiremockPort := os.Getenv("WIREMOCK_PORT")
-	if wiremockPort == "" {
-		wiremockPort = "8080"
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
 	}
-	WireMockBaseURL := "http://localhost:" + wiremockPort
 	client := client.NewWithOptions(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	invocationErr := client.Organization.IdentityProviders.Detach(
 		context.TODO(),

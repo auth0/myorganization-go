@@ -3,7 +3,40 @@
 package organization
 
 import (
+	myorganization "github.com/auth0/myorganization-go"
+	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 )
 
-var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{}
+var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
+	401: func(apiError *core.APIError) error {
+		return &myorganization.UnauthorizedError{
+			APIError: apiError,
+		}
+	},
+	403: func(apiError *core.APIError) error {
+		return &myorganization.ForbiddenError{
+			APIError: apiError,
+		}
+	},
+	404: func(apiError *core.APIError) error {
+		return &myorganization.NotFoundError{
+			APIError: apiError,
+		}
+	},
+	429: func(apiError *core.APIError) error {
+		return &myorganization.TooManyRequestsError{
+			APIError: apiError,
+		}
+	},
+	400: func(apiError *core.APIError) error {
+		return &myorganization.BadRequestError{
+			APIError: apiError,
+		}
+	},
+	409: func(apiError *core.APIError) error {
+		return &myorganization.ConflictError{
+			APIError: apiError,
+		}
+	},
+}

@@ -55,6 +55,52 @@ func (c *CreateOrganizationDomainRequestContent) MarshalJSON() ([]byte, error) {
 }
 
 var (
+	createIdpDomainRequestContentFieldDomain = big.NewInt(1 << 0)
+)
+
+type CreateIdpDomainRequestContent struct {
+	Domain OrgDomainName `json:"domain" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateIdpDomainRequestContent) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetDomain sets the Domain field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpDomainRequestContent) SetDomain(domain OrgDomainName) {
+	c.Domain = domain
+	c.require(createIdpDomainRequestContentFieldDomain)
+}
+
+func (c *CreateIdpDomainRequestContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateIdpDomainRequestContent
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateIdpDomainRequestContent(body)
+	return nil
+}
+
+func (c *CreateIdpDomainRequestContent) MarshalJSON() ([]byte, error) {
+	type embed CreateIdpDomainRequestContent
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
 	createIdpProvisioningSCIMTokenRequestContentFieldTokenLifetime = big.NewInt(1 << 0)
 )
 
@@ -92,52 +138,6 @@ func (c *CreateIdpProvisioningSCIMTokenRequestContent) UnmarshalJSON(data []byte
 
 func (c *CreateIdpProvisioningSCIMTokenRequestContent) MarshalJSON() ([]byte, error) {
 	type embed CreateIdpProvisioningSCIMTokenRequestContent
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-var (
-	createIdpDomainRequestContentFieldDomain = big.NewInt(1 << 0)
-)
-
-type CreateIdpDomainRequestContent struct {
-	Domain OrgDomainName `json:"domain" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (c *CreateIdpDomainRequestContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetDomain sets the Domain field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateIdpDomainRequestContent) SetDomain(domain OrgDomainName) {
-	c.Domain = domain
-	c.require(createIdpDomainRequestContentFieldDomain)
-}
-
-func (c *CreateIdpDomainRequestContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateIdpDomainRequestContent
-	var body unmarshaler
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	*c = CreateIdpDomainRequestContent(body)
-	return nil
-}
-
-func (c *CreateIdpDomainRequestContent) MarshalJSON() ([]byte, error) {
-	type embed CreateIdpDomainRequestContent
 	var marshaler = struct {
 		embed
 	}{

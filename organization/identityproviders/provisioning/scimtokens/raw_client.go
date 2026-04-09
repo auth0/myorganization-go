@@ -4,12 +4,13 @@ package scimtokens
 
 import (
 	context "context"
+	http "net/http"
+
 	myorganization "github.com/auth0/myorganization-go"
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
 	provisioning "github.com/auth0/myorganization-go/organization/identityproviders/provisioning"
-	http "net/http"
 )
 
 type RawClient struct {

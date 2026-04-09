@@ -145,6 +145,9 @@ func (b *BaseUserAttributeMapItem) GetIsMissing() bool {
 }
 
 func (b *BaseUserAttributeMapItem) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -225,6 +228,9 @@ func (b *BaseUserAttributeMapItem) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BaseUserAttributeMapItem) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -323,6 +329,9 @@ func (c *CreateIDPProvisioningConfigResponseContent) GetUpdatedOn() time.Time {
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -429,6 +438,9 @@ func (c *CreateIDPProvisioningConfigResponseContent) MarshalJSON() ([]byte, erro
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -466,6 +478,9 @@ func (c *CreateIdpDomainResponseContent) GetDomain() OrgDomainName {
 }
 
 func (c *CreateIdpDomainResponseContent) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -511,6 +526,9 @@ func (c *CreateIdpDomainResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateIdpDomainResponseContent) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -568,6 +586,9 @@ func (d *DomainIdp) GetDisplayName() string {
 }
 
 func (d *DomainIdp) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -627,6 +648,9 @@ func (d *DomainIdp) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DomainIdp) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -691,6 +715,9 @@ func (e *ErrorResponseContent) GetDetail() string {
 }
 
 func (e *ErrorResponseContent) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -757,6 +784,9 @@ func (e *ErrorResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ErrorResponseContent) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -800,6 +830,9 @@ func (g *GetConfigurationResponseContent) GetConnectionDeletionBehavior() IdpCon
 }
 
 func (g *GetConfigurationResponseContent) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -852,6 +885,9 @@ func (g *GetConfigurationResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetConfigurationResponseContent) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -950,6 +986,9 @@ func (g *GetIDPProvisioningConfigResponseContent) GetUpdatedOn() time.Time {
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1056,6 +1095,9 @@ func (g *GetIDPProvisioningConfigResponseContent) MarshalJSON() ([]byte, error) 
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1122,6 +1164,9 @@ func (i *IdentityProvidersConfig) GetStrategies() *IdentityProvidersConfigStrate
 }
 
 func (i *IdentityProvidersConfig) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1174,6 +1219,9 @@ func (i *IdentityProvidersConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdentityProvidersConfig) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1242,6 +1290,9 @@ func (i *IdentityProvidersConfigOrganization) GetCanSetAssignMembershipOnLogin()
 }
 
 func (i *IdentityProvidersConfigOrganization) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1294,6 +1345,9 @@ func (i *IdentityProvidersConfigOrganization) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdentityProvidersConfigOrganization) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1358,6 +1412,9 @@ func (i *IdentityProvidersConfigStrategyBase) GetProvisioningMethods() []Identit
 }
 
 func (i *IdentityProvidersConfigStrategyBase) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1410,6 +1467,9 @@ func (i *IdentityProvidersConfigStrategyBase) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdentityProvidersConfigStrategyBase) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1498,6 +1558,9 @@ func (i *IdentityProvidersConfigStrategyOverride) GetWaad() IdentityProviderConf
 }
 
 func (i *IdentityProvidersConfigStrategyOverride) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1585,6 +1648,9 @@ func (i *IdentityProvidersConfigStrategyOverride) MarshalJSON() ([]byte, error) 
 }
 
 func (i *IdentityProvidersConfigStrategyOverride) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1681,6 +1747,9 @@ func (i *IdpAdfsOptionsRequestAdfsServer) GetAdfsServer() string {
 }
 
 func (i *IdpAdfsOptionsRequestAdfsServer) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1726,6 +1795,9 @@ func (i *IdpAdfsOptionsRequestAdfsServer) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpAdfsOptionsRequestAdfsServer) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1822,6 +1894,9 @@ func (i *IdpAdfsOptionsResponseAdfsServer) GetAdfsServer() string {
 }
 
 func (i *IdpAdfsOptionsResponseAdfsServer) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1867,6 +1942,9 @@ func (i *IdpAdfsOptionsResponseAdfsServer) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpAdfsOptionsResponseAdfsServer) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1989,6 +2067,9 @@ func (i *IdpAdfsRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpAdfsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2097,6 +2178,9 @@ func (i *IdpAdfsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpAdfsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2238,6 +2322,9 @@ func (i *IdpAdfsResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpAdfsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2346,6 +2433,9 @@ func (i *IdpAdfsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpAdfsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2439,6 +2529,9 @@ func (i *IdpAdfsUpdateRequest) GetOptions() IdpAdfsOptionsRequest {
 }
 
 func (i *IdpAdfsUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2512,6 +2605,9 @@ func (i *IdpAdfsUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpAdfsUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2605,6 +2701,9 @@ func (i *IdpBaseRequest) GetIsEnabled() bool {
 }
 
 func (i *IdpBaseRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2692,6 +2791,9 @@ func (i *IdpBaseRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpBaseRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2803,6 +2905,9 @@ func (i *IdpBaseResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpBaseResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2904,6 +3009,9 @@ func (i *IdpBaseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpBaseResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2991,6 +3099,9 @@ func (i *IdpGoogleAppsOptionsRequest) GetIconURL() string {
 }
 
 func (i *IdpGoogleAppsOptionsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3057,6 +3168,9 @@ func (i *IdpGoogleAppsOptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpGoogleAppsOptionsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3111,6 +3225,9 @@ func (i *IdpGoogleAppsOptionsResponse) GetIconURL() string {
 }
 
 func (i *IdpGoogleAppsOptionsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3170,6 +3287,9 @@ func (i *IdpGoogleAppsOptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpGoogleAppsOptionsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3292,6 +3412,9 @@ func (i *IdpGoogleAppsRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpGoogleAppsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3400,6 +3523,9 @@ func (i *IdpGoogleAppsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpGoogleAppsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3541,6 +3667,9 @@ func (i *IdpGoogleAppsResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpGoogleAppsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3649,6 +3778,9 @@ func (i *IdpGoogleAppsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpGoogleAppsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3743,6 +3875,9 @@ func (i *IdpGoogleAppsUpdateRequest) GetOptions() IdpGoogleAppsOptionsRequest {
 }
 
 func (i *IdpGoogleAppsUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3816,6 +3951,9 @@ func (i *IdpGoogleAppsUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpGoogleAppsUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -4216,6 +4354,9 @@ func (i *IdpOidcOptionsRequest) GetDiscoveryURL() string {
 }
 
 func (i *IdpOidcOptionsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -4282,6 +4423,9 @@ func (i *IdpOidcOptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOidcOptionsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -4335,6 +4479,9 @@ func (i *IdpOidcOptionsResponse) GetDiscoveryURL() string {
 }
 
 func (i *IdpOidcOptionsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -4394,6 +4541,9 @@ func (i *IdpOidcOptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOidcOptionsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -4539,6 +4689,9 @@ func (i *IdpOidcRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpOidcRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -4647,6 +4800,9 @@ func (i *IdpOidcRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOidcRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -4797,6 +4953,9 @@ func (i *IdpOidcResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpOidcResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -4912,6 +5071,9 @@ func (i *IdpOidcResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOidcResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5006,6 +5168,9 @@ func (i *IdpOidcUpdateRequest) GetOptions() IdpOidcOptionsRequest {
 }
 
 func (i *IdpOidcUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5079,6 +5244,9 @@ func (i *IdpOidcUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOidcUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5143,6 +5311,9 @@ func (i *IdpOktaOptionsRequest) GetIconURL() string {
 }
 
 func (i *IdpOktaOptionsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5209,6 +5380,9 @@ func (i *IdpOktaOptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOktaOptionsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5263,6 +5437,9 @@ func (i *IdpOktaOptionsResponse) GetIconURL() string {
 }
 
 func (i *IdpOktaOptionsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5322,6 +5499,9 @@ func (i *IdpOktaOptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOktaOptionsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5444,6 +5624,9 @@ func (i *IdpOktaRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpOktaRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5552,6 +5735,9 @@ func (i *IdpOktaRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOktaRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5702,6 +5888,9 @@ func (i *IdpOktaResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpOktaResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5817,6 +6006,9 @@ func (i *IdpOktaResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOktaResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -5911,6 +6103,9 @@ func (i *IdpOktaUpdateRequest) GetOptions() IdpOktaOptionsRequest {
 }
 
 func (i *IdpOktaUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -5984,6 +6179,9 @@ func (i *IdpOktaUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOktaUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -6049,6 +6247,9 @@ func (i *IdpOptionsIdpInitiated) GetClientAuthorizequery() string {
 }
 
 func (i *IdpOptionsIdpInitiated) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -6115,6 +6316,9 @@ func (i *IdpOptionsIdpInitiated) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpOptionsIdpInitiated) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -6206,6 +6410,9 @@ func (i *IdpPingFederateOptionsRequest) GetIconURL() string {
 }
 
 func (i *IdpPingFederateOptionsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -6293,6 +6500,9 @@ func (i *IdpPingFederateOptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpPingFederateOptionsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -6384,6 +6594,9 @@ func (i *IdpPingFederateOptionsResponse) GetIconURL() string {
 }
 
 func (i *IdpPingFederateOptionsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -6471,6 +6684,9 @@ func (i *IdpPingFederateOptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpPingFederateOptionsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -6593,6 +6809,9 @@ func (i *IdpPingFederateRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpPingFederateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -6701,6 +6920,9 @@ func (i *IdpPingFederateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpPingFederateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -6842,6 +7064,9 @@ func (i *IdpPingFederateResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpPingFederateResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -6950,6 +7175,9 @@ func (i *IdpPingFederateResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpPingFederateResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -7044,6 +7272,9 @@ func (i *IdpPingFederateUpdateRequest) GetOptions() IdpPingFederateOptionsReques
 }
 
 func (i *IdpPingFederateUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -7117,6 +7348,9 @@ func (i *IdpPingFederateUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpPingFederateUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -7220,6 +7454,9 @@ func (i *IdpProvisioningConfig) GetUserIDAttribute() string {
 }
 
 func (i *IdpProvisioningConfig) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -7300,6 +7537,9 @@ func (i *IdpProvisioningConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpProvisioningConfig) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -7420,6 +7660,9 @@ func (i *IdpProvisioningUserAttributeMapItem) GetProvisioningField() string {
 }
 
 func (i *IdpProvisioningUserAttributeMapItem) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -7507,6 +7750,9 @@ func (i *IdpProvisioningUserAttributeMapItem) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpProvisioningUserAttributeMapItem) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -7753,6 +7999,9 @@ func (i *IdpSamlpRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpSamlpRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -7861,6 +8110,9 @@ func (i *IdpSamlpRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpSamlpRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -8011,6 +8263,9 @@ func (i *IdpSamlpResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpSamlpResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -8126,6 +8381,9 @@ func (i *IdpSamlpResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpSamlpResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -8220,6 +8478,9 @@ func (i *IdpSamlpUpdateRequest) GetOptions() IdpSamlpOptionsRequest {
 }
 
 func (i *IdpSamlpUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -8293,6 +8554,9 @@ func (i *IdpSamlpUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpSamlpUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -8357,6 +8621,9 @@ func (i *IdpSCIMTokenBase) GetValidUntil() time.Time {
 }
 
 func (i *IdpSCIMTokenBase) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -8435,6 +8702,9 @@ func (i *IdpSCIMTokenBase) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpSCIMTokenBase) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -8509,6 +8779,9 @@ func (i *IdpSCIMTokenCreate) GetToken() string {
 }
 
 func (i *IdpSCIMTokenCreate) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -8594,6 +8867,9 @@ func (i *IdpSCIMTokenCreate) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpSCIMTokenCreate) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -8744,6 +9020,9 @@ func (i *IdpUpdateBase) GetIsEnabled() bool {
 }
 
 func (i *IdpUpdateBase) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -8810,6 +9089,9 @@ func (i *IdpUpdateBase) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpUpdateBase) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -9238,6 +9520,9 @@ func (i *IdpUserAttributeMapItem) GetSSOField() []string {
 }
 
 func (i *IdpUserAttributeMapItem) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -9325,6 +9610,9 @@ func (i *IdpUserAttributeMapItem) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpUserAttributeMapItem) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -9389,6 +9677,9 @@ func (i *IdpWaadOptionsRequest) GetIconURL() string {
 }
 
 func (i *IdpWaadOptionsRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -9455,6 +9746,9 @@ func (i *IdpWaadOptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpWaadOptionsRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -9509,6 +9803,9 @@ func (i *IdpWaadOptionsResponse) GetIconURL() string {
 }
 
 func (i *IdpWaadOptionsResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -9568,6 +9865,9 @@ func (i *IdpWaadOptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpWaadOptionsResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -9690,6 +9990,9 @@ func (i *IdpWaadRequest) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpWaadRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -9798,6 +10101,9 @@ func (i *IdpWaadRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpWaadRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -9939,6 +10245,9 @@ func (i *IdpWaadResponse) GetAccessLevel() OrganizationAccessLevelEnum {
 }
 
 func (i *IdpWaadResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -10047,6 +10356,9 @@ func (i *IdpWaadResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpWaadResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -10141,6 +10453,9 @@ func (i *IdpWaadUpdateRequest) GetOptions() IdpWaadOptionsRequest {
 }
 
 func (i *IdpWaadUpdateRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -10214,6 +10529,9 @@ func (i *IdpWaadUpdateRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdpWaadUpdateRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -10250,6 +10568,9 @@ func (l *ListDomainIdentityProvidersResponseContent) GetIdentityProviders() []*D
 }
 
 func (l *ListDomainIdentityProvidersResponseContent) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -10295,6 +10616,9 @@ func (l *ListDomainIdentityProvidersResponseContent) MarshalJSON() ([]byte, erro
 }
 
 func (l *ListDomainIdentityProvidersResponseContent) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -10328,6 +10652,9 @@ func (l *ListIdentityProvidersResponseContent) GetIdentityProviders() []*IdpKnow
 }
 
 func (l *ListIdentityProvidersResponseContent) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -10373,6 +10700,9 @@ func (l *ListIdentityProvidersResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListIdentityProvidersResponseContent) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -10406,6 +10736,9 @@ func (l *ListIdpProvisioningSCIMTokensResponseContent) GetSCIMTokens() []IdpSCIM
 }
 
 func (l *ListIdpProvisioningSCIMTokensResponseContent) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -10451,6 +10784,9 @@ func (l *ListIdpProvisioningSCIMTokensResponseContent) MarshalJSON() ([]byte, er
 }
 
 func (l *ListIdpProvisioningSCIMTokensResponseContent) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -10494,6 +10830,9 @@ func (l *ListOrganizationDomainsResponseContent) GetOrganizationDomains() []*Org
 }
 
 func (l *ListOrganizationDomainsResponseContent) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -10546,6 +10885,9 @@ func (l *ListOrganizationDomainsResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListOrganizationDomainsResponseContent) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -10664,6 +11006,9 @@ func (m *MemberInvitation) GetTicketID() string {
 }
 
 func (m *MemberInvitation) GetExtraProperties() map[string]interface{} {
+	if m == nil {
+		return nil
+	}
 	return m.extraProperties
 }
 
@@ -10784,6 +11129,9 @@ func (m *MemberInvitation) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MemberInvitation) String() string {
+	if m == nil {
+		return "<nil>"
+	}
 	if len(m.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
 			return value
@@ -10818,6 +11166,9 @@ func (m *MemberInvitationInvitee) GetEmail() string {
 }
 
 func (m *MemberInvitationInvitee) GetExtraProperties() map[string]interface{} {
+	if m == nil {
+		return nil
+	}
 	return m.extraProperties
 }
 
@@ -10863,6 +11214,9 @@ func (m *MemberInvitationInvitee) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MemberInvitationInvitee) String() string {
+	if m == nil {
+		return "<nil>"
+	}
 	if len(m.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
 			return value
@@ -10897,6 +11251,9 @@ func (m *MemberInvitationInviter) GetName() string {
 }
 
 func (m *MemberInvitationInviter) GetExtraProperties() map[string]interface{} {
+	if m == nil {
+		return nil
+	}
 	return m.extraProperties
 }
 
@@ -10942,6 +11299,9 @@ func (m *MemberInvitationInviter) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MemberInvitationInviter) String() string {
+	if m == nil {
+		return "<nil>"
+	}
 	if len(m.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
 			return value
@@ -11178,6 +11538,9 @@ func (o *OrgDomain) GetVerificationHost() string {
 }
 
 func (o *OrgDomain) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -11258,6 +11621,9 @@ func (o *OrgDomain) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgDomain) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -11415,6 +11781,9 @@ func (o *OrgMember) GetLastLogin() time.Time {
 }
 
 func (o *OrgMember) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -11539,6 +11908,9 @@ func (o *OrgMember) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgMember) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -11593,6 +11965,9 @@ func (o *OrgMemberRole) GetDescription() string {
 }
 
 func (o *OrgMemberRole) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -11652,6 +12027,9 @@ func (o *OrgMemberRole) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgMemberRole) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -11763,6 +12141,9 @@ func (u *UserAttributes) GetFamilyName() string {
 }
 
 func (u *UserAttributes) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -11836,6 +12217,9 @@ func (u *UserAttributes) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UserAttributes) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -11900,6 +12284,9 @@ func (v *ValidationErrorDetail) GetSource() string {
 }
 
 func (v *ValidationErrorDetail) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -11966,6 +12353,9 @@ func (v *ValidationErrorDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (v *ValidationErrorDetail) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -12029,6 +12419,9 @@ func (v *ValidationErrorResponseContent) GetValidationErrors() []*ValidationErro
 }
 
 func (v *ValidationErrorResponseContent) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -12095,6 +12488,9 @@ func (v *ValidationErrorResponseContent) MarshalJSON() ([]byte, error) {
 }
 
 func (v *ValidationErrorResponseContent) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -12205,6 +12601,9 @@ func (a *Automatic) GetIconURL() string {
 }
 
 func (a *Automatic) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -12306,6 +12705,9 @@ func (a *Automatic) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Automatic) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -12340,6 +12742,9 @@ func (f *FedMetadataXML) GetFedMetadataXML() string {
 }
 
 func (f *FedMetadataXML) GetExtraProperties() map[string]interface{} {
+	if f == nil {
+		return nil
+	}
 	return f.extraProperties
 }
 
@@ -12385,6 +12790,9 @@ func (f *FedMetadataXML) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FedMetadataXML) String() string {
+	if f == nil {
+		return "<nil>"
+	}
 	if len(f.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(f.rawJSON); err == nil {
 			return value
@@ -12495,6 +12903,9 @@ func (m *Manual) GetIconURL() string {
 }
 
 func (m *Manual) GetExtraProperties() map[string]interface{} {
+	if m == nil {
+		return nil
+	}
 	return m.extraProperties
 }
 
@@ -12596,6 +13007,9 @@ func (m *Manual) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Manual) String() string {
+	if m == nil {
+		return "<nil>"
+	}
 	if len(m.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
 			return value

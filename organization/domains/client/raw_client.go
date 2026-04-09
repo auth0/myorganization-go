@@ -4,12 +4,13 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+
 	myorganization "github.com/auth0/myorganization-go"
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
 	organization "github.com/auth0/myorganization-go/organization"
-	http "net/http"
 )
 
 type RawClient struct {

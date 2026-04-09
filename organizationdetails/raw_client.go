@@ -4,11 +4,12 @@ package organizationdetails
 
 import (
 	context "context"
+	http "net/http"
+
 	myorganization "github.com/auth0/myorganization-go"
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
-	http "net/http"
 )
 
 type RawClient struct {

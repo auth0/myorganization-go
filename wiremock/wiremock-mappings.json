@@ -1,1 +1,922 @@
-{"mappings":[{"id":"29a326c1-09e0-4f0b-8b3a-55872064dbed","name":"Get Organization details - default","request":{"urlPathTemplate":"/details","method":"GET"},"response":{"status":200,"body":"{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}","headers":{"Content-Type":"application/json"}},"uuid":"29a326c1-09e0-4f0b-8b3a-55872064dbed","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}},"postServeActions":[]},{"id":"175cc45b-1346-42bb-baab-e94c1318da4c","name":"Update Organization details - default","request":{"urlPathTemplate":"/details","method":"PATCH"},"response":{"status":200,"body":"{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}","headers":{"Content-Type":"application/json"}},"uuid":"175cc45b-1346-42bb-baab-e94c1318da4c","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"ddb32f2f-bb17-4551-8c51-a0f78dbb849f","name":"Get My Organization API configuration - default","request":{"urlPathTemplate":"/config","method":"GET"},"response":{"status":200,"body":"{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"ddb32f2f-bb17-4551-8c51-a0f78dbb849f","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}},"postServeActions":[]},{"id":"bd99fc7f-05db-4c0a-8386-d3665f0719ca","name":"List domains - default","request":{"urlPathTemplate":"/domains","method":"GET"},"response":{"status":200,"body":"{\n  \"next\": \"eyJpZCI6Im9yZF96VzFVSGV0dmtCV1NXZENEZThEV3E3IiwidGVuYW50IjoidGVzdC10ZW5hbnQifQ\",\n  \"organization_domains\": [\n    {\n      \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n      \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n      \"domain\": \"acme.com\",\n      \"status\": \"pending\",\n      \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n      \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n    },\n    {\n      \"id\": \"ord_zW1UHetvkBWSWdCDe8DWq7\",\n      \"org_id\": \"org_nW1UHutvkVWSWdCG\",\n      \"domain\": \"roadrunner.com\",\n      \"status\": \"failed\",\n      \"verification_txt\": \"dove_text=bcxzpiujnlewp-23849jdkfjzxcfpiawer\",\n      \"verification_host\": \"_ss-verification.org_nW1UHutvkVWSWdCG.acme.com\"\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"bd99fc7f-05db-4c0a-8386-d3665f0719ca","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}},"postServeActions":[]},{"id":"0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2","name":"Create a domain - default","request":{"urlPathTemplate":"/domains","method":"POST"},"response":{"status":201,"body":"{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"a3c27ba8-01e3-4c19-8725-d3281492d7a6","name":"Get a domain - default","request":{"urlPathTemplate":"/domains/{domain_id}","method":"GET","pathParameters":{"domain_id":{"equalTo":"domain_id"}}},"response":{"status":200,"body":"{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"a3c27ba8-01e3-4c19-8725-d3281492d7a6","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"1719d730-6a86-4223-9c47-2370c25ba66e","name":"Delete a domain - default","request":{"urlPathTemplate":"/domains/{domain_id}","method":"DELETE","pathParameters":{"domain_id":{"equalTo":"domain_id"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"1719d730-6a86-4223-9c47-2370c25ba66e","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"8b89e2ae-9635-46f3-b4e8-fc575b9b6157","name":"List Identity Providers - default","request":{"urlPathTemplate":"/identity-providers","method":"GET"},"response":{"status":200,"body":"{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCC\",\n      \"name\": \"oidcIdp\",\n      \"strategy\": \"oidc\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"OIDC IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"full\",\n      \"options\": {\n        \"type\": \"front_channel\",\n        \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n        \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCD\",\n      \"name\": \"samlIdp\",\n      \"strategy\": \"samlp\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"Saml IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"limited\",\n      \"options\": {\n        \"metadataUrl\": \"a.metadata.url\",\n        \"signSAMLRequest\": true,\n        \"signatureAlgorithm\": \"rsa-sha256\",\n        \"digestAlgorithm\": \"sha256\",\n        \"protocolBinding\": \"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\",\n        \"bindingMethod\": \"HTTP-Redirect\",\n        \"cert\": \"MIIDQjCCAiugAwIBAgIRAMp+cW+SgQ2Yh7fF8v8b0OQwDQYJKoZIhvcNAQELBQAw...\",\n        \"idpInitiated\": {\n          \"enabled\": true,\n          \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n          \"client_protocol\": \"SAML\",\n          \"client_authorizequery\": \"redirect_uri=https://jwt.io&scope=openid email&response_type=token\"\n        }\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"8b89e2ae-9635-46f3-b4e8-fc575b9b6157","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}},"postServeActions":[]},{"id":"3e11b717-d0f8-4c19-9f25-9aaba50cba21","name":"Create an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers","method":"POST"},"response":{"status":201,"body":"{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"client_a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7did\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"3e11b717-d0f8-4c19-9f25-9aaba50cba21","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"58ee7dab-8682-4472-892e-bd11d76b0671","name":"Get an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}","method":"GET","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"58ee7dab-8682-4472-892e-bd11d76b0671","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"e4b7b937-746d-414a-8e19-3c75af53588c","name":"Delete an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}","method":"DELETE","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"e4b7b937-746d-414a-8e19-3c75af53588c","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"97299d05-1531-4f32-8e96-5a64fc5751f8","name":"Update an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}","method":"PATCH","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"97299d05-1531-4f32-8e96-5a64fc5751f8","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"9925321b-b5a5-4ccc-abb9-04139e218c65","name":"Refresh Identity Provider attribute mapping - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/update-attributes","method":"PUT","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"9925321b-b5a5-4ccc-abb9-04139e218c65","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"2ffdc889-0736-4d51-b445-80bcd1890d70","name":"Detach Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/detach","method":"POST","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"2ffdc889-0736-4d51-b445-80bcd1890d70","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"a032561e-549d-47e8-8ebb-dad06d2a6ce4","name":"Get Identity Provider configuration - default","request":{"urlPathTemplate":"/config/identity-providers","method":"GET"},"response":{"status":200,"body":"{\n  \"organization\": {\n    \"can_set_show_as_button\": true,\n    \"can_set_assign_membership_on_login\": false\n  },\n  \"strategies\": {\n    \"adfs\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"googleapps\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"oidc\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"okta\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"pingfederate\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"samlp\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"waad\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    }\n  }\n}","headers":{"Content-Type":"application/json"}},"uuid":"a032561e-549d-47e8-8ebb-dad06d2a6ce4","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}},"postServeActions":[]},{"id":"1a6cb620-9021-415a-98b0-c777a13f658e","name":"Start domain verification - default","request":{"urlPathTemplate":"/domains/{domain_id}/verify","method":"POST","pathParameters":{"domain_id":{"equalTo":"domain_id"}}},"response":{"status":202,"body":"{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"1a6cb620-9021-415a-98b0-c777a13f658e","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"736aebae-5a32-4a51-b735-1331ee4bd9ab","name":"List Identity Providers for a domain - default","request":{"urlPathTemplate":"/domains/{domain_id}/identity-providers","method":"GET","pathParameters":{"domain_id":{"equalTo":"domain_id"}}},"response":{"status":200,"body":"{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_2CZPv6IY0gWzDaQJ\",\n      \"name\": \"acme-engineering\",\n      \"display_name\": \"Acme Engineering\"\n    },\n    {\n      \"id\": \"con_2CZPv6IY0gWzDaQG\",\n      \"name\": \"acme-engineering-2\",\n      \"display_name\": \"Acme Engineering 2\"\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"736aebae-5a32-4a51-b735-1331ee4bd9ab","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"79faaaa8-f657-4412-a338-31db2a0c22fc","name":"Associate a domain with an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/domains","method":"POST","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":201,"body":"{\n  \"domain\": \"my-domain.com\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"79faaaa8-f657-4412-a338-31db2a0c22fc","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"ec8e9df7-568e-4572-8f95-04715c78bcd7","name":"Remove a domain from an Identity Provider - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/domains/{domain}","method":"DELETE","pathParameters":{"idp_id":{"equalTo":"idp_id"},"domain":{"equalTo":"domain"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"ec8e9df7-568e-4572-8f95-04715c78bcd7","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"3ef1a37b-4761-4156-9d5f-1330d174d47b","name":"Get a Provisioning Configuration - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning","method":"GET","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"blocked\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"active\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"3ef1a37b-4761-4156-9d5f-1330d174d47b","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"a58b006c-012a-4283-b025-5b0fc5d9c644","name":"Create a Provisioning Configuration - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning","method":"POST","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":201,"body":"{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"provisioning_field\": \"externalId\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"a58b006c-012a-4283-b025-5b0fc5d9c644","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"52055728-3827-4a87-bfe7-c41eb10fcbc4","name":"Delete a Provisioning Configuration - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning","method":"DELETE","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"52055728-3827-4a87-bfe7-c41eb10fcbc4","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"b52f90fe-1fb8-43af-b6c6-92036c78eafd","name":"Refresh Provisioning Configuration attribute mapping - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning/update-attributes","method":"PUT","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"blocked\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"active\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"b52f90fe-1fb8-43af-b6c6-92036c78eafd","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce","name":"List Provisioning SCIM tokens - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning/scim-tokens","method":"GET","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":200,"body":"{\n  \"scim_tokens\": [\n    {\n      \"token_id\": \"tok_abc8H9hWQ8LaCkdh\",\n      \"scopes\": [\n        \"scopes\"\n      ],\n      \"created_at\": \"2025-05-11T20:11:45Z\",\n      \"valid_until\": \"2025-05-11T20:26:45Z\"\n    },\n    {\n      \"token_id\": \"tok_tuz8H9hWQ8LaCkdh\",\n      \"scopes\": [\n        \"scopes\"\n      ],\n      \"created_at\": \"2025-04-11T20:11:45Z\",\n      \"valid_until\": \"2025-04-12T20:11:45Z\"\n    }\n  ]\n}","headers":{"Content-Type":"application/json"}},"uuid":"e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"97c46081-373a-430e-a4bb-91e718763cd8","name":"Create a Provisioning SCIM token - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning/scim-tokens","method":"POST","pathParameters":{"idp_id":{"equalTo":"idp_id"}}},"response":{"status":201,"body":"{\n  \"token_id\": \"tok_tuz8H9hWQ8LaCkdh\",\n  \"scopes\": [\n    \"scopes\"\n  ],\n  \"created_at\": \"2025-04-11T20:11:45Z\",\n  \"valid_until\": \"2025-04-12T20:11:45Z\",\n  \"token\": \"tok_tuz8H9hWQ8LaCkdh....\"\n}","headers":{"Content-Type":"application/json"}},"uuid":"97c46081-373a-430e-a4bb-91e718763cd8","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}},{"id":"594c868f-251a-4226-b44b-ebff69eb7448","name":"Revoke a Provisioning SCIM token - default","request":{"urlPathTemplate":"/identity-providers/{idp_id}/provisioning/scim-tokens/{idp_scim_token_id}","method":"DELETE","pathParameters":{"idp_id":{"equalTo":"idp_id"},"idp_scim_token_id":{"equalTo":"idp_scim_token_id"}}},"response":{"status":200,"body":"\"\"","headers":{"Content-Type":"application/json"}},"uuid":"594c868f-251a-4226-b44b-ebff69eb7448","persistent":true,"priority":3,"metadata":{"mocklab":{"created":{"at":"2020-01-01T00:00:00.000Z","via":"SYSTEM"}}}}],"meta":{"total":26}}
+{
+  "mappings": [
+    {
+      "id": "29a326c1-09e0-4f0b-8b3a-55872064dbed",
+      "name": "Get Organization details - default",
+      "request": {
+        "urlPathTemplate": "/details",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "29a326c1-09e0-4f0b-8b3a-55872064dbed",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "175cc45b-1346-42bb-baab-e94c1318da4c",
+      "name": "Update Organization details - default",
+      "request": {
+        "urlPathTemplate": "/details",
+        "method": "PATCH",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "175cc45b-1346-42bb-baab-e94c1318da4c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "ddb32f2f-bb17-4551-8c51-a0f78dbb849f",
+      "name": "Get My Organization API configuration - default",
+      "request": {
+        "urlPathTemplate": "/config",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "ddb32f2f-bb17-4551-8c51-a0f78dbb849f",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "bd99fc7f-05db-4c0a-8386-d3665f0719ca",
+      "name": "List domains - default",
+      "request": {
+        "urlPathTemplate": "/domains",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "from": {
+            "equalTo": "from"
+          },
+          "take": {
+            "equalTo": "1"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"next\": \"eyJpZCI6Im9yZF96VzFVSGV0dmtCV1NXZENEZThEV3E3IiwidGVuYW50IjoidGVzdC10ZW5hbnQifQ\",\n  \"organization_domains\": [\n    {\n      \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n      \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n      \"domain\": \"acme.com\",\n      \"status\": \"pending\",\n      \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n      \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n    },\n    {\n      \"id\": \"ord_zW1UHetvkBWSWdCDe8DWq7\",\n      \"org_id\": \"org_nW1UHutvkVWSWdCG\",\n      \"domain\": \"roadrunner.com\",\n      \"status\": \"failed\",\n      \"verification_txt\": \"dove_text=bcxzpiujnlewp-23849jdkfjzxcfpiawer\",\n      \"verification_host\": \"_ss-verification.org_nW1UHutvkVWSWdCG.acme.com\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "bd99fc7f-05db-4c0a-8386-d3665f0719ca",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2",
+      "name": "Create a domain - default",
+      "request": {
+        "urlPathTemplate": "/domains",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "a3c27ba8-01e3-4c19-8725-d3281492d7a6",
+      "name": "Get a domain - default",
+      "request": {
+        "urlPathTemplate": "/domains/{domain_id}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "domain_id": {
+            "equalTo": "domain_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a3c27ba8-01e3-4c19-8725-d3281492d7a6",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1719d730-6a86-4223-9c47-2370c25ba66e",
+      "name": "Delete a domain - default",
+      "request": {
+        "urlPathTemplate": "/domains/{domain_id}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "domain_id": {
+            "equalTo": "domain_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1719d730-6a86-4223-9c47-2370c25ba66e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "8b89e2ae-9635-46f3-b4e8-fc575b9b6157",
+      "name": "List Identity Providers - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCC\",\n      \"name\": \"oidcIdp\",\n      \"strategy\": \"oidc\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"OIDC IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"full\",\n      \"options\": {\n        \"type\": \"front_channel\",\n        \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n        \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCD\",\n      \"name\": \"samlIdp\",\n      \"strategy\": \"samlp\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"Saml IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"limited\",\n      \"options\": {\n        \"metadataUrl\": \"a.metadata.url\",\n        \"signSAMLRequest\": true,\n        \"signatureAlgorithm\": \"rsa-sha256\",\n        \"digestAlgorithm\": \"sha256\",\n        \"protocolBinding\": \"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\",\n        \"bindingMethod\": \"HTTP-Redirect\",\n        \"cert\": \"MIIDQjCCAiugAwIBAgIRAMp+cW+SgQ2Yh7fF8v8b0OQwDQYJKoZIhvcNAQELBQAw...\",\n        \"idpInitiated\": {\n          \"enabled\": true,\n          \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n          \"client_protocol\": \"SAML\",\n          \"client_authorizequery\": \"redirect_uri=https://jwt.io&scope=openid email&response_type=token\"\n        }\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8b89e2ae-9635-46f3-b4e8-fc575b9b6157",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "3e11b717-d0f8-4c19-9f25-9aaba50cba21",
+      "name": "Create an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"client_a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7did\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3e11b717-d0f8-4c19-9f25-9aaba50cba21",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "58ee7dab-8682-4472-892e-bd11d76b0671",
+      "name": "Get an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "58ee7dab-8682-4472-892e-bd11d76b0671",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "e4b7b937-746d-414a-8e19-3c75af53588c",
+      "name": "Delete an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "e4b7b937-746d-414a-8e19-3c75af53588c",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "97299d05-1531-4f32-8e96-5a64fc5751f8",
+      "name": "Update an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}",
+        "method": "PATCH",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "97299d05-1531-4f32-8e96-5a64fc5751f8",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "9925321b-b5a5-4ccc-abb9-04139e218c65",
+      "name": "Refresh Identity Provider attribute mapping - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/update-attributes",
+        "method": "PUT",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "9925321b-b5a5-4ccc-abb9-04139e218c65",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "2ffdc889-0736-4d51-b445-80bcd1890d70",
+      "name": "Detach Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/detach",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2ffdc889-0736-4d51-b445-80bcd1890d70",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "a032561e-549d-47e8-8ebb-dad06d2a6ce4",
+      "name": "Get Identity Provider configuration - default",
+      "request": {
+        "urlPathTemplate": "/config/identity-providers",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"organization\": {\n    \"can_set_show_as_button\": true,\n    \"can_set_assign_membership_on_login\": false\n  },\n  \"strategies\": {\n    \"adfs\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"googleapps\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"oidc\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"okta\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"pingfederate\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"samlp\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"waad\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    }\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a032561e-549d-47e8-8ebb-dad06d2a6ce4",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "1a6cb620-9021-415a-98b0-c777a13f658e",
+      "name": "Start domain verification - default",
+      "request": {
+        "urlPathTemplate": "/domains/{domain_id}/verify",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "domain_id": {
+            "equalTo": "domain_id"
+          }
+        }
+      },
+      "response": {
+        "status": 202,
+        "body": "{\n  \"id\": \"ord_aW1UHetvkBWSWdCCe8DWq7\",\n  \"org_id\": \"org_zW1UHutvkVWSWdCC\",\n  \"domain\": \"acme.com\",\n  \"status\": \"pending\",\n  \"verification_txt\": \"dove_text=asdfpiujnlewp-23849jdkfjzxcfpiawer\",\n  \"verification_host\": \"_ss-verification.org_zW1UHutvkVWSWdCC.acme.com\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1a6cb620-9021-415a-98b0-c777a13f658e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "736aebae-5a32-4a51-b735-1331ee4bd9ab",
+      "name": "List Identity Providers for a domain - default",
+      "request": {
+        "urlPathTemplate": "/domains/{domain_id}/identity-providers",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "domain_id": {
+            "equalTo": "domain_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_2CZPv6IY0gWzDaQJ\",\n      \"name\": \"acme-engineering\",\n      \"display_name\": \"Acme Engineering\"\n    },\n    {\n      \"id\": \"con_2CZPv6IY0gWzDaQG\",\n      \"name\": \"acme-engineering-2\",\n      \"display_name\": \"Acme Engineering 2\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "736aebae-5a32-4a51-b735-1331ee4bd9ab",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "79faaaa8-f657-4412-a338-31db2a0c22fc",
+      "name": "Associate a domain with an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/domains",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"domain\": \"my-domain.com\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "79faaaa8-f657-4412-a338-31db2a0c22fc",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "ec8e9df7-568e-4572-8f95-04715c78bcd7",
+      "name": "Remove a domain from an Identity Provider - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/domains/{domain}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          },
+          "domain": {
+            "equalTo": "domain"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "ec8e9df7-568e-4572-8f95-04715c78bcd7",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "3ef1a37b-4761-4156-9d5f-1330d174d47b",
+      "name": "Get a Provisioning Configuration - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"blocked\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"active\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3ef1a37b-4761-4156-9d5f-1330d174d47b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "a58b006c-012a-4283-b025-5b0fc5d9c644",
+      "name": "Create a Provisioning Configuration - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"provisioning_field\": \"externalId\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a58b006c-012a-4283-b025-5b0fc5d9c644",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "52055728-3827-4a87-bfe7-c41eb10fcbc4",
+      "name": "Delete a Provisioning Configuration - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "52055728-3827-4a87-bfe7-c41eb10fcbc4",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "b52f90fe-1fb8-43af-b6c6-92036c78eafd",
+      "name": "Refresh Provisioning Configuration attribute mapping - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/update-attributes",
+        "method": "PUT",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"identity_provider_name\": \"EC-org-gaZPTTOS42pReSzs-id-ready2\",\n  \"strategy\": \"okta\",\n  \"method\": \"scim\",\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"userName\"\n    },\n    {\n      \"user_attribute\": \"blocked\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"provisioning_field\": \"active\"\n    }\n  ],\n  \"user_id_attribute\": \"externalId\",\n  \"created_at\": \"2025-05-15T23:32:52Z\",\n  \"updated_on\": \"2025-05-15T23:32:52Z\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "b52f90fe-1fb8-43af-b6c6-92036c78eafd",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce",
+      "name": "List Provisioning SCIM tokens - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/scim-tokens",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"scim_tokens\": [\n    {\n      \"token_id\": \"tok_abc8H9hWQ8LaCkdh\",\n      \"scopes\": [\n        \"scopes\"\n      ],\n      \"created_at\": \"2025-05-11T20:11:45Z\",\n      \"valid_until\": \"2025-05-11T20:26:45Z\"\n    },\n    {\n      \"token_id\": \"tok_tuz8H9hWQ8LaCkdh\",\n      \"scopes\": [\n        \"scopes\"\n      ],\n      \"created_at\": \"2025-04-11T20:11:45Z\",\n      \"valid_until\": \"2025-04-12T20:11:45Z\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "97c46081-373a-430e-a4bb-91e718763cd8",
+      "name": "Create a Provisioning SCIM token - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/scim-tokens",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"token_id\": \"tok_tuz8H9hWQ8LaCkdh\",\n  \"scopes\": [\n    \"scopes\"\n  ],\n  \"created_at\": \"2025-04-11T20:11:45Z\",\n  \"valid_until\": \"2025-04-12T20:11:45Z\",\n  \"token\": \"tok_tuz8H9hWQ8LaCkdh....\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "97c46081-373a-430e-a4bb-91e718763cd8",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "594c868f-251a-4226-b44b-ebff69eb7448",
+      "name": "Revoke a Provisioning SCIM token - default",
+      "request": {
+        "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/scim-tokens/{idp_scim_token_id}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "idp_id": {
+            "equalTo": "idp_id"
+          },
+          "idp_scim_token_id": {
+            "equalTo": "idp_scim_token_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "594c868f-251a-4226-b44b-ebff69eb7448",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total": 26
+  }
+}

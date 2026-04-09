@@ -44,6 +44,9 @@ func (o *OrgBranding) GetColors() OrgBrandingColors {
 }
 
 func (o *OrgBranding) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -96,6 +99,9 @@ func (o *OrgBranding) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgBranding) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -141,6 +147,9 @@ func (o *OrgBrandingColors) GetPageBackground() string {
 }
 
 func (o *OrgBrandingColors) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -193,6 +202,9 @@ func (o *OrgBrandingColors) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgBrandingColors) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -246,6 +258,9 @@ func (o *OrgDetails) GetBranding() OrgBranding {
 }
 
 func (o *OrgDetails) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -305,6 +320,9 @@ func (o *OrgDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgDetails) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -367,6 +385,9 @@ func (o *OrgDetailsRead) GetBranding() OrgBranding {
 }
 
 func (o *OrgDetailsRead) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -433,6 +454,9 @@ func (o *OrgDetailsRead) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrgDetailsRead) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
