@@ -9,7 +9,7 @@ require github.com/google/uuid v1.6.0
 require (
 	github.com/lestrrat-go/jwx/v3 v3.0.13
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/oauth2 v0.35.0
+	golang.org/x/oauth2 v0.36.0
 )
 
 require gopkg.in/yaml.v3 v3.0.1 // indirect
