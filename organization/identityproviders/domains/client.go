@@ -4,6 +4,7 @@ package domains
 
 import (
 	context "context"
+
 	myorganization "github.com/auth0/myorganization-go"
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"

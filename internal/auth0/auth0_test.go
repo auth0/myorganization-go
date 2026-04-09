@@ -71,7 +71,6 @@ func TestDeriveURLs_CustomBaseURLAndAudience(t *testing.T) {
 	assert.Equal(t, "https://custom-api.example.com/", audience)
 }
 
-
 // --- ValidateOptions ---
 
 func TestValidateOptions_EmptyDomain(t *testing.T) {

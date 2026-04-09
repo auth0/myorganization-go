@@ -10,11 +10,11 @@ import (
 // Invalid request body. The message will vary depending on the cause.
 type BadRequestError struct {
 	*core.APIError
-	Body interface{}
+	Body any
 }
 
 func (b *BadRequestError) UnmarshalJSON(data []byte) error {
-	var body interface{}
+	var body any
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
