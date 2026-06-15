@@ -9,5 +9,5 @@ package myorganization
 var Environments = struct {
 	Default string
 }{
-	Default: "https://%7BTENANT%7D.auth0.com/my-org",
+	Default: "https://%7BTENANT%7D.auth0.com/my-org/v1",
 }

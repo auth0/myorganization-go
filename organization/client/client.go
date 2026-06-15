@@ -8,12 +8,20 @@ import (
 	client "github.com/auth0/myorganization-go/organization/configuration/client"
 	domainsclient "github.com/auth0/myorganization-go/organization/domains/client"
 	identityprovidersclient "github.com/auth0/myorganization-go/organization/identityproviders/client"
+	invitations "github.com/auth0/myorganization-go/organization/invitations"
+	membersclient "github.com/auth0/myorganization-go/organization/members/client"
+	memberships "github.com/auth0/myorganization-go/organization/memberships"
+	roles "github.com/auth0/myorganization-go/organization/roles"
 )
 
 type Client struct {
 	Configuration     *client.Client
 	Domains           *domainsclient.Client
 	IdentityProviders *identityprovidersclient.Client
+	Members           *membersclient.Client
+	Memberships       *memberships.Client
+	Invitations       *invitations.Client
+	Roles             *roles.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -25,6 +33,10 @@ func NewClient(options *core.RequestOptions) *Client {
 		Configuration:     client.NewClient(options),
 		Domains:           domainsclient.NewClient(options),
 		IdentityProviders: identityprovidersclient.NewClient(options),
+		Members:           membersclient.NewClient(options),
+		Memberships:       memberships.NewClient(options),
+		Invitations:       invitations.NewClient(options),
+		Roles:             roles.NewClient(options),
 		options:           options,
 		baseURL:           options.BaseURL,
 		caller: internal.NewCaller(

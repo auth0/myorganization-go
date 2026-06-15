@@ -39,7 +39,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := baseURL + "/details"
 	headers := internal.MergeHeaders(
@@ -80,7 +80,7 @@ func (r *RawClient) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := baseURL + "/details"
 	headers := internal.MergeHeaders(
