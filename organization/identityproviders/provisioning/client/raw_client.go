@@ -41,7 +41,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/identity-providers/%v/provisioning",
@@ -85,7 +85,7 @@ func (r *RawClient) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/identity-providers/%v/provisioning",
@@ -129,7 +129,7 @@ func (r *RawClient) Delete(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/identity-providers/%v/provisioning",
@@ -172,7 +172,7 @@ func (r *RawClient) UpdateAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/identity-providers/%v/provisioning/update-attributes",

@@ -10,14 +10,12 @@ import (
 	core "github.com/auth0/myorganization-go/core"
 	internal "github.com/auth0/myorganization-go/internal"
 	option "github.com/auth0/myorganization-go/option"
-	identityproviders "github.com/auth0/myorganization-go/organization/domains/identityproviders"
-	verify "github.com/auth0/myorganization-go/organization/domains/verify"
+	roles "github.com/auth0/myorganization-go/organization/members/roles"
 )
 
 type Client struct {
-	WithRawResponse   *RawClient
-	Verify            *verify.Client
-	IdentityProviders *identityproviders.Client
+	WithRawResponse *RawClient
+	Roles           *roles.Client
 
 	options *core.RequestOptions
 	baseURL string
@@ -26,11 +24,10 @@ type Client struct {
 
 func NewClient(options *core.RequestOptions) *Client {
 	return &Client{
-		Verify:            verify.NewClient(options),
-		IdentityProviders: identityproviders.NewClient(options),
-		WithRawResponse:   NewRawClient(options),
-		options:           options,
-		baseURL:           options.BaseURL,
+		Roles:           roles.NewClient(options),
+		WithRawResponse: NewRawClient(options),
+		options:         options,
+		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
 				Client:      options.HTTPClient,
@@ -40,23 +37,24 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve a list of all pending and verified domains for this Organization.
+// Retrieve a list of all members for this Organization. The `roles` field is only included for each member when the token also carries the `read:my_org:member_roles` scope; without that scope the `roles` field is omitted from the response.
 func (c *Client) List(
 	ctx context.Context,
-	request *myorganization.ListOrganizationDomainsRequestParameters,
+	request *myorganization.ListOrganizationMembersRequestParameters,
 	opts ...option.RequestOption,
-) (*core.Page[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent], error) {
+) (*core.Page[*string, *myorganization.OrgMember, *myorganization.ListOrganizationMembersResponseContent], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
 		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
-	endpointURL := baseURL + "/domains"
+	endpointURL := baseURL + "/members"
 	queryParams, err := internal.QueryValuesWithDefaults(
 		request,
 		map[string]any{
-			"take": 50,
+			"include_fields": true,
+			"take":           50,
 		},
 	)
 	if err != nil {
@@ -86,11 +84,11 @@ func (c *Client) List(
 			ErrorDecoder:    internal.NewErrorDecoder(myorganization.ErrorCodes),
 		}
 	}
-	readPageResponse := func(response *myorganization.ListOrganizationDomainsResponseContent) *core.PageResponse[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent] {
+	readPageResponse := func(response *myorganization.ListOrganizationMembersResponseContent) *core.PageResponse[*string, *myorganization.OrgMember, *myorganization.ListOrganizationMembersResponseContent] {
 		var zeroValue *string
 		next := response.Next
-		results := response.OrganizationDomains
-		return &core.PageResponse[*string, *myorganization.OrgDomain, *myorganization.ListOrganizationDomainsResponseContent]{
+		results := response.Members
+		return &core.PageResponse[*string, *myorganization.OrgMember, *myorganization.ListOrganizationMembersResponseContent]{
 			Results:  results,
 			Response: response,
 			Next:     next,
@@ -105,14 +103,16 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.From)
 }
 
-// Create a new domain for this Organization.
-func (c *Client) Create(
+// Retrieve details of a member specified by user ID for this Organization.
+func (c *Client) Get(
 	ctx context.Context,
-	request *myorganization.CreateOrganizationDomainRequestContent,
+	userID myorganization.OrgMemberID,
+	request *myorganization.GetOrganizationMemberRequestParameters,
 	opts ...option.RequestOption,
-) (myorganization.CreateOrganizationDomainResponseContent, error) {
-	response, err := c.WithRawResponse.Create(
+) (myorganization.GetOrganizationMemberResponseContent, error) {
+	response, err := c.WithRawResponse.Get(
 		ctx,
+		userID,
 		request,
 		opts...,
 	)
@@ -120,38 +120,4 @@ func (c *Client) Create(
 		return nil, err
 	}
 	return response.Body, nil
-}
-
-// Retrieve details of a domain specified by ID for this Organization.
-func (c *Client) Get(
-	ctx context.Context,
-	domainID myorganization.OrgDomainID,
-	opts ...option.RequestOption,
-) (myorganization.GetOrganizationDomainResponseContent, error) {
-	response, err := c.WithRawResponse.Get(
-		ctx,
-		domainID,
-		opts...,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return response.Body, nil
-}
-
-// Remove a domain specified by ID from this Organization.
-func (c *Client) Delete(
-	ctx context.Context,
-	domainID myorganization.OrgDomainID,
-	opts ...option.RequestOption,
-) error {
-	_, err := c.WithRawResponse.Delete(
-		ctx,
-		domainID,
-		opts...,
-	)
-	if err != nil {
-		return err
-	}
-	return nil
 }

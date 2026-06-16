@@ -866,6 +866,696 @@ client.Organization.IdentityProviders.Detach(
 </dl>
 </details>
 
+## Organization Members
+<details><summary><code>client.Organization.Members.List() -> *myorganization.ListOrganizationMembersResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of all members for this Organization. The `roles` field is only included for each member when the token also carries the `read:my_org:member_roles` scope; without that scope the `roles` field is omitted from the response.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.ListOrganizationMembersRequestParameters{
+        Fields: myorganization.String(
+            "fields",
+        ),
+        IncludeFields: myorganization.Bool(
+            true,
+        ),
+        From: myorganization.String(
+            "from",
+        ),
+        Take: myorganization.Int(
+            1,
+        ),
+    }
+client.Organization.Members.List(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**fields:** `*string` — Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeFields:** `*bool` — Whether specified fields are to be included (true) or excluded (false). Defaults to true
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**from:** `*string` — An optional cursor from which to start the selection (exclusive).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**take:** `*int` — Number of results per page. Defaults to 50.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Members.Get(UserID) -> myorganization.GetOrganizationMemberResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of a member specified by user ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.GetOrganizationMemberRequestParameters{
+        Fields: myorganization.String(
+            "fields",
+        ),
+        IncludeFields: myorganization.Bool(
+            true,
+        ),
+    }
+client.Organization.Members.Get(
+        context.TODO(),
+        "user_id",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**userID:** `myorganization.OrgMemberID` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**fields:** `*string` — Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeFields:** `*bool` — Whether specified fields are to be included (true) or excluded (false). Defaults to true
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Organization Memberships
+<details><summary><code>client.Organization.Memberships.DeleteMemberships(request) -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove one member from this Organization. The underlying user account is not deleted.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.DeleteOrganizationMembershipsRequestParameters{
+        Members: []myorganization.OrgMemberID{
+            "auth0|1234567890",
+        },
+    }
+client.Organization.Memberships.DeleteMemberships(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**members:** `[]myorganization.OrgMemberID` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Organization Invitations
+<details><summary><code>client.Organization.Invitations.List() -> *myorganization.ListMembersInvitationsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of all member invitations for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.ListMemberInvitationsRequestParameters{
+        Fields: myorganization.String(
+            "fields",
+        ),
+        IncludeFields: myorganization.Bool(
+            true,
+        ),
+        From: myorganization.String(
+            "from",
+        ),
+        Take: myorganization.Int(
+            1,
+        ),
+        Sort: myorganization.String(
+            "sort",
+        ),
+    }
+client.Organization.Invitations.List(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**fields:** `*string` — Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. Note: you cannot filter on ticket_id and this value will only be returned when fields are not filtered.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeFields:** `*bool` — Whether specified fields are to be included (true) or excluded (false). Defaults to true
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**from:** `*string` — An optional cursor from which to start the selection (exclusive).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**take:** `*int` — Number of results per page. Defaults to 50.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort:** `*string` — Field to sort by. Use field:order where order is 1 for ascending and -1 for descending. Defaults to created_at:-1
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Invitations.Create(request) -> myorganization.CreateMemberInvitationResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create one or more member invitations for this Organization. If an active invitation already exists for a user, generating a new invitation will automatically revoke any outstanding invitations for that user. Roles specified in the payload will be granted to the user upon acceptance of the invitation.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.CreateMemberInvitationRequestContent{
+        Invitees: []*myorganization.CreateMemberInvitationInvitee{
+            &myorganization.CreateMemberInvitationInvitee{
+                Email: "user@example.com",
+                Roles: []myorganization.RoleID{
+                    "rol_0000000000000001",
+                },
+            },
+        },
+        Inviter: &myorganization.MemberInvitationInviter{
+            Name: myorganization.String(
+                "Allison the Admin",
+            ),
+        },
+        IdentityProviderID: myorganization.String(
+            "con_2CZPv6IY0gWzDaQJ",
+        ),
+        TTLSec: myorganization.Int(
+            3600,
+        ),
+    }
+client.Organization.Invitations.Create(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**auth0CustomDomain:** `*string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invitees:** `[]*myorganization.CreateMemberInvitationInvitee` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inviter:** `*myorganization.MemberInvitationInviter` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**identityProviderID:** `*string` — Identity provider identifier.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ttlSec:** `*int` — Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Invitations.Get(InvitationID) -> myorganization.GetMemberInvitationResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of a member invitation specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.GetMemberInvitationRequestParameters{
+        Fields: myorganization.String(
+            "fields",
+        ),
+        IncludeFields: myorganization.Bool(
+            true,
+        ),
+    }
+client.Organization.Invitations.Get(
+        context.TODO(),
+        "invitation_id",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invitationID:** `myorganization.InvitationID` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**fields:** `*string` — Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. Note: you cannot filter on ticket_id and this value will only be returned when fields are not filtered.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeFields:** `*bool` — Whether specified fields are to be included (true) or excluded (false). Defaults to true
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Invitations.Delete(InvitationID) -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Revoke a member invitation specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.Organization.Invitations.Delete(
+        context.TODO(),
+        "invitation_id",
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invitationID:** `myorganization.InvitationID` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Organization Roles
+<details><summary><code>client.Organization.Roles.List() -> *myorganization.ListRolesResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the list of roles available for binding to members and invitations for this Organization. Only roles made visible to this Organization by the Tenant Admin are returned.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.ListRolesRequestParameters{
+        From: myorganization.String(
+            "from",
+        ),
+        Take: myorganization.Int(
+            1,
+        ),
+        Name: myorganization.String(
+            "name",
+        ),
+    }
+client.Organization.Roles.List(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**from:** `*string` — An optional cursor from which to start the selection (exclusive).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**take:** `*int` — Number of results per page. Defaults to 50.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `*string` — An optional filter on the name (case-insensitive).
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Organization Configuration IdentityProviders
 <details><summary><code>client.Organization.Configuration.IdentityProviders.Get() -> myorganization.GetIdpConfigurationResponseContent</code></summary>
 <dl>
@@ -1597,6 +2287,234 @@ client.Organization.IdentityProviders.Provisioning.SCIMTokens.Delete(
 <dd>
 
 **idpSCIMTokenID:** `myorganization.IdpProvisioningSCIMTokenID` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Organization Members Roles
+<details><summary><code>client.Organization.Members.Roles.List(UserID) -> *myorganization.GetOrganizationMemberRolesResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of roles assigned to a member specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.ListOrgMemberRolesRequestParameters{
+        From: myorganization.String(
+            "from",
+        ),
+        Take: myorganization.Int(
+            1,
+        ),
+    }
+client.Organization.Members.Roles.List(
+        context.TODO(),
+        "user_id",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**userID:** `myorganization.OrgMemberID` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**from:** `*string` — An optional cursor from which to start the selection (exclusive).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**take:** `*int` — Number of results per page. Defaults to 50.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Members.Roles.Assign(UserID, request) -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Assign roles to a member specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.OrganizationMemberRolesChangeRequestContent{
+        RoleIDs: []myorganization.RoleID{
+            "rol_SO2j0sFo9NFa3F9w",
+        },
+    }
+client.Organization.Members.Roles.Assign(
+        context.TODO(),
+        "user_id",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**userID:** `myorganization.OrgMemberID` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*myorganization.OrganizationMemberRolesChangeRequestContent` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Members.Roles.Unassign(UserID, request) -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove roles from a member specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.OrganizationMemberRolesChangeRequestContent{
+        RoleIDs: []myorganization.RoleID{
+            "rol_SO2j0sFo9NFa3F9w",
+        },
+    }
+client.Organization.Members.Roles.Unassign(
+        context.TODO(),
+        "user_id",
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**userID:** `myorganization.OrgMemberID` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*myorganization.OrganizationMemberRolesChangeRequestContent` 
     
 </dd>
 </dl>

@@ -41,7 +41,7 @@ func (r *RawClient) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
-		"https://%7BTENANT%7D.auth0.com/my-org",
+		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/domains/%v/identity-providers",

@@ -34,20 +34,37 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) Get(
 	ctx context.Context,
+	userID myorganization.OrgMemberID,
+	request *myorganization.GetOrganizationMemberRequestParameters,
 	opts ...option.RequestOption,
-) (*core.Response[*myorganization.GetConfigurationResponseContent], error) {
+) (*core.Response[myorganization.GetOrganizationMemberResponseContent], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
 		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
-	endpointURL := baseURL + "/config"
+	endpointURL := internal.EncodeURL(
+		baseURL+"/members/%v",
+		userID,
+	)
+	queryParams, err := internal.QueryValuesWithDefaults(
+		request,
+		map[string]any{
+			"include_fields": true,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *myorganization.GetConfigurationResponseContent
+	var response myorganization.GetOrganizationMemberResponseContent
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +82,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*myorganization.GetConfigurationResponseContent]{
+	return &core.Response[myorganization.GetOrganizationMemberResponseContent]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

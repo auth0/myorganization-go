@@ -482,6 +482,330 @@
       }
     },
     {
+      "id": "8a221b24-aed6-4bfe-bfdb-c4329d8e2181",
+      "name": "List members - default",
+      "request": {
+        "urlPathTemplate": "/members",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "fields": {
+            "equalTo": "fields"
+          },
+          "include_fields": {
+            "equalTo": "true"
+          },
+          "from": {
+            "equalTo": "from"
+          },
+          "take": {
+            "equalTo": "1"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"next\": \"next\",\n  \"members\": [\n    {\n      \"email\": \"roadrunner@acme.com\",\n      \"name\": \"name\",\n      \"nickname\": \"nickname\",\n      \"given_name\": \"given_name\",\n      \"family_name\": \"family_name\",\n      \"user_id\": \"auth0|123234235\",\n      \"roles\": [\n        {\n          \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n          \"name\": \"role1\"\n        },\n        {\n          \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n          \"name\": \"role2\"\n        }\n      ],\n      \"created_at\": \"2024-01-15T09:30:00Z\",\n      \"updated_at\": \"2024-01-15T09:30:00Z\",\n      \"last_login\": \"2024-01-15T09:30:00Z\",\n      \"phone_number\": \"phone_number\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8a221b24-aed6-4bfe-bfdb-c4329d8e2181",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "fae3f220-6c07-455b-b799-d153a5d10715",
+      "name": "Get a member - default",
+      "request": {
+        "urlPathTemplate": "/members/{user_id}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "user_id": {
+            "equalTo": "user_id"
+          }
+        },
+        "queryParameters": {
+          "fields": {
+            "equalTo": "fields"
+          },
+          "include_fields": {
+            "equalTo": "true"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"email\": \"roadrunner@acme.com\",\n  \"name\": \"roadrunner\",\n  \"nickname\": \"beepbeep\",\n  \"given_name\": \"Road\",\n  \"family_name\": \"Runner\",\n  \"user_id\": \"auth0|123234235\",\n  \"roles\": [\n    {\n      \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n      \"name\": \"role1\",\n      \"description\": \"description\"\n    },\n    {\n      \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n      \"name\": \"role2\",\n      \"description\": \"description\"\n    }\n  ],\n  \"created_at\": \"2025-05-01T12:00:00Z\",\n  \"updated_at\": \"2025-05-02T12:00:00Z\",\n  \"last_login\": \"2025-05-03T12:00:00Z\",\n  \"phone_number\": \"phone_number\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "fae3f220-6c07-455b-b799-d153a5d10715",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "615842a1-853a-4670-8ba3-e4825a6bd0af",
+      "name": "Delete memberships - default",
+      "request": {
+        "urlPathTemplate": "/delete-memberships",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "615842a1-853a-4670-8ba3-e4825a6bd0af",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "78503755-437a-4f13-bb75-fbf050b174b1",
+      "name": "List member invitations - default",
+      "request": {
+        "urlPathTemplate": "/member-invitations",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "fields": {
+            "equalTo": "fields"
+          },
+          "include_fields": {
+            "equalTo": "true"
+          },
+          "from": {
+            "equalTo": "from"
+          },
+          "take": {
+            "equalTo": "1"
+          },
+          "sort": {
+            "equalTo": "sort"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"next\": \"next\",\n  \"invitations\": [\n    {\n      \"id\": \"uinv_12345678abcdefgh\",\n      \"organization_id\": \"org_12345678abcdefgh\",\n      \"inviter\": {\n        \"name\": \"Allison the Admin\"\n      },\n      \"invitee\": {\n        \"email\": \"user@example.com\"\n      },\n      \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n      \"created_at\": \"2025-04-11T20:11:45Z\",\n      \"expires_at\": \"2025-04-11T20:11:45Z\",\n      \"roles\": [\n        \"rol_BKW1BKIfBKd0BaI0\"\n      ],\n      \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n      \"ticket_id\": \"1asdfasd23usjdef\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "78503755-437a-4f13-bb75-fbf050b174b1",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "55c94d5e-e08c-471f-b76f-111cd557f5ca",
+      "name": "Create member invitations - default",
+      "request": {
+        "urlPathTemplate": "/member-invitations",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "[\n  {\n    \"id\": \"uinv_12345678abcdefgh\",\n    \"organization_id\": \"org_12345678abcdefgh\",\n    \"inviter\": {\n      \"name\": \"Allison the Admin\"\n    },\n    \"invitee\": {\n      \"email\": \"user@example.com\"\n    },\n    \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n    \"created_at\": \"2025-04-11T20:11:45Z\",\n    \"expires_at\": \"2025-04-11T20:11:45Z\",\n    \"roles\": [\n      \"rol_BKW1BKIfBKd0BaI0\"\n    ],\n    \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n    \"ticket_id\": \"1asdfasd23usjdef\"\n  }\n]",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "55c94d5e-e08c-471f-b76f-111cd557f5ca",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1a5a7d10-bc8e-44b0-ab8a-e611721f0d64",
+      "name": "Get a member invitation - default",
+      "request": {
+        "urlPathTemplate": "/member-invitations/{invitation_id}",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "invitation_id": {
+            "equalTo": "invitation_id"
+          }
+        },
+        "queryParameters": {
+          "fields": {
+            "equalTo": "fields"
+          },
+          "include_fields": {
+            "equalTo": "true"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"uinv_12345678abcdefgh\",\n  \"organization_id\": \"org_12345678abcdefgh\",\n  \"inviter\": {\n    \"name\": \"Allison the Admin\"\n  },\n  \"invitee\": {\n    \"email\": \"user@example.com\"\n  },\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"created_at\": \"2025-04-11T20:11:45Z\",\n  \"expires_at\": \"2025-04-11T20:11:45Z\",\n  \"roles\": [\n    \"rol_BKW1BKIfBKd0BaI0\"\n  ],\n  \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n  \"ticket_id\": \"1asdfasd23usjdef\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1a5a7d10-bc8e-44b0-ab8a-e611721f0d64",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "44e77096-1347-4434-83ae-3fad0ed2847b",
+      "name": "Revoke a member invitation - default",
+      "request": {
+        "urlPathTemplate": "/member-invitations/{invitation_id}",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "invitation_id": {
+            "equalTo": "invitation_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "44e77096-1347-4434-83ae-3fad0ed2847b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "d7eb85d6-a74e-47c7-b669-d9c33ad0aa81",
+      "name": "List roles - default",
+      "request": {
+        "urlPathTemplate": "/roles",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "from": {
+            "equalTo": "from"
+          },
+          "take": {
+            "equalTo": "1"
+          },
+          "name": {
+            "equalTo": "name"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"roles\": [\n    {\n      \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n      \"name\": \"Admin\",\n      \"description\": \"Administrator role with full access\"\n    },\n    {\n      \"id\": \"rol_BKI0BKI0BKI0BKI1\",\n      \"name\": \"User\",\n      \"description\": \"Standard user role with limited access\"\n    }\n  ],\n  \"next\": \"abc123\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "d7eb85d6-a74e-47c7-b669-d9c33ad0aa81",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
       "id": "a032561e-549d-47e8-8ebb-dad06d2a6ce4",
       "name": "Get Identity Provider configuration - default",
       "request": {
@@ -914,9 +1238,125 @@
           }
         }
       }
+    },
+    {
+      "id": "3b86d015-abf6-4c97-b708-237ed2ad30e3",
+      "name": "List member roles - default",
+      "request": {
+        "urlPathTemplate": "/members/{user_id}/roles",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "user_id": {
+            "equalTo": "user_id"
+          }
+        },
+        "queryParameters": {
+          "from": {
+            "equalTo": "from"
+          },
+          "take": {
+            "equalTo": "1"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"next\": \"next\",\n  \"roles\": [\n    {\n      \"id\": \"rol_SO2j0sFo9NFa3F9w\",\n      \"name\": \"role1\",\n      \"description\": \"role1 description\"\n    },\n    {\n      \"id\": \"rol_BO2j1sFo9NFa3F9w\",\n      \"name\": \"role2\",\n      \"description\": \"role2 description\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3b86d015-abf6-4c97-b708-237ed2ad30e3",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "fc74ad7a-df90-438a-80ba-908648d37c76",
+      "name": "Assign roles to a member - default",
+      "request": {
+        "urlPathTemplate": "/members/{user_id}/roles",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "user_id": {
+            "equalTo": "user_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "fc74ad7a-df90-438a-80ba-908648d37c76",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "da82679e-4aa8-4fe7-b946-2b37ffeb5fdb",
+      "name": "Remove roles from a member - default",
+      "request": {
+        "urlPathTemplate": "/members/{user_id}/roles",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "user_id": {
+            "equalTo": "user_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "da82679e-4aa8-4fe7-b946-2b37ffeb5fdb",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
     }
   ],
   "meta": {
-    "total": 26
+    "total": 37
   }
 }
