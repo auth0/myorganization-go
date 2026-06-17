@@ -1,5 +1,22 @@
 # Change Log
 
+## [v1.0.0](https://github.com/auth0/myorganization-go/tree/v1.0.0) (2026-06-16)
+
+This is the first stable release of the Auth0 MyOrganization Go SDK. It promotes `v1.0.0-beta.0` to a stable `v1.0.0`, with new APIs for managing organization members, roles, memberships, and invitations.
+
+### Features
+
+- **Members** - List and get organization members with cursor-based pagination via `Organization.Members`
+- **Member Roles** - List, assign, and unassign roles for a member via `Organization.Members.Roles`
+- **Roles** - List organization roles via `Organization.Roles`
+- **Memberships** - Remove organization memberships via `Organization.Memberships`
+- **Invitations** - Full lifecycle (list, create, get, delete) for member invitations via `Organization.Invitations`
+- Member-specific typed error codes in `organization/members/error_codes.go`
+
+### Maintenance
+
+- Bump the Go toolchain to `go1.25.11` to clear four standard library advisories reported by `govulncheck` (GO-2026-5039, GO-2026-5037, GO-2026-4971, GO-2026-4918)
+
 ## [v1.0.0-beta.0](https://github.com/auth0/myorganization-go/tree/v1.0.0-beta.0) (2026-04-09)
 
 This is the first beta release of the Auth0 MyOrganization Go SDK, providing a fully-featured Go client for managing Auth0 Organizations.
