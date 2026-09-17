@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![GoDoc](https://pkg.go.dev/badge/github.com/auth0/myorganization-go.svg)](https://pkg.go.dev/github.com/auth0/myorganization-go)
-[![Go Report Card](https://goreportcard.com/badge/github.com/auth0/myorganization-go?style=flat-square)](https://goreportcard.com/report/github.com/auth0/myorganization-go)
+[![GoDoc](https://pkg.go.dev/badge/github.com/auth0/myorganization-go/v2.svg)](https://pkg.go.dev/github.com/auth0/myorganization-go/v2)
+[![Go Report Card](https://goreportcard.com/badge/github.com/auth0/myorganization-go/v2?style=flat-square)](https://goreportcard.com/report/github.com/auth0/myorganization-go/v2)
 [![Release](https://img.shields.io/github/v/release/auth0/myorganization-go?include_prereleases&style=flat-square)](https://github.com/auth0/myorganization-go/releases)
 [![License](https://img.shields.io/github/license/auth0/myorganization-go.svg?style=flat-square)](https://github.com/auth0/myorganization-go/blob/main/LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/myorganization-go/ci.yml?branch=main&style=flat-square)](https://github.com/auth0/myorganization-go/actions?query=branch%3Amain)
@@ -17,7 +17,7 @@
 
 ## Documentation
 
-- [Godoc](https://pkg.go.dev/github.com/auth0/myorganization-go) - explore the Go SDK documentation.
+- [Godoc](https://pkg.go.dev/github.com/auth0/myorganization-go/v2) - explore the Go SDK documentation.
 - [Docs site](https://www.auth0.com/docs) — explore our docs site and learn more about Auth0.
 - [Examples](./examples.md) - Practical usage examples for all SDK features.
 - [API Reference](./reference.md) - Complete API reference documentation.
