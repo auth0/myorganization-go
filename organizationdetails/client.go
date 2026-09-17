@@ -33,6 +33,21 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
+// Permanently delete this Organization.
+func (c *Client) Delete(
+	ctx context.Context,
+	opts ...option.RequestOption,
+) error {
+	_, err := c.WithRawResponse.Delete(
+		ctx,
+		opts...,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Retrieve details for this Organization, including display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
 func (c *Client) Get(
 	ctx context.Context,

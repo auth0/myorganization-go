@@ -34,6 +34,7 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) List(
 	ctx context.Context,
+	request *myorganization.ListOrganizationIdentityProvidersRequestParameters,
 	opts ...option.RequestOption,
 ) (*core.Response[*myorganization.ListIdentityProvidersResponseContent], error) {
 	options := core.NewRequestOptions(opts...)
@@ -43,6 +44,13 @@ func (r *RawClient) List(
 		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := baseURL + "/identity-providers"
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
 	headers := internal.MergeHeaders(
 		r.options.ToHeader(),
 		options.ToHeader(),

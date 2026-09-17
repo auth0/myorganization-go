@@ -8,19 +8,21 @@ import (
 	client "github.com/auth0/myorganization-go/organization/configuration/client"
 	domainsclient "github.com/auth0/myorganization-go/organization/domains/client"
 	identityprovidersclient "github.com/auth0/myorganization-go/organization/identityproviders/client"
-	invitations "github.com/auth0/myorganization-go/organization/invitations"
+	invitationsclient "github.com/auth0/myorganization-go/organization/invitations/client"
 	membersclient "github.com/auth0/myorganization-go/organization/members/client"
 	memberships "github.com/auth0/myorganization-go/organization/memberships"
 	roles "github.com/auth0/myorganization-go/organization/roles"
+	userstores "github.com/auth0/myorganization-go/organization/userstores"
 )
 
 type Client struct {
 	Configuration     *client.Client
+	UserStores        *userstores.Client
 	Domains           *domainsclient.Client
 	IdentityProviders *identityprovidersclient.Client
 	Members           *membersclient.Client
 	Memberships       *memberships.Client
-	Invitations       *invitations.Client
+	Invitations       *invitationsclient.Client
 	Roles             *roles.Client
 
 	options *core.RequestOptions
@@ -31,11 +33,12 @@ type Client struct {
 func NewClient(options *core.RequestOptions) *Client {
 	return &Client{
 		Configuration:     client.NewClient(options),
+		UserStores:        userstores.NewClient(options),
 		Domains:           domainsclient.NewClient(options),
 		IdentityProviders: identityprovidersclient.NewClient(options),
 		Members:           membersclient.NewClient(options),
 		Memberships:       memberships.NewClient(options),
-		Invitations:       invitations.NewClient(options),
+		Invitations:       invitationsclient.NewClient(options),
 		Roles:             roles.NewClient(options),
 		options:           options,
 		baseURL:           options.BaseURL,

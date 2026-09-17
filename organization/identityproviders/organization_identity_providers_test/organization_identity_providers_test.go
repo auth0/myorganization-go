@@ -74,15 +74,24 @@ func TestOrganizationIdentityProvidersListWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithToken("test-token"),
 	)
+	request := &myorganization.ListOrganizationIdentityProvidersRequestParameters{
+		MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+			myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+		},
+		IsEnabled: myorganization.Bool(
+			true,
+		),
+	}
 	_, invocationErr := client.Organization.IdentityProviders.List(
 		context.TODO(),
+		request,
 		option.WithHTTPHeader(
 			http.Header{"X-Test-Id": []string{"TestOrganizationIdentityProvidersListWithWireMock"}},
 		),
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationIdentityProvidersListWithWireMock", "GET", "/identity-providers", nil, 1)
+	VerifyRequestCount(t, "TestOrganizationIdentityProvidersListWithWireMock", "GET", "/identity-providers", map[string]string{"member_access_level": "none", "is_enabled": "true"}, 1)
 }
 
 func TestOrganizationIdentityProvidersCreateWithWireMock(

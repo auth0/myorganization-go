@@ -75,3 +75,6 @@ internal/auth0/testdata/
 examples.md
 
 .fern/
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

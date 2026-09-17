@@ -39,13 +39,15 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// Retrieve a list of all Identity Providers for this Organization.
+// Retrieve the comprehensive list of identity providers and their respective configurations associated with an Auth0 Organization.
 func (c *Client) List(
 	ctx context.Context,
+	request *myorganization.ListOrganizationIdentityProvidersRequestParameters,
 	opts ...option.RequestOption,
 ) (*myorganization.ListIdentityProvidersResponseContent, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
+		request,
 		opts...,
 	)
 	if err != nil {
@@ -54,7 +56,7 @@ func (c *Client) List(
 	return response.Body, nil
 }
 
-// Create a new Identity Provider for this Organization.
+// Create a new enterprise Identity Provider utilizing the specified configuration settings and details for this Auth0 Organization.
 func (c *Client) Create(
 	ctx context.Context,
 	request myorganization.CreateIdentityProviderRequestContent,

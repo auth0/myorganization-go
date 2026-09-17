@@ -105,7 +105,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.From)
 }
 
-// Create a new domain for this Organization.
+// Create a domain for an Auth0 Organization and optionally enable Organization Discovery for members during the user login flow
 func (c *Client) Create(
 	ctx context.Context,
 	request *myorganization.CreateOrganizationDomainRequestContent,
@@ -122,7 +122,7 @@ func (c *Client) Create(
 	return response.Body, nil
 }
 
-// Retrieve details of a domain specified by ID for this Organization.
+// Retrieve the details of an Auth0 Organization domain using its unique domain ID, including the domain name and its current verification status.
 func (c *Client) Get(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,
@@ -139,7 +139,7 @@ func (c *Client) Get(
 	return response.Body, nil
 }
 
-// Remove a domain specified by ID from this Organization.
+// Delete an Auth0 Organization domain using its unique domain ID, including all associated details and verification status.
 func (c *Client) Delete(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,
