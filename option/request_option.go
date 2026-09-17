@@ -3,7 +3,7 @@
 package option
 
 import (
-	core "github.com/auth0/myorganization-go/core"
+	core "github.com/auth0/myorganization-go/v2/core"
 	http "net/http"
 	url "net/url"
 )

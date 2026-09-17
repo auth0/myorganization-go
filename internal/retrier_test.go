@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/auth0/myorganization-go/core"
+	"github.com/auth0/myorganization-go/v2/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

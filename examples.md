@@ -46,8 +46,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 func main() {
@@ -92,8 +92,8 @@ import (
     "context"
     "os"
 
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 privateKeyPEM, _ := os.ReadFile("private_key.pem")
@@ -132,8 +132,8 @@ Provide your own `oauth2.TokenSource` for full control over how tokens are obtai
 
 ```go
 import (
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
     "golang.org/x/oauth2"
 )
 
@@ -185,7 +185,7 @@ import (
     "fmt"
     "net/url"
 
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 ctx := context.Background()
@@ -219,7 +219,7 @@ for response.Next != nil {
 ### Create a Domain
 
 ```go
-import myorganization "github.com/auth0/myorganization-go"
+import myorganization "github.com/auth0/myorganization-go/v2"
 
 domain, err := c.Organization.Domains.Create(
     ctx,
@@ -261,7 +261,7 @@ for _, cl := range clients.Clients {
 ### Create a Client
 
 ```go
-import myorganization "github.com/auth0/myorganization-go"
+import myorganization "github.com/auth0/myorganization-go/v2"
 
 client, err := c.Organization.Clients.Create(
     ctx,
@@ -293,7 +293,7 @@ fmt.Printf("Org: %s (%s)\n", details.GetDisplayName(), details.GetName())
 ### Update Organization Details
 
 ```go
-import myorganization "github.com/auth0/myorganization-go"
+import myorganization "github.com/auth0/myorganization-go/v2"
 
 updated, err := c.OrganizationDetails.Update(ctx, &myorganization.OrgDetails{
     DisplayName: myorganization.String("My Organization"),
@@ -332,8 +332,8 @@ import (
     "errors"
     "fmt"
 
-    myorganization "github.com/auth0/myorganization-go"
-    "github.com/auth0/myorganization-go/core"
+    myorganization "github.com/auth0/myorganization-go/v2"
+    "github.com/auth0/myorganization-go/v2/core"
 )
 
 response, err := c.Organization.Domains.Create(ctx, request)
@@ -371,7 +371,7 @@ Available error types: `BadRequestError` (400), `UnauthorizedError` (401), `Forb
 Send explicit `null` in JSON payloads using `Set*` methods.
 
 ```go
-import myorganization "github.com/auth0/myorganization-go"
+import myorganization "github.com/auth0/myorganization-go/v2"
 
 details := &myorganization.OrgDetails{}
 
@@ -393,8 +393,8 @@ import (
     "net/http"
     "time"
 
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 c, err := client.New(

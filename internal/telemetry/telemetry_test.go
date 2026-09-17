@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	myorganization "github.com/auth0/myorganization-go"
+	myorganization "github.com/auth0/myorganization-go/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

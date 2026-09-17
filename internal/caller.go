@@ -12,7 +12,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/auth0/myorganization-go/core"
+	"github.com/auth0/myorganization-go/v2/core"
 )
 
 const (

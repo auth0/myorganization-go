@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	core "github.com/auth0/myorganization-go/core"
+	core "github.com/auth0/myorganization-go/v2/core"
 )
 
 // SanitizeDomain strips protocol prefixes and trailing slashes from the domain.

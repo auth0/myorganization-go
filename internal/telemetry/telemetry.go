@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"runtime"
 
-	myorganization "github.com/auth0/myorganization-go"
+	myorganization "github.com/auth0/myorganization-go/v2"
 )
 
 // Auth0ClientInfo represents the Auth0-Client telemetry header payload.

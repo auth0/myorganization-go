@@ -1,4 +1,4 @@
-module github.com/auth0/myorganization-go
+module github.com/auth0/myorganization-go/v2
 
 go 1.25.0
 

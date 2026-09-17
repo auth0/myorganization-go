@@ -4,7 +4,7 @@ package myorganization
 
 import (
 	json "encoding/json"
-	core "github.com/auth0/myorganization-go/core"
+	core "github.com/auth0/myorganization-go/v2/core"
 )
 
 // Invalid request body. The message will vary depending on the cause.

@@ -3,7 +3,7 @@ package option
 import (
 	"context"
 
-	core "github.com/auth0/myorganization-go/core"
+	core "github.com/auth0/myorganization-go/v2/core"
 	"golang.org/x/oauth2"
 )
 
