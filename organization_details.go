@@ -217,17 +217,19 @@ func (o *OrgBrandingColors) String() string {
 }
 
 var (
-	orgDetailsFieldName        = big.NewInt(1 << 0)
-	orgDetailsFieldDisplayName = big.NewInt(1 << 1)
-	orgDetailsFieldBranding    = big.NewInt(1 << 2)
+	orgDetailsFieldName                   = big.NewInt(1 << 0)
+	orgDetailsFieldDisplayName            = big.NewInt(1 << 1)
+	orgDetailsFieldBranding               = big.NewInt(1 << 2)
+	orgDetailsFieldThirdPartyClientAccess = big.NewInt(1 << 3)
 )
 
 type OrgDetails struct {
 	// The name of this organization.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// Friendly name of this organization.
-	DisplayName *string      `json:"display_name,omitempty" url:"display_name,omitempty"`
-	Branding    *OrgBranding `json:"branding,omitempty" url:"branding,omitempty"`
+	DisplayName            *string                        `json:"display_name,omitempty" url:"display_name,omitempty"`
+	Branding               *OrgBranding                   `json:"branding,omitempty" url:"branding,omitempty"`
+	ThirdPartyClientAccess *OrgThirdPartyClientAccessEnum `json:"third_party_client_access,omitempty" url:"third_party_client_access,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -255,6 +257,13 @@ func (o *OrgDetails) GetBranding() OrgBranding {
 		return OrgBranding{}
 	}
 	return *o.Branding
+}
+
+func (o *OrgDetails) GetThirdPartyClientAccess() OrgThirdPartyClientAccessEnum {
+	if o == nil || o.ThirdPartyClientAccess == nil {
+		return ""
+	}
+	return *o.ThirdPartyClientAccess
 }
 
 func (o *OrgDetails) GetExtraProperties() map[string]interface{} {
@@ -290,6 +299,13 @@ func (o *OrgDetails) SetDisplayName(displayName *string) {
 func (o *OrgDetails) SetBranding(branding *OrgBranding) {
 	o.Branding = branding
 	o.require(orgDetailsFieldBranding)
+}
+
+// SetThirdPartyClientAccess sets the ThirdPartyClientAccess field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetails) SetThirdPartyClientAccess(thirdPartyClientAccess *OrgThirdPartyClientAccessEnum) {
+	o.ThirdPartyClientAccess = thirdPartyClientAccess
+	o.require(orgDetailsFieldThirdPartyClientAccess)
 }
 
 func (o *OrgDetails) UnmarshalJSON(data []byte) error {
@@ -335,10 +351,11 @@ func (o *OrgDetails) String() string {
 }
 
 var (
-	orgDetailsReadFieldID          = big.NewInt(1 << 0)
-	orgDetailsReadFieldName        = big.NewInt(1 << 1)
-	orgDetailsReadFieldDisplayName = big.NewInt(1 << 2)
-	orgDetailsReadFieldBranding    = big.NewInt(1 << 3)
+	orgDetailsReadFieldID                     = big.NewInt(1 << 0)
+	orgDetailsReadFieldName                   = big.NewInt(1 << 1)
+	orgDetailsReadFieldDisplayName            = big.NewInt(1 << 2)
+	orgDetailsReadFieldBranding               = big.NewInt(1 << 3)
+	orgDetailsReadFieldThirdPartyClientAccess = big.NewInt(1 << 4)
 )
 
 type OrgDetailsRead struct {
@@ -346,8 +363,9 @@ type OrgDetailsRead struct {
 	// The name of this organization.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// Friendly name of this organization.
-	DisplayName *string      `json:"display_name,omitempty" url:"display_name,omitempty"`
-	Branding    *OrgBranding `json:"branding,omitempty" url:"branding,omitempty"`
+	DisplayName            *string                        `json:"display_name,omitempty" url:"display_name,omitempty"`
+	Branding               *OrgBranding                   `json:"branding,omitempty" url:"branding,omitempty"`
+	ThirdPartyClientAccess *OrgThirdPartyClientAccessEnum `json:"third_party_client_access,omitempty" url:"third_party_client_access,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -382,6 +400,13 @@ func (o *OrgDetailsRead) GetBranding() OrgBranding {
 		return OrgBranding{}
 	}
 	return *o.Branding
+}
+
+func (o *OrgDetailsRead) GetThirdPartyClientAccess() OrgThirdPartyClientAccessEnum {
+	if o == nil || o.ThirdPartyClientAccess == nil {
+		return ""
+	}
+	return *o.ThirdPartyClientAccess
 }
 
 func (o *OrgDetailsRead) GetExtraProperties() map[string]interface{} {
@@ -424,6 +449,13 @@ func (o *OrgDetailsRead) SetDisplayName(displayName *string) {
 func (o *OrgDetailsRead) SetBranding(branding *OrgBranding) {
 	o.Branding = branding
 	o.require(orgDetailsReadFieldBranding)
+}
+
+// SetThirdPartyClientAccess sets the ThirdPartyClientAccess field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrgDetailsRead) SetThirdPartyClientAccess(thirdPartyClientAccess *OrgThirdPartyClientAccessEnum) {
+	o.ThirdPartyClientAccess = thirdPartyClientAccess
+	o.require(orgDetailsReadFieldThirdPartyClientAccess)
 }
 
 func (o *OrgDetailsRead) UnmarshalJSON(data []byte) error {

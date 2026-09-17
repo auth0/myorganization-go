@@ -87,6 +87,9 @@ func TestOrganizationMembersListWithWireMock(
 		Take: myorganization.Int(
 			1,
 		),
+		IncludeTotals: myorganization.Bool(
+			true,
+		),
 	}
 	_, invocationErr := client.Organization.Members.List(
 		context.TODO(),
@@ -97,7 +100,7 @@ func TestOrganizationMembersListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationMembersListWithWireMock", "GET", "/members", map[string]string{"fields": "fields", "include_fields": "true", "from": "from", "take": "1"}, 1)
+	VerifyRequestCount(t, "TestOrganizationMembersListWithWireMock", "GET", "/members", map[string]string{"fields": "fields", "include_fields": "true", "from": "from", "take": "1", "include_totals": "true"}, 1)
 }
 
 func TestOrganizationMembersGetWithWireMock(

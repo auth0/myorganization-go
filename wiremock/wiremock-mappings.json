@@ -1,6 +1,37 @@
 {
   "mappings": [
     {
+      "id": "365475dc-6362-4043-9631-e477aab36c13",
+      "name": "Delete this Organization - default",
+      "request": {
+        "urlPathTemplate": "/",
+        "method": "DELETE",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "365475dc-6362-4043-9631-e477aab36c13",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "29a326c1-09e0-4f0b-8b3a-55872064dbed",
       "name": "Get Organization details - default",
       "request": {
@@ -14,7 +45,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}",
+        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  },\n  \"third_party_client_access\": \"allow\"\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -46,7 +77,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  }\n}",
+        "body": "{\n  \"id\": \"org_zW1UHutvkVWSWdCC\",\n  \"name\": \"testorg\",\n  \"display_name\": \"Test Organization\",\n  \"branding\": {\n    \"logo_url\": \"https://example.com/logo.png\",\n    \"colors\": {\n      \"primary\": \"#000000\",\n      \"page_background\": \"#FFFFFF\"\n    }\n  },\n  \"third_party_client_access\": \"allow\"\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -77,12 +108,49 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\"\n}",
+        "body": "{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\",\n  \"third_party_client_access\": {\n    \"default_value\": \"allow\",\n    \"allowed_values\": [\n      \"allow\"\n    ]\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
       },
       "uuid": "ddb32f2f-bb17-4551-8c51-a0f78dbb849f",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
+      "id": "ae9deb4a-5848-4ca1-b163-f6bcbafaa9e9",
+      "name": "List User Stores - default",
+      "request": {
+        "urlPathTemplate": "/user-stores",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "is_enabled": {
+            "equalTo": "true"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"user_stores\": [\n    {\n      \"id\": \"con_abc123\",\n      \"name\": \"acme-scim\",\n      \"display_name\": \"Acme SCIM\",\n      \"access_level\": \"full\",\n      \"member_access_level\": \"full\",\n      \"is_enabled\": true\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "ae9deb4a-5848-4ca1-b163-f6bcbafaa9e9",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -248,11 +316,16 @@
           "Authorization": {
             "matches": "Bearer .+"
           }
+        },
+        "queryParameters": {
+          "is_enabled": {
+            "equalTo": "true"
+          }
         }
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCC\",\n      \"name\": \"oidcIdp\",\n      \"strategy\": \"oidc\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"OIDC IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"full\",\n      \"options\": {\n        \"type\": \"front_channel\",\n        \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n        \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCD\",\n      \"name\": \"samlIdp\",\n      \"strategy\": \"samlp\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"Saml IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"limited\",\n      \"options\": {\n        \"metadataUrl\": \"a.metadata.url\",\n        \"signSAMLRequest\": true,\n        \"signatureAlgorithm\": \"rsa-sha256\",\n        \"digestAlgorithm\": \"sha256\",\n        \"protocolBinding\": \"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\",\n        \"bindingMethod\": \"HTTP-Redirect\",\n        \"cert\": \"MIIDQjCCAiugAwIBAgIRAMp+cW+SgQ2Yh7fF8v8b0OQwDQYJKoZIhvcNAQELBQAw...\",\n        \"idpInitiated\": {\n          \"enabled\": true,\n          \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n          \"client_protocol\": \"SAML\",\n          \"client_authorizequery\": \"redirect_uri=https://jwt.io&scope=openid email&response_type=token\"\n        }\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    }\n  ]\n}",
+        "body": "{\n  \"identity_providers\": [\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCC\",\n      \"name\": \"oidcIdp\",\n      \"strategy\": \"oidc\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"OIDC IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"full\",\n      \"member_access_level\": \"none\",\n      \"use_for_third_party_client_access\": true,\n      \"cross_app_access_resource_app\": {\n        \"status\": \"enabled\"\n      },\n      \"options\": {\n        \"type\": \"front_channel\",\n        \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n        \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"con_zW1UHutvkVWSWdCD\",\n      \"name\": \"samlIdp\",\n      \"strategy\": \"samlp\",\n      \"domains\": [\n        \"mydomain.com\"\n      ],\n      \"display_name\": \"Saml IdP\",\n      \"show_as_button\": true,\n      \"assign_membership_on_login\": false,\n      \"is_enabled\": true,\n      \"access_level\": \"limited\",\n      \"member_access_level\": \"none\",\n      \"use_for_third_party_client_access\": true,\n      \"cross_app_access_resource_app\": {\n        \"status\": \"enabled\"\n      },\n      \"options\": {\n        \"metadataUrl\": \"a.metadata.url\",\n        \"signSAMLRequest\": true,\n        \"signatureAlgorithm\": \"rsa-sha256\",\n        \"digestAlgorithm\": \"sha256\",\n        \"protocolBinding\": \"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\",\n        \"bindingMethod\": \"HTTP-Redirect\",\n        \"cert\": \"MIIDQjCCAiugAwIBAgIRAMp+cW+SgQ2Yh7fF8v8b0OQwDQYJKoZIhvcNAQELBQAw...\",\n        \"idpInitiated\": {\n          \"enabled\": true,\n          \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n          \"client_protocol\": \"SAML\",\n          \"client_authorizequery\": \"redirect_uri=https://jwt.io&scope=openid email&response_type=token\"\n        }\n      },\n      \"attributes\": [\n        {\n          \"user_attribute\": \"preferred_username\",\n          \"description\": \"Preferred Username\",\n          \"label\": \"Preferred username\",\n          \"is_required\": true,\n          \"is_extra\": false,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"userName\"\n          ]\n        },\n        {\n          \"user_attribute\": \"external_id\",\n          \"is_required\": true,\n          \"is_extra\": true,\n          \"is_missing\": false,\n          \"sso_field\": [\n            \"externalId\"\n          ]\n        }\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -284,7 +357,7 @@
       },
       "response": {
         "status": 201,
-        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"client_a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7did\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"member_access_level\": \"none\",\n  \"use_for_third_party_client_access\": true,\n  \"cross_app_access_resource_app\": {\n    \"status\": \"enabled\"\n  },\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"client_a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7did\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -320,7 +393,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"member_access_level\": \"none\",\n  \"use_for_third_party_client_access\": true,\n  \"cross_app_access_resource_app\": {\n    \"status\": \"enabled\"\n  },\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -392,7 +465,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"full\",\n  \"member_access_level\": \"none\",\n  \"use_for_third_party_client_access\": true,\n  \"cross_app_access_resource_app\": {\n    \"status\": \"enabled\"\n  },\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -428,7 +501,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
+        "body": "{\n  \"id\": \"con_zW1UHutvkVWSWdCC\",\n  \"name\": \"oidcIdp\",\n  \"strategy\": \"oidc\",\n  \"domains\": [\n    \"mydomain.com\"\n  ],\n  \"display_name\": \"OIDC IdP\",\n  \"show_as_button\": true,\n  \"assign_membership_on_login\": false,\n  \"is_enabled\": true,\n  \"access_level\": \"readonly\",\n  \"member_access_level\": \"none\",\n  \"use_for_third_party_client_access\": true,\n  \"cross_app_access_resource_app\": {\n    \"status\": \"enabled\"\n  },\n  \"options\": {\n    \"type\": \"front_channel\",\n    \"client_id\": \"a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d\",\n    \"discovery_url\": \"https://{yourDomain}/.well-known/openid-configuration\"\n  },\n  \"attributes\": [\n    {\n      \"user_attribute\": \"preferred_username\",\n      \"description\": \"Preferred Username\",\n      \"label\": \"Preferred username\",\n      \"is_required\": true,\n      \"is_extra\": false,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"userName\"\n      ]\n    },\n    {\n      \"user_attribute\": \"external_id\",\n      \"description\": \"description\",\n      \"label\": \"label\",\n      \"is_required\": true,\n      \"is_extra\": true,\n      \"is_missing\": false,\n      \"sso_field\": [\n        \"externalId\"\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -504,12 +577,15 @@
           },
           "take": {
             "equalTo": "1"
+          },
+          "include_totals": {
+            "equalTo": "true"
           }
         }
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"next\": \"next\",\n  \"members\": [\n    {\n      \"email\": \"roadrunner@acme.com\",\n      \"name\": \"name\",\n      \"nickname\": \"nickname\",\n      \"given_name\": \"given_name\",\n      \"family_name\": \"family_name\",\n      \"user_id\": \"auth0|123234235\",\n      \"roles\": [\n        {\n          \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n          \"name\": \"role1\"\n        },\n        {\n          \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n          \"name\": \"role2\"\n        }\n      ],\n      \"created_at\": \"2024-01-15T09:30:00Z\",\n      \"updated_at\": \"2024-01-15T09:30:00Z\",\n      \"last_login\": \"2024-01-15T09:30:00Z\",\n      \"phone_number\": \"phone_number\"\n    }\n  ]\n}",
+        "body": "{\n  \"next\": \"next\",\n  \"total\": 1,\n  \"total_is_capped\": true,\n  \"members\": [\n    {\n      \"email\": \"roadrunner@acme.com\",\n      \"name\": \"name\",\n      \"nickname\": \"nickname\",\n      \"given_name\": \"given_name\",\n      \"family_name\": \"family_name\",\n      \"user_id\": \"auth0|123234235\",\n      \"created_at\": \"2024-01-15T09:30:00Z\",\n      \"updated_at\": \"2024-01-15T09:30:00Z\",\n      \"last_login\": \"2024-01-15T09:30:00Z\",\n      \"access_level\": \"none\",\n      \"phone_number\": \"phone_number\",\n      \"roles\": [\n        {\n          \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n          \"name\": \"role1\"\n        },\n        {\n          \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n          \"name\": \"role2\"\n        }\n      ]\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -554,7 +630,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"email\": \"roadrunner@acme.com\",\n  \"name\": \"roadrunner\",\n  \"nickname\": \"beepbeep\",\n  \"given_name\": \"Road\",\n  \"family_name\": \"Runner\",\n  \"user_id\": \"auth0|123234235\",\n  \"roles\": [\n    {\n      \"id\": \"rol_BKI0BKI0BKI0BKI0\",\n      \"name\": \"role1\",\n      \"description\": \"description\"\n    },\n    {\n      \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n      \"name\": \"role2\",\n      \"description\": \"description\"\n    }\n  ],\n  \"created_at\": \"2025-05-01T12:00:00Z\",\n  \"updated_at\": \"2025-05-02T12:00:00Z\",\n  \"last_login\": \"2025-05-03T12:00:00Z\",\n  \"phone_number\": \"phone_number\"\n}",
+        "body": "{\n  \"email\": \"roadrunner@acme.com\",\n  \"name\": \"roadrunner\",\n  \"nickname\": \"beepbeep\",\n  \"given_name\": \"Road\",\n  \"family_name\": \"Runner\",\n  \"user_id\": \"auth0|123234235\",\n  \"created_at\": \"2025-05-01T12:00:00Z\",\n  \"updated_at\": \"2025-05-02T12:00:00Z\",\n  \"last_login\": \"2025-05-03T12:00:00Z\",\n  \"access_level\": \"none\",\n  \"phone_number\": \"phone_number\"\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -628,12 +704,15 @@
           },
           "sort": {
             "equalTo": "sort"
+          },
+          "include_totals": {
+            "equalTo": "true"
           }
         }
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"next\": \"next\",\n  \"invitations\": [\n    {\n      \"id\": \"uinv_12345678abcdefgh\",\n      \"organization_id\": \"org_12345678abcdefgh\",\n      \"inviter\": {\n        \"name\": \"Allison the Admin\"\n      },\n      \"invitee\": {\n        \"email\": \"user@example.com\"\n      },\n      \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n      \"created_at\": \"2025-04-11T20:11:45Z\",\n      \"expires_at\": \"2025-04-11T20:11:45Z\",\n      \"roles\": [\n        \"rol_BKW1BKIfBKd0BaI0\"\n      ],\n      \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n      \"ticket_id\": \"1asdfasd23usjdef\"\n    }\n  ]\n}",
+        "body": "{\n  \"next\": \"next\",\n  \"total\": 1,\n  \"total_is_capped\": true,\n  \"invitations\": [\n    {\n      \"id\": \"uinv_12345678abcdefgh\",\n      \"organization_id\": \"org_12345678abcdefgh\",\n      \"inviter\": {\n        \"name\": \"Allison the Admin\"\n      },\n      \"invitee\": {\n        \"email\": \"user@example.com\"\n      },\n      \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n      \"user_store_id\": \"user_store_id\",\n      \"created_at\": \"2025-04-11T20:11:45Z\",\n      \"expires_at\": \"2025-04-11T20:11:45Z\",\n      \"roles\": [\n        \"rol_BKW1BKIfBKd0BaI0\"\n      ],\n      \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n      \"ticket_id\": \"1asdfasd23usjdef\"\n    }\n  ]\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -665,12 +744,43 @@
       },
       "response": {
         "status": 201,
-        "body": "[\n  {\n    \"id\": \"uinv_12345678abcdefgh\",\n    \"organization_id\": \"org_12345678abcdefgh\",\n    \"inviter\": {\n      \"name\": \"Allison the Admin\"\n    },\n    \"invitee\": {\n      \"email\": \"user@example.com\"\n    },\n    \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n    \"created_at\": \"2025-04-11T20:11:45Z\",\n    \"expires_at\": \"2025-04-11T20:11:45Z\",\n    \"roles\": [\n      \"rol_BKW1BKIfBKd0BaI0\"\n    ],\n    \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n    \"ticket_id\": \"1asdfasd23usjdef\"\n  }\n]",
+        "body": "[\n  {\n    \"id\": \"uinv_12345678abcdefgh\",\n    \"organization_id\": \"org_12345678abcdefgh\",\n    \"inviter\": {\n      \"name\": \"Allison the Admin\"\n    },\n    \"invitee\": {\n      \"email\": \"user@example.com\"\n    },\n    \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n    \"user_store_id\": \"user_store_id\",\n    \"created_at\": \"2025-04-11T20:11:45Z\",\n    \"expires_at\": \"2025-04-11T20:11:45Z\",\n    \"roles\": [\n      \"rol_BKW1BKIfBKd0BaI0\"\n    ],\n    \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n    \"ticket_id\": \"1asdfasd23usjdef\"\n  }\n]",
         "headers": {
           "Content-Type": "application/json"
         }
       },
       "uuid": "55c94d5e-e08c-471f-b76f-111cd557f5ca",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "4ff79cd1-af44-44e4-89b7-a95ccbe9c6f3",
+      "name": "Revoke member invitations - default",
+      "request": {
+        "urlPathTemplate": "/delete-member-invitations",
+        "method": "POST",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "\"\"",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "4ff79cd1-af44-44e4-89b7-a95ccbe9c6f3",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -709,48 +819,12 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"id\": \"uinv_12345678abcdefgh\",\n  \"organization_id\": \"org_12345678abcdefgh\",\n  \"inviter\": {\n    \"name\": \"Allison the Admin\"\n  },\n  \"invitee\": {\n    \"email\": \"user@example.com\"\n  },\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"created_at\": \"2025-04-11T20:11:45Z\",\n  \"expires_at\": \"2025-04-11T20:11:45Z\",\n  \"roles\": [\n    \"rol_BKW1BKIfBKd0BaI0\"\n  ],\n  \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n  \"ticket_id\": \"1asdfasd23usjdef\"\n}",
+        "body": "{\n  \"id\": \"uinv_12345678abcdefgh\",\n  \"organization_id\": \"org_12345678abcdefgh\",\n  \"inviter\": {\n    \"name\": \"Allison the Admin\"\n  },\n  \"invitee\": {\n    \"email\": \"user@example.com\"\n  },\n  \"identity_provider_id\": \"con_2CZPv6IY0gWzDaQJ\",\n  \"user_store_id\": \"user_store_id\",\n  \"created_at\": \"2025-04-11T20:11:45Z\",\n  \"expires_at\": \"2025-04-11T20:11:45Z\",\n  \"roles\": [\n    \"rol_BKW1BKIfBKd0BaI0\"\n  ],\n  \"invitation_url\": \"https://example.auth0.com/login?invitation=uinv_12345678abcdefgh&organization=org_12345678abcdefgh\",\n  \"ticket_id\": \"1asdfasd23usjdef\"\n}",
         "headers": {
           "Content-Type": "application/json"
         }
       },
       "uuid": "1a5a7d10-bc8e-44b0-ab8a-e611721f0d64",
-      "persistent": true,
-      "priority": 3,
-      "metadata": {
-        "mocklab": {
-          "created": {
-            "at": "2020-01-01T00:00:00.000Z",
-            "via": "SYSTEM"
-          }
-        }
-      }
-    },
-    {
-      "id": "44e77096-1347-4434-83ae-3fad0ed2847b",
-      "name": "Revoke a member invitation - default",
-      "request": {
-        "urlPathTemplate": "/member-invitations/{invitation_id}",
-        "method": "DELETE",
-        "headers": {
-          "Authorization": {
-            "matches": "Bearer .+"
-          }
-        },
-        "pathParameters": {
-          "invitation_id": {
-            "equalTo": "invitation_id"
-          }
-        }
-      },
-      "response": {
-        "status": 200,
-        "body": "\"\"",
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      },
-      "uuid": "44e77096-1347-4434-83ae-3fad0ed2847b",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -819,7 +893,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"organization\": {\n    \"can_set_show_as_button\": true,\n    \"can_set_assign_membership_on_login\": false\n  },\n  \"strategies\": {\n    \"adfs\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"googleapps\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"oidc\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"okta\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"pingfederate\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"samlp\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"waad\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    }\n  }\n}",
+        "body": "{\n  \"organization\": {\n    \"can_set_show_as_button\": true,\n    \"can_set_assign_membership_on_login\": false\n  },\n  \"strategies\": {\n    \"adfs\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"googleapps\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"oidc\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ],\n      \"cross_app_access_resource_app\": {\n        \"status\": {\n          \"default_value\": \"enabled\"\n        }\n      }\n    },\n    \"okta\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ],\n      \"cross_app_access_resource_app\": {\n        \"status\": {\n          \"default_value\": \"enabled\"\n        }\n      }\n    },\n    \"pingfederate\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    },\n    \"samlp\": {\n      \"enabled_features\": [\n        \"provisioning\",\n        \"universal_logout\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ],\n      \"cross_app_access_resource_app\": {\n        \"status\": {\n          \"default_value\": \"enabled\"\n        }\n      }\n    },\n    \"waad\": {\n      \"enabled_features\": [\n        \"provisioning\"\n      ],\n      \"provisioning_methods\": [\n        \"scim\"\n      ]\n    }\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -874,7 +948,7 @@
       }
     },
     {
-      "id": "736aebae-5a32-4a51-b735-1331ee4bd9ab",
+      "id": "7c8ea4b7-2528-4c67-b0d6-336bbc4e6110",
       "name": "List Identity Providers for a domain - default",
       "request": {
         "urlPathTemplate": "/domains/{domain_id}/identity-providers",
@@ -897,7 +971,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "736aebae-5a32-4a51-b735-1331ee4bd9ab",
+      "uuid": "7c8ea4b7-2528-4c67-b0d6-336bbc4e6110",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1240,6 +1314,42 @@
       }
     },
     {
+      "id": "78855d86-9c34-431d-9d2a-2cda50cd9271",
+      "name": "List roles for a member invitation - default",
+      "request": {
+        "urlPathTemplate": "/member-invitations/{invitation_id}/roles",
+        "method": "GET",
+        "headers": {
+          "Authorization": {
+            "matches": "Bearer .+"
+          }
+        },
+        "pathParameters": {
+          "invitation_id": {
+            "equalTo": "invitation_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"roles\": [\n    {\n      \"id\": \"rol_BKW1BKIfBKd0BaI0\",\n      \"name\": \"admin\",\n      \"description\": \"Organization administrator\"\n    },\n    {\n      \"id\": \"rol_0000000000000001\",\n      \"name\": \"member\",\n      \"description\": \"description\"\n    }\n  ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "78855d86-9c34-431d-9d2a-2cda50cd9271",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "3b86d015-abf6-4c97-b708-237ed2ad30e3",
       "name": "List member roles - default",
       "request": {
@@ -1320,11 +1430,11 @@
       }
     },
     {
-      "id": "da82679e-4aa8-4fe7-b946-2b37ffeb5fdb",
+      "id": "c5b1c25a-99e9-4641-859c-ae712240e6b7",
       "name": "Remove roles from a member - default",
       "request": {
-        "urlPathTemplate": "/members/{user_id}/roles",
-        "method": "DELETE",
+        "urlPathTemplate": "/members/{user_id}/unassign-roles",
+        "method": "POST",
         "headers": {
           "Authorization": {
             "matches": "Bearer .+"
@@ -1343,7 +1453,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "da82679e-4aa8-4fe7-b946-2b37ffeb5fdb",
+      "uuid": "c5b1c25a-99e9-4641-859c-ae712240e6b7",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1357,6 +1467,6 @@
     }
   ],
   "meta": {
-    "total": 37
+    "total": 40
   }
 }

@@ -1,5 +1,47 @@
 # Reference
 ## OrganizationDetails
+<details><summary><code>client.OrganizationDetails.Delete() -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Permanently delete this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.OrganizationDetails.Delete(
+        context.TODO(),
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.OrganizationDetails.Get() -> myorganization.GetOrganizationDetailsResponseContent</code></summary>
 <dl>
 <dd>
@@ -160,6 +202,81 @@ client.Organization.Configuration.Get(
 </dl>
 </details>
 
+## Organization UserStores
+<details><summary><code>client.Organization.UserStores.List() -> *myorganization.ListUserStoresResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the user stores for the associated Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.ListOrganizationUserStoresRequestParameters{
+        MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+            myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+        },
+        IsEnabled: myorganization.Bool(
+            true,
+        ),
+    }
+client.Organization.UserStores.List(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**memberAccessLevel:** `*myorganization.OrganizationAccessLevelEnum` — When present, only connections whose Organization Member Access Level matches one of the provided values are returned. Accepted values are full, limited, readonly and none.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isEnabled:** `*bool` — Filter the returned list by enabled status. When `true`, only enabled items are returned; when `false`, only disabled items; when omitted, all items are returned.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Organization Domains
 <details><summary><code>client.Organization.Domains.List() -> *myorganization.ListOrganizationDomainsResponseContent</code></summary>
 <dl>
@@ -247,7 +364,7 @@ client.Organization.Domains.List(
 <dl>
 <dd>
 
-Create a new domain for this Organization.
+Create a domain for an Auth0 Organization and optionally enable Organization Discovery for members during the user login flow
 </dd>
 </dl>
 </dd>
@@ -308,7 +425,7 @@ client.Organization.Domains.Create(
 <dl>
 <dd>
 
-Retrieve details of a domain specified by ID for this Organization.
+Retrieve the details of an Auth0 Organization domain using its unique domain ID, including the domain name and its current verification status.
 </dd>
 </dl>
 </dd>
@@ -366,7 +483,7 @@ client.Organization.Domains.Get(
 <dl>
 <dd>
 
-Remove a domain specified by ID from this Organization.
+Delete an Auth0 Organization domain using its unique domain ID, including all associated details and verification status.
 </dd>
 </dl>
 </dd>
@@ -425,7 +542,7 @@ client.Organization.Domains.Delete(
 <dl>
 <dd>
 
-Retrieve a list of all Identity Providers for this Organization.
+Retrieve the comprehensive list of identity providers and their respective configurations associated with an Auth0 Organization.
 </dd>
 </dl>
 </dd>
@@ -440,11 +557,43 @@ Retrieve a list of all Identity Providers for this Organization.
 <dd>
 
 ```go
+request := &myorganization.ListOrganizationIdentityProvidersRequestParameters{
+        MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+            myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+        },
+        IsEnabled: myorganization.Bool(
+            true,
+        ),
+    }
 client.Organization.IdentityProviders.List(
         context.TODO(),
+        request,
     )
 }
 ```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**memberAccessLevel:** `*myorganization.OrganizationAccessLevelEnum` — When present, only connections whose Organization Member Access Level matches one of the provided values are returned. Accepted values are full, limited, readonly and none.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**isEnabled:** `*bool` — Filter the returned list by enabled status. When `true`, only enabled items are returned; when `false`, only disabled items; when omitted, all items are returned.
+    
 </dd>
 </dl>
 </dd>
@@ -467,7 +616,7 @@ client.Organization.IdentityProviders.List(
 <dl>
 <dd>
 
-Create a new Identity Provider for this Organization.
+Create a new enterprise Identity Provider utilizing the specified configuration settings and details for this Auth0 Organization.
 </dd>
 </dl>
 </dd>
@@ -907,6 +1056,9 @@ request := &myorganization.ListOrganizationMembersRequestParameters{
         Take: myorganization.Int(
             1,
         ),
+        IncludeTotals: myorganization.Bool(
+            true,
+        ),
     }
 client.Organization.Members.List(
         context.TODO(),
@@ -952,6 +1104,14 @@ client.Organization.Members.List(
 <dd>
 
 **take:** `*int` — Number of results per page. Defaults to 50.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeTotals:** `*bool` — When true, the response includes a 'total' count of items in the result set (reflecting any active filters), along with a 'total_is_capped' flag. The count is best-effort and capped at 1000; when the true size may be larger, 'total_is_capped' is true and 'total' is a lower bound. Omitted when not requested.
     
 </dd>
 </dl>
@@ -1154,6 +1314,9 @@ request := &myorganization.ListMemberInvitationsRequestParameters{
         Sort: myorganization.String(
             "sort",
         ),
+        IncludeTotals: myorganization.Bool(
+            true,
+        ),
     }
 client.Organization.Invitations.List(
         context.TODO(),
@@ -1207,6 +1370,14 @@ client.Organization.Invitations.List(
 <dd>
 
 **sort:** `*string` — Field to sort by. Use field:order where order is 1 for ascending and -1 for descending. Defaults to created_at:-1
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeTotals:** `*bool` — When true, the response includes a 'total' count of items in the result set (reflecting any active filters), along with a 'total_is_capped' flag. The count is best-effort and capped at 1000; when the true size may be larger, 'total_is_capped' is true and 'total' is a lower bound. Omitted when not requested.
     
 </dd>
 </dl>
@@ -1309,7 +1480,15 @@ client.Organization.Invitations.Create(
 <dl>
 <dd>
 
-**identityProviderID:** `*string` — Identity provider identifier.
+**identityProviderID:** `*string` — Identity provider identifier. At least one of identity_provider_id or user_store_id must be provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**userStoreID:** `*string` — The user store to route the invitation through. At least one of identity_provider_id or user_store_id must be provided.
     
 </dd>
 </dl>
@@ -1318,6 +1497,71 @@ client.Organization.Invitations.Create(
 <dd>
 
 **ttlSec:** `*int` — Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.Organization.Invitations.Delete(request) -> error</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Revoke a set of member invitations specified by IDs for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &myorganization.DeleteMemberInvitationsRequestContent{
+        Invitations: []myorganization.InvitationID{
+            "uinv_0000000000000001",
+            "uinv_0000000000000002",
+            "uinv_0000000000000003",
+        },
+    }
+client.Organization.Invitations.Delete(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invitations:** `[]myorganization.InvitationID` 
     
 </dd>
 </dl>
@@ -1401,64 +1645,6 @@ client.Organization.Invitations.Get(
 <dd>
 
 **includeFields:** `*bool` — Whether specified fields are to be included (true) or excluded (false). Defaults to true
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.Organization.Invitations.Delete(InvitationID) -> error</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Revoke a member invitation specified by ID for this Organization.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-client.Organization.Invitations.Delete(
-        context.TODO(),
-        "invitation_id",
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**invitationID:** `myorganization.InvitationID` 
     
 </dd>
 </dl>
@@ -1659,7 +1845,7 @@ client.Organization.Domains.Verify.Create(
 </details>
 
 ## Organization Domains IdentityProviders
-<details><summary><code>client.Organization.Domains.IdentityProviders.Get(DomainID) -> *myorganization.ListDomainIdentityProvidersResponseContent</code></summary>
+<details><summary><code>client.Organization.Domains.IdentityProviders.List(DomainID) -> *myorganization.ListDomainIdentityProvidersResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -1686,7 +1872,7 @@ Retrieve the list of Identity Providers associated with a domain specified by ID
 <dd>
 
 ```go
-client.Organization.Domains.IdentityProviders.Get(
+client.Organization.Domains.IdentityProviders.List(
         context.TODO(),
         "domain_id",
     )
@@ -2287,6 +2473,65 @@ client.Organization.IdentityProviders.Provisioning.SCIMTokens.Delete(
 <dd>
 
 **idpSCIMTokenID:** `myorganization.IdpProvisioningSCIMTokenID` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Organization Invitations Roles
+<details><summary><code>client.Organization.Invitations.Roles.List(InvitationID) -> *myorganization.GetMemberInvitationRolesResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the roles assigned to a member invitation specified by ID for this Organization.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.Organization.Invitations.Roles.List(
+        context.TODO(),
+        "invitation_id",
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invitationID:** `myorganization.InvitationID` 
     
 </dd>
 </dl>

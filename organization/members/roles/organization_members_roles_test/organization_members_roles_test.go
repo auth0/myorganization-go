@@ -150,5 +150,5 @@ func TestOrganizationMembersRolesUnassignWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationMembersRolesUnassignWithWireMock", "DELETE", "/members/user_id/roles", nil, 1)
+	VerifyRequestCount(t, "TestOrganizationMembersRolesUnassignWithWireMock", "POST", "/members/user_id/unassign-roles", nil, 1)
 }

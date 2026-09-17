@@ -9,6 +9,100 @@ import (
 )
 
 var (
+	createMemberInvitationRequestContentFieldAuth0CustomDomain  = big.NewInt(1 << 0)
+	createMemberInvitationRequestContentFieldInvitees           = big.NewInt(1 << 1)
+	createMemberInvitationRequestContentFieldInviter            = big.NewInt(1 << 2)
+	createMemberInvitationRequestContentFieldIdentityProviderID = big.NewInt(1 << 3)
+	createMemberInvitationRequestContentFieldUserStoreID        = big.NewInt(1 << 4)
+	createMemberInvitationRequestContentFieldTTLSec             = big.NewInt(1 << 5)
+)
+
+type CreateMemberInvitationRequestContent struct {
+	Auth0CustomDomain *string                          `json:"-" url:"-"`
+	Invitees          []*CreateMemberInvitationInvitee `json:"invitees" url:"-"`
+	Inviter           *MemberInvitationInviter         `json:"inviter,omitempty" url:"-"`
+	// Identity provider identifier. At least one of identity_provider_id or user_store_id must be provided.
+	IdentityProviderID *string `json:"identity_provider_id,omitempty" url:"-"`
+	// The user store to route the invitation through. At least one of identity_provider_id or user_store_id must be provided.
+	UserStoreID *string `json:"user_store_id,omitempty" url:"-"`
+	// Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+	TTLSec *int `json:"ttl_sec,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateMemberInvitationRequestContent) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAuth0CustomDomain sets the Auth0CustomDomain field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetAuth0CustomDomain(auth0CustomDomain *string) {
+	c.Auth0CustomDomain = auth0CustomDomain
+	c.require(createMemberInvitationRequestContentFieldAuth0CustomDomain)
+}
+
+// SetInvitees sets the Invitees field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetInvitees(invitees []*CreateMemberInvitationInvitee) {
+	c.Invitees = invitees
+	c.require(createMemberInvitationRequestContentFieldInvitees)
+}
+
+// SetInviter sets the Inviter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetInviter(inviter *MemberInvitationInviter) {
+	c.Inviter = inviter
+	c.require(createMemberInvitationRequestContentFieldInviter)
+}
+
+// SetIdentityProviderID sets the IdentityProviderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetIdentityProviderID(identityProviderID *string) {
+	c.IdentityProviderID = identityProviderID
+	c.require(createMemberInvitationRequestContentFieldIdentityProviderID)
+}
+
+// SetUserStoreID sets the UserStoreID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetUserStoreID(userStoreID *string) {
+	c.UserStoreID = userStoreID
+	c.require(createMemberInvitationRequestContentFieldUserStoreID)
+}
+
+// SetTTLSec sets the TTLSec field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMemberInvitationRequestContent) SetTTLSec(ttlSec *int) {
+	c.TTLSec = ttlSec
+	c.require(createMemberInvitationRequestContentFieldTTLSec)
+}
+
+func (c *CreateMemberInvitationRequestContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateMemberInvitationRequestContent
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateMemberInvitationRequestContent(body)
+	return nil
+}
+
+func (c *CreateMemberInvitationRequestContent) MarshalJSON() ([]byte, error) {
+	type embed CreateMemberInvitationRequestContent
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
 	createOrganizationDomainRequestContentFieldDomain = big.NewInt(1 << 0)
 )
 
@@ -148,86 +242,48 @@ func (c *CreateIdpProvisioningSCIMTokenRequestContent) MarshalJSON() ([]byte, er
 }
 
 var (
-	createMemberInvitationRequestContentFieldAuth0CustomDomain  = big.NewInt(1 << 0)
-	createMemberInvitationRequestContentFieldInvitees           = big.NewInt(1 << 1)
-	createMemberInvitationRequestContentFieldInviter            = big.NewInt(1 << 2)
-	createMemberInvitationRequestContentFieldIdentityProviderID = big.NewInt(1 << 3)
-	createMemberInvitationRequestContentFieldTTLSec             = big.NewInt(1 << 4)
+	deleteMemberInvitationsRequestContentFieldInvitations = big.NewInt(1 << 0)
 )
 
-type CreateMemberInvitationRequestContent struct {
-	Auth0CustomDomain *string                          `json:"-" url:"-"`
-	Invitees          []*CreateMemberInvitationInvitee `json:"invitees" url:"-"`
-	Inviter           *MemberInvitationInviter         `json:"inviter,omitempty" url:"-"`
-	// Identity provider identifier.
-	IdentityProviderID *string `json:"identity_provider_id,omitempty" url:"-"`
-	// Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
-	TTLSec *int `json:"ttl_sec,omitempty" url:"-"`
+type DeleteMemberInvitationsRequestContent struct {
+	Invitations []InvitationID `json:"invitations" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
 }
 
-func (c *CreateMemberInvitationRequestContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+func (d *DeleteMemberInvitationsRequestContent) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	d.explicitFields.Or(d.explicitFields, field)
 }
 
-// SetAuth0CustomDomain sets the Auth0CustomDomain field and marks it as non-optional;
+// SetInvitations sets the Invitations field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMemberInvitationRequestContent) SetAuth0CustomDomain(auth0CustomDomain *string) {
-	c.Auth0CustomDomain = auth0CustomDomain
-	c.require(createMemberInvitationRequestContentFieldAuth0CustomDomain)
+func (d *DeleteMemberInvitationsRequestContent) SetInvitations(invitations []InvitationID) {
+	d.Invitations = invitations
+	d.require(deleteMemberInvitationsRequestContentFieldInvitations)
 }
 
-// SetInvitees sets the Invitees field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMemberInvitationRequestContent) SetInvitees(invitees []*CreateMemberInvitationInvitee) {
-	c.Invitees = invitees
-	c.require(createMemberInvitationRequestContentFieldInvitees)
-}
-
-// SetInviter sets the Inviter field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMemberInvitationRequestContent) SetInviter(inviter *MemberInvitationInviter) {
-	c.Inviter = inviter
-	c.require(createMemberInvitationRequestContentFieldInviter)
-}
-
-// SetIdentityProviderID sets the IdentityProviderID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMemberInvitationRequestContent) SetIdentityProviderID(identityProviderID *string) {
-	c.IdentityProviderID = identityProviderID
-	c.require(createMemberInvitationRequestContentFieldIdentityProviderID)
-}
-
-// SetTTLSec sets the TTLSec field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateMemberInvitationRequestContent) SetTTLSec(ttlSec *int) {
-	c.TTLSec = ttlSec
-	c.require(createMemberInvitationRequestContentFieldTTLSec)
-}
-
-func (c *CreateMemberInvitationRequestContent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CreateMemberInvitationRequestContent
+func (d *DeleteMemberInvitationsRequestContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteMemberInvitationsRequestContent
 	var body unmarshaler
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
-	*c = CreateMemberInvitationRequestContent(body)
+	*d = DeleteMemberInvitationsRequestContent(body)
 	return nil
 }
 
-func (c *CreateMemberInvitationRequestContent) MarshalJSON() ([]byte, error) {
-	type embed CreateMemberInvitationRequestContent
+func (d *DeleteMemberInvitationsRequestContent) MarshalJSON() ([]byte, error) {
+	type embed DeleteMemberInvitationsRequestContent
 	var marshaler = struct {
 		embed
 	}{
-		embed: embed(*c),
+		embed: embed(*d),
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
 	return json.Marshal(explicitMarshaler)
 }
 
@@ -350,47 +406,12 @@ func (g *GetOrganizationMemberRequestParameters) SetIncludeFields(includeFields 
 }
 
 var (
-	listOrganizationDomainsRequestParametersFieldFrom = big.NewInt(1 << 0)
-	listOrganizationDomainsRequestParametersFieldTake = big.NewInt(1 << 1)
-)
-
-type ListOrganizationDomainsRequestParameters struct {
-	// An optional cursor from which to start the selection (exclusive).
-	From *string `json:"-" url:"from,omitempty"`
-	// Number of results per page. Defaults to 50.
-	Take *int `json:"-" url:"take,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (l *ListOrganizationDomainsRequestParameters) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
-	}
-	l.explicitFields.Or(l.explicitFields, field)
-}
-
-// SetFrom sets the From field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListOrganizationDomainsRequestParameters) SetFrom(from *string) {
-	l.From = from
-	l.require(listOrganizationDomainsRequestParametersFieldFrom)
-}
-
-// SetTake sets the Take field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListOrganizationDomainsRequestParameters) SetTake(take *int) {
-	l.Take = take
-	l.require(listOrganizationDomainsRequestParametersFieldTake)
-}
-
-var (
 	listMemberInvitationsRequestParametersFieldFields        = big.NewInt(1 << 0)
 	listMemberInvitationsRequestParametersFieldIncludeFields = big.NewInt(1 << 1)
 	listMemberInvitationsRequestParametersFieldFrom          = big.NewInt(1 << 2)
 	listMemberInvitationsRequestParametersFieldTake          = big.NewInt(1 << 3)
 	listMemberInvitationsRequestParametersFieldSort          = big.NewInt(1 << 4)
+	listMemberInvitationsRequestParametersFieldIncludeTotals = big.NewInt(1 << 5)
 )
 
 type ListMemberInvitationsRequestParameters struct {
@@ -404,6 +425,8 @@ type ListMemberInvitationsRequestParameters struct {
 	Take *int `json:"-" url:"take,omitempty"`
 	// Field to sort by. Use field:order where order is 1 for ascending and -1 for descending. Defaults to created_at:-1
 	Sort *string `json:"-" url:"sort,omitempty"`
+	// When true, the response includes a 'total' count of items in the result set (reflecting any active filters), along with a 'total_is_capped' flag. The count is best-effort and capped at 1000; when the true size may be larger, 'total_is_capped' is true and 'total' is a lower bound. Omitted when not requested.
+	IncludeTotals *bool `json:"-" url:"include_totals,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -451,11 +474,55 @@ func (l *ListMemberInvitationsRequestParameters) SetSort(sort *string) {
 	l.require(listMemberInvitationsRequestParametersFieldSort)
 }
 
+// SetIncludeTotals sets the IncludeTotals field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListMemberInvitationsRequestParameters) SetIncludeTotals(includeTotals *bool) {
+	l.IncludeTotals = includeTotals
+	l.require(listMemberInvitationsRequestParametersFieldIncludeTotals)
+}
+
+var (
+	listOrganizationDomainsRequestParametersFieldFrom = big.NewInt(1 << 0)
+	listOrganizationDomainsRequestParametersFieldTake = big.NewInt(1 << 1)
+)
+
+type ListOrganizationDomainsRequestParameters struct {
+	// An optional cursor from which to start the selection (exclusive).
+	From *string `json:"-" url:"from,omitempty"`
+	// Number of results per page. Defaults to 50.
+	Take *int `json:"-" url:"take,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListOrganizationDomainsRequestParameters) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetFrom sets the From field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationDomainsRequestParameters) SetFrom(from *string) {
+	l.From = from
+	l.require(listOrganizationDomainsRequestParametersFieldFrom)
+}
+
+// SetTake sets the Take field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationDomainsRequestParameters) SetTake(take *int) {
+	l.Take = take
+	l.require(listOrganizationDomainsRequestParametersFieldTake)
+}
+
 var (
 	listOrganizationMembersRequestParametersFieldFields        = big.NewInt(1 << 0)
 	listOrganizationMembersRequestParametersFieldIncludeFields = big.NewInt(1 << 1)
 	listOrganizationMembersRequestParametersFieldFrom          = big.NewInt(1 << 2)
 	listOrganizationMembersRequestParametersFieldTake          = big.NewInt(1 << 3)
+	listOrganizationMembersRequestParametersFieldIncludeTotals = big.NewInt(1 << 4)
 )
 
 type ListOrganizationMembersRequestParameters struct {
@@ -467,6 +534,8 @@ type ListOrganizationMembersRequestParameters struct {
 	From *string `json:"-" url:"from,omitempty"`
 	// Number of results per page. Defaults to 50.
 	Take *int `json:"-" url:"take,omitempty"`
+	// When true, the response includes a 'total' count of items in the result set (reflecting any active filters), along with a 'total_is_capped' flag. The count is best-effort and capped at 1000; when the true size may be larger, 'total_is_capped' is true and 'total' is a lower bound. Omitted when not requested.
+	IncludeTotals *bool `json:"-" url:"include_totals,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -507,6 +576,13 @@ func (l *ListOrganizationMembersRequestParameters) SetTake(take *int) {
 	l.require(listOrganizationMembersRequestParametersFieldTake)
 }
 
+// SetIncludeTotals sets the IncludeTotals field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationMembersRequestParameters) SetIncludeTotals(includeTotals *bool) {
+	l.IncludeTotals = includeTotals
+	l.require(listOrganizationMembersRequestParametersFieldIncludeTotals)
+}
+
 var (
 	listOrgMemberRolesRequestParametersFieldFrom = big.NewInt(1 << 0)
 	listOrgMemberRolesRequestParametersFieldTake = big.NewInt(1 << 1)
@@ -541,6 +617,42 @@ func (l *ListOrgMemberRolesRequestParameters) SetFrom(from *string) {
 func (l *ListOrgMemberRolesRequestParameters) SetTake(take *int) {
 	l.Take = take
 	l.require(listOrgMemberRolesRequestParametersFieldTake)
+}
+
+var (
+	listOrganizationIdentityProvidersRequestParametersFieldMemberAccessLevel = big.NewInt(1 << 0)
+	listOrganizationIdentityProvidersRequestParametersFieldIsEnabled         = big.NewInt(1 << 1)
+)
+
+type ListOrganizationIdentityProvidersRequestParameters struct {
+	// When present, only connections whose Organization Member Access Level matches one of the provided values are returned. Accepted values are full, limited, readonly and none.
+	MemberAccessLevel []*OrganizationAccessLevelEnum `json:"-" url:"member_access_level,omitempty"`
+	// Filter the returned list by enabled status. When `true`, only enabled items are returned; when `false`, only disabled items; when omitted, all items are returned.
+	IsEnabled *bool `json:"-" url:"is_enabled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListOrganizationIdentityProvidersRequestParameters) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetMemberAccessLevel sets the MemberAccessLevel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationIdentityProvidersRequestParameters) SetMemberAccessLevel(memberAccessLevel []*OrganizationAccessLevelEnum) {
+	l.MemberAccessLevel = memberAccessLevel
+	l.require(listOrganizationIdentityProvidersRequestParametersFieldMemberAccessLevel)
+}
+
+// SetIsEnabled sets the IsEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationIdentityProvidersRequestParameters) SetIsEnabled(isEnabled *bool) {
+	l.IsEnabled = isEnabled
+	l.require(listOrganizationIdentityProvidersRequestParametersFieldIsEnabled)
 }
 
 var (
@@ -587,4 +699,40 @@ func (l *ListRolesRequestParameters) SetTake(take *int) {
 func (l *ListRolesRequestParameters) SetName(name *string) {
 	l.Name = name
 	l.require(listRolesRequestParametersFieldName)
+}
+
+var (
+	listOrganizationUserStoresRequestParametersFieldMemberAccessLevel = big.NewInt(1 << 0)
+	listOrganizationUserStoresRequestParametersFieldIsEnabled         = big.NewInt(1 << 1)
+)
+
+type ListOrganizationUserStoresRequestParameters struct {
+	// When present, only connections whose Organization Member Access Level matches one of the provided values are returned. Accepted values are full, limited, readonly and none.
+	MemberAccessLevel []*OrganizationAccessLevelEnum `json:"-" url:"member_access_level,omitempty"`
+	// Filter the returned list by enabled status. When `true`, only enabled items are returned; when `false`, only disabled items; when omitted, all items are returned.
+	IsEnabled *bool `json:"-" url:"is_enabled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListOrganizationUserStoresRequestParameters) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetMemberAccessLevel sets the MemberAccessLevel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationUserStoresRequestParameters) SetMemberAccessLevel(memberAccessLevel []*OrganizationAccessLevelEnum) {
+	l.MemberAccessLevel = memberAccessLevel
+	l.require(listOrganizationUserStoresRequestParametersFieldMemberAccessLevel)
+}
+
+// SetIsEnabled sets the IsEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListOrganizationUserStoresRequestParameters) SetIsEnabled(isEnabled *bool) {
+	l.IsEnabled = isEnabled
+	l.require(listOrganizationUserStoresRequestParametersFieldIsEnabled)
 }

@@ -90,6 +90,9 @@ func TestOrganizationInvitationsListWithWireMock(
 		Sort: myorganization.String(
 			"sort",
 		),
+		IncludeTotals: myorganization.Bool(
+			true,
+		),
 	}
 	_, invocationErr := client.Organization.Invitations.List(
 		context.TODO(),
@@ -100,7 +103,7 @@ func TestOrganizationInvitationsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationInvitationsListWithWireMock", "GET", "/member-invitations", map[string]string{"fields": "fields", "include_fields": "true", "from": "from", "take": "1", "sort": "sort"}, 1)
+	VerifyRequestCount(t, "TestOrganizationInvitationsListWithWireMock", "GET", "/member-invitations", map[string]string{"fields": "fields", "include_fields": "true", "from": "from", "take": "1", "sort": "sort", "include_totals": "true"}, 1)
 }
 
 func TestOrganizationInvitationsCreateWithWireMock(
@@ -147,6 +150,36 @@ func TestOrganizationInvitationsCreateWithWireMock(
 	VerifyRequestCount(t, "TestOrganizationInvitationsCreateWithWireMock", "POST", "/member-invitations", nil, 1)
 }
 
+func TestOrganizationInvitationsDeleteWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewWithOptions(
+		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
+	)
+	request := &myorganization.DeleteMemberInvitationsRequestContent{
+		Invitations: []myorganization.InvitationID{
+			"uinv_0000000000000001",
+			"uinv_0000000000000002",
+			"uinv_0000000000000003",
+		},
+	}
+	invocationErr := client.Organization.Invitations.Delete(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestOrganizationInvitationsDeleteWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestOrganizationInvitationsDeleteWithWireMock", "POST", "/delete-member-invitations", nil, 1)
+}
+
 func TestOrganizationInvitationsGetWithWireMock(
 	t *testing.T,
 ) {
@@ -177,27 +210,4 @@ func TestOrganizationInvitationsGetWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestOrganizationInvitationsGetWithWireMock", "GET", "/member-invitations/invitation_id", map[string]string{"fields": "fields", "include_fields": "true"}, 1)
-}
-
-func TestOrganizationInvitationsDeleteWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewWithOptions(
-		option.WithBaseURL(WireMockBaseURL),
-		option.WithToken("test-token"),
-	)
-	invocationErr := client.Organization.Invitations.Delete(
-		context.TODO(),
-		"invitation_id",
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestOrganizationInvitationsDeleteWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationInvitationsDeleteWithWireMock", "DELETE", "/member-invitations/invitation_id", nil, 1)
 }

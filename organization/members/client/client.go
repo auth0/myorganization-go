@@ -55,6 +55,7 @@ func (c *Client) List(
 		map[string]any{
 			"include_fields": true,
 			"take":           50,
+			"include_totals": false,
 		},
 	)
 	if err != nil {

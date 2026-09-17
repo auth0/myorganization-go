@@ -89,7 +89,7 @@ func (r *RawClient) Unassign(
 		"https://%7BTENANT%7D.auth0.com/my-org/v1",
 	)
 	endpointURL := internal.EncodeURL(
-		baseURL+"/members/%v/roles",
+		baseURL+"/members/%v/unassign-roles",
 		userID,
 	)
 	headers := internal.MergeHeaders(
@@ -100,7 +100,7 @@ func (r *RawClient) Unassign(
 		ctx,
 		&internal.CallParams{
 			URL:             endpointURL,
-			Method:          http.MethodDelete,
+			Method:          http.MethodPost,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
