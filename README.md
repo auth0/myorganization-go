@@ -36,6 +36,8 @@ This library follows the [same support policy as Go](https://go.dev/doc/devel/re
 go get github.com/auth0/myorganization-go/v2
 ```
 
+Upgrading from v1? See the [Migration Guide](./MIGRATION_GUIDE.md) for the breaking changes and step-by-step upgrade instructions.
+
 ### Usage
 
 #### Client Credentials (M2M)

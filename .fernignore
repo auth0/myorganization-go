@@ -13,6 +13,7 @@ go.sum
 # Documentation
 README.md
 CLAUDE.md
+MIGRATION_GUIDE.md
 
 # Change log
 CHANGELOG.md
