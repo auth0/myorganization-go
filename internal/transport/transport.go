@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
-	myorganization "github.com/auth0/myorganization-go"
-	"github.com/auth0/myorganization-go/internal/telemetry"
+	myorganization "github.com/auth0/myorganization-go/v2"
+	"github.com/auth0/myorganization-go/v2/internal/telemetry"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )

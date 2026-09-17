@@ -4,7 +4,7 @@ package myorganization
 
 import (
 	json "encoding/json"
-	internal "github.com/auth0/myorganization-go/internal"
+	internal "github.com/auth0/myorganization-go/v2/internal"
 	big "math/big"
 )
 

@@ -6,11 +6,11 @@ import (
 	context "context"
 	http "net/http"
 
-	myorganization "github.com/auth0/myorganization-go"
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	option "github.com/auth0/myorganization-go/option"
-	configuration "github.com/auth0/myorganization-go/organization/configuration"
+	myorganization "github.com/auth0/myorganization-go/v2"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	option "github.com/auth0/myorganization-go/v2/option"
+	configuration "github.com/auth0/myorganization-go/v2/organization/configuration"
 )
 
 type RawClient struct {

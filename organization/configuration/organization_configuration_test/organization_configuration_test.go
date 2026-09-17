@@ -10,8 +10,8 @@ import (
 	os "os"
 	testing "testing"
 
-	client "github.com/auth0/myorganization-go/client"
-	option "github.com/auth0/myorganization-go/option"
+	client "github.com/auth0/myorganization-go/v2/client"
+	option "github.com/auth0/myorganization-go/v2/option"
 	require "github.com/stretchr/testify/require"
 )
 

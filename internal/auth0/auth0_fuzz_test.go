@@ -3,7 +3,7 @@ package auth0
 import (
 	"testing"
 
-	core "github.com/auth0/myorganization-go/core"
+	core "github.com/auth0/myorganization-go/v2/core"
 )
 
 // FuzzSanitizeDomain verifies SanitizeDomain never panics on arbitrary input

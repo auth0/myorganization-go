@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/auth0/myorganization-go/core"
+	"github.com/auth0/myorganization-go/v2/core"
 )
 
 // ErrorCodes maps HTTP status codes to error constructors.

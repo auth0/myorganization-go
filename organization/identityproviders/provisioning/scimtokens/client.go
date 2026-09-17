@@ -5,10 +5,10 @@ package scimtokens
 import (
 	context "context"
 
-	myorganization "github.com/auth0/myorganization-go"
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	option "github.com/auth0/myorganization-go/option"
+	myorganization "github.com/auth0/myorganization-go/v2"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	option "github.com/auth0/myorganization-go/v2/option"
 )
 
 type Client struct {

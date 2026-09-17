@@ -33,7 +33,7 @@ This library follows the [same support policy as Go](https://go.dev/doc/devel/re
 ### Installation
 
 ```shell
-go get github.com/auth0/myorganization-go
+go get github.com/auth0/myorganization-go/v2
 ```
 
 ### Usage
@@ -50,8 +50,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 func main() {
@@ -103,8 +103,8 @@ import (
     "context"
     "os"
 
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 privateKeyPEM, _ := os.ReadFile("private_key.pem")
@@ -141,8 +141,8 @@ Use `option.WithTokenSource` to provide your own `oauth2.TokenSource` implementa
 
 ```go
 import (
-    "github.com/auth0/myorganization-go/client"
-    "github.com/auth0/myorganization-go/option"
+    "github.com/auth0/myorganization-go/v2/client"
+    "github.com/auth0/myorganization-go/v2/option"
     "golang.org/x/oauth2"
 )
 
@@ -178,8 +178,8 @@ import (
     "fmt"
     "net/url"
 
-    myorganization "github.com/auth0/myorganization-go"
-    "github.com/auth0/myorganization-go/option"
+    myorganization "github.com/auth0/myorganization-go/v2"
+    "github.com/auth0/myorganization-go/v2/option"
 )
 
 ctx := context.Background()
@@ -291,8 +291,8 @@ import (
     "errors"
     "fmt"
 
-    myorganization "github.com/auth0/myorganization-go"
-    "github.com/auth0/myorganization-go/core"
+    myorganization "github.com/auth0/myorganization-go/v2"
+    "github.com/auth0/myorganization-go/v2/core"
 )
 
 response, err := c.Organization.Domains.Create(ctx, request)
@@ -353,7 +353,7 @@ _, err := c.OrganizationDetails.Update(ctx, details)
 The SDK provides helper functions for creating pointers to primitive values, useful when constructing request bodies with optional fields:
 
 ```go
-import myorganization "github.com/auth0/myorganization-go"
+import myorganization "github.com/auth0/myorganization-go/v2"
 
 request := &myorganization.CreateClientRequestContent{
     Name:        "my-client",

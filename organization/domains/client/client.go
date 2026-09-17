@@ -6,12 +6,12 @@ import (
 	context "context"
 	http "net/http"
 
-	myorganization "github.com/auth0/myorganization-go"
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	option "github.com/auth0/myorganization-go/option"
-	identityproviders "github.com/auth0/myorganization-go/organization/domains/identityproviders"
-	verify "github.com/auth0/myorganization-go/organization/domains/verify"
+	myorganization "github.com/auth0/myorganization-go/v2"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	option "github.com/auth0/myorganization-go/v2/option"
+	identityproviders "github.com/auth0/myorganization-go/v2/organization/domains/identityproviders"
+	verify "github.com/auth0/myorganization-go/v2/organization/domains/verify"
 )
 
 type Client struct {

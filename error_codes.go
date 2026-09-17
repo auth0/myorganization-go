@@ -3,8 +3,8 @@
 package myorganization
 
 import (
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{

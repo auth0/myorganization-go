@@ -3,11 +3,11 @@
 package client
 
 import (
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	option "github.com/auth0/myorganization-go/option"
-	client "github.com/auth0/myorganization-go/organization/client"
-	organizationdetails "github.com/auth0/myorganization-go/organizationdetails"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	option "github.com/auth0/myorganization-go/v2/option"
+	client "github.com/auth0/myorganization-go/v2/organization/client"
+	organizationdetails "github.com/auth0/myorganization-go/v2/organizationdetails"
 )
 
 type MyOrganization struct {

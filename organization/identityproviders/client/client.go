@@ -5,12 +5,12 @@ package client
 import (
 	context "context"
 
-	myorganization "github.com/auth0/myorganization-go"
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	option "github.com/auth0/myorganization-go/option"
-	domains "github.com/auth0/myorganization-go/organization/identityproviders/domains"
-	client "github.com/auth0/myorganization-go/organization/identityproviders/provisioning/client"
+	myorganization "github.com/auth0/myorganization-go/v2"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	option "github.com/auth0/myorganization-go/v2/option"
+	domains "github.com/auth0/myorganization-go/v2/organization/identityproviders/domains"
+	client "github.com/auth0/myorganization-go/v2/organization/identityproviders/provisioning/client"
 )
 
 type Client struct {

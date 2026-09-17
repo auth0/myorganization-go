@@ -1,10 +1,10 @@
 package client
 
 import (
-	core "github.com/auth0/myorganization-go/core"
-	"github.com/auth0/myorganization-go/internal/auth0"
-	"github.com/auth0/myorganization-go/internal/transport"
-	option "github.com/auth0/myorganization-go/option"
+	core "github.com/auth0/myorganization-go/v2/core"
+	"github.com/auth0/myorganization-go/v2/internal/auth0"
+	"github.com/auth0/myorganization-go/v2/internal/transport"
+	option "github.com/auth0/myorganization-go/v2/option"
 )
 
 // New creates a new MyOrganization client with Auth0 authentication and telemetry.

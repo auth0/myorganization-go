@@ -3,16 +3,16 @@
 package client
 
 import (
-	core "github.com/auth0/myorganization-go/core"
-	internal "github.com/auth0/myorganization-go/internal"
-	client "github.com/auth0/myorganization-go/organization/configuration/client"
-	domainsclient "github.com/auth0/myorganization-go/organization/domains/client"
-	identityprovidersclient "github.com/auth0/myorganization-go/organization/identityproviders/client"
-	invitationsclient "github.com/auth0/myorganization-go/organization/invitations/client"
-	membersclient "github.com/auth0/myorganization-go/organization/members/client"
-	memberships "github.com/auth0/myorganization-go/organization/memberships"
-	roles "github.com/auth0/myorganization-go/organization/roles"
-	userstores "github.com/auth0/myorganization-go/organization/userstores"
+	core "github.com/auth0/myorganization-go/v2/core"
+	internal "github.com/auth0/myorganization-go/v2/internal"
+	client "github.com/auth0/myorganization-go/v2/organization/configuration/client"
+	domainsclient "github.com/auth0/myorganization-go/v2/organization/domains/client"
+	identityprovidersclient "github.com/auth0/myorganization-go/v2/organization/identityproviders/client"
+	invitationsclient "github.com/auth0/myorganization-go/v2/organization/invitations/client"
+	membersclient "github.com/auth0/myorganization-go/v2/organization/members/client"
+	memberships "github.com/auth0/myorganization-go/v2/organization/memberships"
+	roles "github.com/auth0/myorganization-go/v2/organization/roles"
+	userstores "github.com/auth0/myorganization-go/v2/organization/userstores"
 )
 
 type Client struct {
