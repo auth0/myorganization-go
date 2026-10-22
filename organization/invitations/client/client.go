@@ -30,14 +30,42 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve a list of all member invitations for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.ListMemberInvitationsRequestParameters{
+//	    Fields: myorganization.String(
+//	        "fields",
+//	    ),
+//	    IncludeFields: myorganization.Bool(
+//	        true,
+//	    ),
+//	    From: myorganization.String(
+//	        "from",
+//	    ),
+//	    Take: myorganization.Int(
+//	        1,
+//	    ),
+//	    Sort: myorganization.String(
+//	        "sort",
+//	    ),
+//	    IncludeTotals: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.Invitations.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *myorganization.ListMemberInvitationsRequestParameters,
@@ -79,6 +107,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -94,7 +123,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,6 +135,34 @@ func (c *Client) List(
 }
 
 // Create one or more member invitations for this Organization. If an active invitation already exists for a user, generating a new invitation will automatically revoke any outstanding invitations for that user. Roles specified in the payload will be granted to the user upon acceptance of the invitation.
+//
+// Example:
+//
+//	request := &myorganization.CreateMemberInvitationRequestContent{
+//	    Invitees: []*myorganization.CreateMemberInvitationInvitee{
+//	        &myorganization.CreateMemberInvitationInvitee{
+//	            Email: "user@example.com",
+//	            Roles: []myorganization.RoleID{
+//	                "rol_0000000000000001",
+//	            },
+//	        },
+//	    },
+//	    Inviter: &myorganization.MemberInvitationInviter{
+//	        Name: myorganization.String(
+//	            "Allison the Admin",
+//	        ),
+//	    },
+//	    IdentityProviderID: myorganization.String(
+//	        "con_2CZPv6IY0gWzDaQJ",
+//	    ),
+//	    TTLSec: myorganization.Int(
+//	        3600,
+//	    ),
+//	}
+//	client.Organization.Invitations.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *myorganization.CreateMemberInvitationRequestContent,
@@ -123,6 +180,20 @@ func (c *Client) Create(
 }
 
 // Revoke a set of member invitations specified by IDs for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.DeleteMemberInvitationsRequestContent{
+//	    Invitations: []myorganization.InvitationID{
+//	        "uinv_0000000000000001",
+//	        "uinv_0000000000000002",
+//	        "uinv_0000000000000003",
+//	    },
+//	}
+//	client.Organization.Invitations.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *myorganization.DeleteMemberInvitationsRequestContent,
@@ -140,6 +211,22 @@ func (c *Client) Delete(
 }
 
 // Retrieve details of a member invitation specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.GetMemberInvitationRequestParameters{
+//	    Fields: myorganization.String(
+//	        "fields",
+//	    ),
+//	    IncludeFields: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.Invitations.Get(
+//	    context.TODO(),
+//	    "invitation_id",
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	invitationID myorganization.InvitationID,

@@ -26,14 +26,27 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Remove one member from this Organization. The underlying user account is not deleted.
+//
+// Example:
+//
+//	request := &myorganization.DeleteOrganizationMembershipsRequestParameters{
+//	    Members: []myorganization.OrgMemberID{
+//	        "auth0|1234567890",
+//	    },
+//	}
+//	client.Organization.Memberships.DeleteMemberships(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteMemberships(
 	ctx context.Context,
 	request *myorganization.DeleteOrganizationMembershipsRequestParameters,

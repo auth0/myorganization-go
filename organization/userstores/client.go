@@ -26,14 +26,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve the user stores for the associated Organization.
+//
+// Example:
+//
+//	request := &myorganization.ListOrganizationUserStoresRequestParameters{
+//	    MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+//	        myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+//	    },
+//	    IsEnabled: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.UserStores.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *myorganization.ListOrganizationUserStoresRequestParameters,

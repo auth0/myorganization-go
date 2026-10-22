@@ -11,12 +11,17 @@ import (
 
 type GetOrganizationDetailsResponseContent = *OrgDetailsRead
 
-// Theme defines how to style the login pages.
 var (
 	orgBrandingFieldLogoURL = big.NewInt(1 << 0)
 	orgBrandingFieldColors  = big.NewInt(1 << 1)
 )
 
+// orgBrandingNullableFields maps the wire names of OrgBranding's nullable fields (required or optional) to their field bits.
+var orgBrandingNullableFields = map[string]*big.Int{
+	"logo_url": orgBrandingFieldLogoURL,
+}
+
+// Theme defines how to style the login pages.
 type OrgBranding struct {
 	// URL of logo to display on login page.
 	LogoURL *string            `json:"logo_url,omitempty" url:"logo_url,omitempty"`
@@ -51,10 +56,12 @@ func (o *OrgBranding) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgBranding) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetLogoURL sets the LogoURL field and marks it as non-optional;
@@ -83,6 +90,13 @@ func (o *OrgBranding) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	o.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, orgBrandingNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		o.require(presentFields)
+	}
 	o.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -113,12 +127,12 @@ func (o *OrgBranding) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// Color scheme used to customize the login pages.
 var (
 	orgBrandingColorsFieldPrimary        = big.NewInt(1 << 0)
 	orgBrandingColorsFieldPageBackground = big.NewInt(1 << 1)
 )
 
+// Color scheme used to customize the login pages.
 type OrgBrandingColors struct {
 	// HEX Color for primary elements.
 	Primary string `json:"primary" url:"primary"`
@@ -154,10 +168,12 @@ func (o *OrgBrandingColors) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgBrandingColors) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetPrimary sets the Primary field and marks it as non-optional;
@@ -274,10 +290,12 @@ func (o *OrgDetails) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgDetails) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -417,10 +435,12 @@ func (o *OrgDetailsRead) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgDetailsRead) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;

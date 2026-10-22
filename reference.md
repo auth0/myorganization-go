@@ -28,9 +28,8 @@ Permanently delete this Organization.
 
 ```go
 client.OrganizationDetails.Delete(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -70,9 +69,8 @@ Retrieve details for this Organization, including display name and branding opti
 
 ```go
 client.OrganizationDetails.Get(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -112,27 +110,26 @@ Update details for this Organization, such as display name and branding options.
 
 ```go
 request := &myorganization.OrgDetails{
-        Name: myorganization.String(
-            "testorg",
+    Name: myorganization.String(
+        "testorg",
+    ),
+    DisplayName: myorganization.String(
+        "Test Organization",
+    ),
+    Branding: &myorganization.OrgBranding{
+        LogoURL: myorganization.String(
+            "https://example.com/logo.png",
         ),
-        DisplayName: myorganization.String(
-            "Test Organization",
-        ),
-        Branding: &myorganization.OrgBranding{
-            LogoURL: myorganization.String(
-                "https://example.com/logo.png",
-            ),
-            Colors: &myorganization.OrgBrandingColors{
-                Primary: "#000000",
-                PageBackground: "#FFFFFF",
-            },
+        Colors: &myorganization.OrgBrandingColors{
+            Primary: "#000000",
+            PageBackground: "#FFFFFF",
         },
-    }
-client.OrganizationDetails.Update(
-        context.TODO(),
-        request,
-    )
+    },
 }
+client.OrganizationDetails.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -172,7 +169,7 @@ client.OrganizationDetails.Update(
 <dl>
 <dd>
 
-Retrieve the My Organization API configuration. Returns only the `connection_deletion_behavior` and `allowed_strategies`. Identifier attributes such as `user_attribute_profile_id` and `connection_profile_id` are not included. Cache this information, as it does not change frequently.
+Retrieve the My Organization API configuration. Returns the `allowed_strategies`, `connection_deletion_behavior`, `organization_deletion_behavior`, and (when enabled) `third_party_client_access` settings. Identifier attributes such as `user_attribute_profile_id` and `connection_profile_id` are not included. Cache this information, as it does not change frequently.
 </dd>
 </dl>
 </dd>
@@ -188,9 +185,8 @@ Retrieve the My Organization API configuration. Returns only the `connection_del
 
 ```go
 client.Organization.Configuration.Get(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -231,18 +227,17 @@ Retrieve the user stores for the associated Organization.
 
 ```go
 request := &myorganization.ListOrganizationUserStoresRequestParameters{
-        MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
-            myorganization.OrganizationAccessLevelEnumNone.Ptr(),
-        },
-        IsEnabled: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.UserStores.List(
-        context.TODO(),
-        request,
-    )
+    MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+        myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+    },
+    IsEnabled: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.UserStores.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -306,18 +301,17 @@ Retrieve a list of all pending and verified domains for this Organization.
 
 ```go
 request := &myorganization.ListOrganizationDomainsRequestParameters{
-        From: myorganization.String(
-            "from",
-        ),
-        Take: myorganization.Int(
-            1,
-        ),
-    }
-client.Organization.Domains.List(
-        context.TODO(),
-        request,
-    )
+    From: myorganization.String(
+        "from",
+    ),
+    Take: myorganization.Int(
+        1,
+    ),
 }
+client.Organization.Domains.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -380,13 +374,12 @@ Create a domain for an Auth0 Organization and optionally enable Organization Dis
 
 ```go
 request := &myorganization.CreateOrganizationDomainRequestContent{
-        Domain: "acme.com",
-    }
-client.Organization.Domains.Create(
-        context.TODO(),
-        request,
-    )
+    Domain: "acme.com",
 }
+client.Organization.Domains.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -441,10 +434,9 @@ Retrieve the details of an Auth0 Organization domain using its unique domain ID,
 
 ```go
 client.Organization.Domains.Get(
-        context.TODO(),
-        "domain_id",
-    )
-}
+    context.TODO(),
+    "domain_id",
+)
 ```
 </dd>
 </dl>
@@ -499,10 +491,9 @@ Delete an Auth0 Organization domain using its unique domain ID, including all as
 
 ```go
 client.Organization.Domains.Delete(
-        context.TODO(),
-        "domain_id",
-    )
-}
+    context.TODO(),
+    "domain_id",
+)
 ```
 </dd>
 </dl>
@@ -558,18 +549,17 @@ Retrieve the comprehensive list of identity providers and their respective confi
 
 ```go
 request := &myorganization.ListOrganizationIdentityProvidersRequestParameters{
-        MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
-            myorganization.OrganizationAccessLevelEnumNone.Ptr(),
-        },
-        IsEnabled: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.IdentityProviders.List(
-        context.TODO(),
-        request,
-    )
+    MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+        myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+    },
+    IsEnabled: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.IdentityProviders.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -632,33 +622,38 @@ Create a new enterprise Identity Provider utilizing the specified configuration 
 
 ```go
 request := &myorganization.IdpKnownRequest{
-        IdpAdfsRequest: &myorganization.IdpAdfsRequest{
-            Name: "oidcIdp",
-            Domains: []string{
-                "mydomain.com",
-            },
-            DisplayName: myorganization.String(
-                "OIDC IdP",
+    IdpOidcRequest: &myorganization.IdpOidcRequest{
+        Strategy: myorganization.IdpOidcRequestStrategyOidc,
+        Options: &myorganization.IdpOidcOptionsRequest{
+            Type: myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+            ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+            ClientSecret: myorganization.String(
+                "KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
             ),
-            ShowAsButton: myorganization.Bool(
-                true,
-            ),
-            AssignMembershipOnLogin: myorganization.Bool(
-                false,
-            ),
-            IsEnabled: myorganization.Bool(
-                true,
-            ),
-            Options: &myorganization.IdpAdfsOptionsRequest{
-                IdpAdfsOptionsRequestAdfsServer: &myorganization.IdpAdfsOptionsRequestAdfsServer{},
-            },
+            DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
         },
-    }
-client.Organization.IdentityProviders.Create(
-        context.TODO(),
-        request,
-    )
+        Name: "oidcIdp",
+        Domains: []string{
+            "mydomain.com",
+        },
+        DisplayName: myorganization.String(
+            "OIDC IdP",
+        ),
+        ShowAsButton: myorganization.Bool(
+            true,
+        ),
+        AssignMembershipOnLogin: myorganization.Bool(
+            false,
+        ),
+        IsEnabled: myorganization.Bool(
+            true,
+        ),
+    },
 }
+client.Organization.IdentityProviders.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -713,10 +708,9 @@ Retrieve details of an Identity Provider specified by ID for this Organization.
 
 ```go
 client.Organization.IdentityProviders.Get(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -771,10 +765,9 @@ Delete an Identity Provider specified by ID from this Organization. This will re
 
 ```go
 client.Organization.IdentityProviders.Delete(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -829,30 +822,34 @@ Update the details of an Identity Provider specified by ID for this Organization
 
 ```go
 request := &myorganization.IdpUpdateKnownRequest{
-        IdpAdfsUpdateRequest: &myorganization.IdpAdfsUpdateRequest{
-            DisplayName: myorganization.String(
-                "OIDC IdP",
+    IdpOidcUpdateRequest: &myorganization.IdpOidcUpdateRequest{
+        DisplayName: myorganization.String(
+            "OIDC IdP",
+        ),
+        ShowAsButton: myorganization.Bool(
+            true,
+        ),
+        AssignMembershipOnLogin: myorganization.Bool(
+            false,
+        ),
+        IsEnabled: myorganization.Bool(
+            true,
+        ),
+        Options: &myorganization.IdpOidcOptionsRequest{
+            Type: myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+            ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+            ClientSecret: myorganization.String(
+                "KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
             ),
-            ShowAsButton: myorganization.Bool(
-                true,
-            ),
-            AssignMembershipOnLogin: myorganization.Bool(
-                false,
-            ),
-            IsEnabled: myorganization.Bool(
-                true,
-            ),
-            Options: &myorganization.IdpAdfsOptionsRequest{
-                IdpAdfsOptionsRequestAdfsServer: &myorganization.IdpAdfsOptionsRequestAdfsServer{},
-            },
+            DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
         },
-    }
-client.Organization.IdentityProviders.Update(
-        context.TODO(),
-        "idp_id",
-        request,
-    )
+    },
 }
+client.Organization.IdentityProviders.Update(
+    context.TODO(),
+    "idp_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -915,14 +912,13 @@ Refresh the attribute mapping for an Identity Provider specified by ID for this 
 
 ```go
 request := map[string]any{
-        "key": "value",
-    }
-client.Organization.IdentityProviders.UpdateAttributes(
-        context.TODO(),
-        "idp_id",
-        request,
-    )
+    "key": "value",
 }
+client.Organization.IdentityProviders.UpdateAttributes(
+    context.TODO(),
+    "idp_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -985,10 +981,9 @@ Remove an Identity Provider specified by ID from this Organization. This only re
 
 ```go
 client.Organization.IdentityProviders.Detach(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -1044,27 +1039,26 @@ Retrieve a list of all members for this Organization. The `roles` field is only 
 
 ```go
 request := &myorganization.ListOrganizationMembersRequestParameters{
-        Fields: myorganization.String(
-            "fields",
-        ),
-        IncludeFields: myorganization.Bool(
-            true,
-        ),
-        From: myorganization.String(
-            "from",
-        ),
-        Take: myorganization.Int(
-            1,
-        ),
-        IncludeTotals: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.Members.List(
-        context.TODO(),
-        request,
-    )
+    Fields: myorganization.String(
+        "fields",
+    ),
+    IncludeFields: myorganization.Bool(
+        true,
+    ),
+    From: myorganization.String(
+        "from",
+    ),
+    Take: myorganization.Int(
+        1,
+    ),
+    IncludeTotals: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.Members.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1151,19 +1145,18 @@ Retrieve details of a member specified by user ID for this Organization.
 
 ```go
 request := &myorganization.GetOrganizationMemberRequestParameters{
-        Fields: myorganization.String(
-            "fields",
-        ),
-        IncludeFields: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.Members.Get(
-        context.TODO(),
-        "user_id",
-        request,
-    )
+    Fields: myorganization.String(
+        "fields",
+    ),
+    IncludeFields: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.Members.Get(
+    context.TODO(),
+    "user_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1235,15 +1228,14 @@ Remove one member from this Organization. The underlying user account is not del
 
 ```go
 request := &myorganization.DeleteOrganizationMembershipsRequestParameters{
-        Members: []myorganization.OrgMemberID{
-            "auth0|1234567890",
-        },
-    }
-client.Organization.Memberships.DeleteMemberships(
-        context.TODO(),
-        request,
-    )
+    Members: []myorganization.OrgMemberID{
+        "auth0|1234567890",
+    },
 }
+client.Organization.Memberships.DeleteMemberships(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1299,30 +1291,29 @@ Retrieve a list of all member invitations for this Organization.
 
 ```go
 request := &myorganization.ListMemberInvitationsRequestParameters{
-        Fields: myorganization.String(
-            "fields",
-        ),
-        IncludeFields: myorganization.Bool(
-            true,
-        ),
-        From: myorganization.String(
-            "from",
-        ),
-        Take: myorganization.Int(
-            1,
-        ),
-        Sort: myorganization.String(
-            "sort",
-        ),
-        IncludeTotals: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.Invitations.List(
-        context.TODO(),
-        request,
-    )
+    Fields: myorganization.String(
+        "fields",
+    ),
+    IncludeFields: myorganization.Bool(
+        true,
+    ),
+    From: myorganization.String(
+        "from",
+    ),
+    Take: myorganization.Int(
+        1,
+    ),
+    Sort: myorganization.String(
+        "sort",
+    ),
+    IncludeTotals: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.Invitations.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1417,31 +1408,30 @@ Create one or more member invitations for this Organization. If an active invita
 
 ```go
 request := &myorganization.CreateMemberInvitationRequestContent{
-        Invitees: []*myorganization.CreateMemberInvitationInvitee{
-            &myorganization.CreateMemberInvitationInvitee{
-                Email: "user@example.com",
-                Roles: []myorganization.RoleID{
-                    "rol_0000000000000001",
-                },
+    Invitees: []*myorganization.CreateMemberInvitationInvitee{
+        &myorganization.CreateMemberInvitationInvitee{
+            Email: "user@example.com",
+            Roles: []myorganization.RoleID{
+                "rol_0000000000000001",
             },
         },
-        Inviter: &myorganization.MemberInvitationInviter{
-            Name: myorganization.String(
-                "Allison the Admin",
-            ),
-        },
-        IdentityProviderID: myorganization.String(
-            "con_2CZPv6IY0gWzDaQJ",
+    },
+    Inviter: &myorganization.MemberInvitationInviter{
+        Name: myorganization.String(
+            "Allison the Admin",
         ),
-        TTLSec: myorganization.Int(
-            3600,
-        ),
-    }
-client.Organization.Invitations.Create(
-        context.TODO(),
-        request,
-    )
+    },
+    IdentityProviderID: myorganization.String(
+        "con_2CZPv6IY0gWzDaQJ",
+    ),
+    TTLSec: myorganization.Int(
+        3600,
+    ),
 }
+client.Organization.Invitations.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1536,17 +1526,16 @@ Revoke a set of member invitations specified by IDs for this Organization.
 
 ```go
 request := &myorganization.DeleteMemberInvitationsRequestContent{
-        Invitations: []myorganization.InvitationID{
-            "uinv_0000000000000001",
-            "uinv_0000000000000002",
-            "uinv_0000000000000003",
-        },
-    }
-client.Organization.Invitations.Delete(
-        context.TODO(),
-        request,
-    )
+    Invitations: []myorganization.InvitationID{
+        "uinv_0000000000000001",
+        "uinv_0000000000000002",
+        "uinv_0000000000000003",
+    },
 }
+client.Organization.Invitations.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1601,19 +1590,18 @@ Retrieve details of a member invitation specified by ID for this Organization.
 
 ```go
 request := &myorganization.GetMemberInvitationRequestParameters{
-        Fields: myorganization.String(
-            "fields",
-        ),
-        IncludeFields: myorganization.Bool(
-            true,
-        ),
-    }
-client.Organization.Invitations.Get(
-        context.TODO(),
-        "invitation_id",
-        request,
-    )
+    Fields: myorganization.String(
+        "fields",
+    ),
+    IncludeFields: myorganization.Bool(
+        true,
+    ),
 }
+client.Organization.Invitations.Get(
+    context.TODO(),
+    "invitation_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1685,21 +1673,20 @@ Retrieve the list of roles available for binding to members and invitations for 
 
 ```go
 request := &myorganization.ListRolesRequestParameters{
-        From: myorganization.String(
-            "from",
-        ),
-        Take: myorganization.Int(
-            1,
-        ),
-        Name: myorganization.String(
-            "name",
-        ),
-    }
-client.Organization.Roles.List(
-        context.TODO(),
-        request,
-    )
+    From: myorganization.String(
+        "from",
+    ),
+    Take: myorganization.Int(
+        1,
+    ),
+    Name: myorganization.String(
+        "name",
+    ),
 }
+client.Organization.Roles.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1771,9 +1758,8 @@ Retrieve the [Connection Profile](https://auth0.com/docs/authenticate/enterprise
 
 ```go
 client.Organization.Configuration.IdentityProviders.Get(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -1814,10 +1800,9 @@ Initiate the verification process for a domain specified by ID for this Organiza
 
 ```go
 client.Organization.Domains.Verify.Create(
-        context.TODO(),
-        "domain_id",
-    )
-}
+    context.TODO(),
+    "domain_id",
+)
 ```
 </dd>
 </dl>
@@ -1873,10 +1858,9 @@ Retrieve the list of Identity Providers associated with a domain specified by ID
 
 ```go
 client.Organization.Domains.IdentityProviders.List(
-        context.TODO(),
-        "domain_id",
-    )
-}
+    context.TODO(),
+    "domain_id",
+)
 ```
 </dd>
 </dl>
@@ -1932,14 +1916,13 @@ Associate a domain with an Identity Provider specified by ID for this Organizati
 
 ```go
 request := &myorganization.CreateIdpDomainRequestContent{
-        Domain: "my-domain.com",
-    }
-client.Organization.IdentityProviders.Domains.Create(
-        context.TODO(),
-        "idp_id",
-        request,
-    )
+    Domain: "my-domain.com",
 }
+client.Organization.IdentityProviders.Domains.Create(
+    context.TODO(),
+    "idp_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2002,11 +1985,10 @@ Remove a domain specified by name from an Identity Provider specified by ID for 
 
 ```go
 client.Organization.IdentityProviders.Domains.Delete(
-        context.TODO(),
-        "idp_id",
-        "domain",
-    )
-}
+    context.TODO(),
+    "idp_id",
+    "domain",
+)
 ```
 </dd>
 </dl>
@@ -2070,10 +2052,9 @@ Retrieve the Provisioning Configuration for an Identity Provider specified by ID
 
 ```go
 client.Organization.IdentityProviders.Provisioning.Get(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -2128,10 +2109,9 @@ Create a new Provisioning Configuration for an Identity Provider specified by ID
 
 ```go
 client.Organization.IdentityProviders.Provisioning.Create(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -2186,10 +2166,9 @@ Delete the Provisioning Configuration for an Identity Provider specified by ID f
 
 ```go
 client.Organization.IdentityProviders.Provisioning.Delete(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -2244,14 +2223,13 @@ Refresh the attribute mapping for the Provisioning Configuration of an Identity 
 
 ```go
 request := map[string]any{
-        "key": "value",
-    }
-client.Organization.IdentityProviders.Provisioning.UpdateAttributes(
-        context.TODO(),
-        "idp_id",
-        request,
-    )
+    "key": "value",
 }
+client.Organization.IdentityProviders.Provisioning.UpdateAttributes(
+    context.TODO(),
+    "idp_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2315,10 +2293,9 @@ Retrieve a list of [SCIM tokens](https://auth0.com/docs/authenticate/protocols/s
 
 ```go
 client.Organization.IdentityProviders.Provisioning.SCIMTokens.List(
-        context.TODO(),
-        "idp_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+)
 ```
 </dd>
 </dl>
@@ -2373,16 +2350,15 @@ Create a new SCIM token for the Provisioning Configuration of an Identity Provid
 
 ```go
 request := &myorganization.CreateIdpProvisioningSCIMTokenRequestContent{
-        TokenLifetime: myorganization.Int(
-            86400,
-        ),
-    }
-client.Organization.IdentityProviders.Provisioning.SCIMTokens.Create(
-        context.TODO(),
-        "idp_id",
-        request,
-    )
+    TokenLifetime: myorganization.Int(
+        86400,
+    ),
 }
+client.Organization.IdentityProviders.Provisioning.SCIMTokens.Create(
+    context.TODO(),
+    "idp_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2445,11 +2421,10 @@ Revoke a SCIM token specified by token ID for the Provisioning Configuration of 
 
 ```go
 client.Organization.IdentityProviders.Provisioning.SCIMTokens.Delete(
-        context.TODO(),
-        "idp_id",
-        "idp_scim_token_id",
-    )
-}
+    context.TODO(),
+    "idp_id",
+    "idp_scim_token_id",
+)
 ```
 </dd>
 </dl>
@@ -2513,10 +2488,9 @@ Retrieve the roles assigned to a member invitation specified by ID for this Orga
 
 ```go
 client.Organization.Invitations.Roles.List(
-        context.TODO(),
-        "invitation_id",
-    )
-}
+    context.TODO(),
+    "invitation_id",
+)
 ```
 </dd>
 </dl>
@@ -2572,19 +2546,18 @@ Retrieve a list of roles assigned to a member specified by ID for this Organizat
 
 ```go
 request := &myorganization.ListOrgMemberRolesRequestParameters{
-        From: myorganization.String(
-            "from",
-        ),
-        Take: myorganization.Int(
-            1,
-        ),
-    }
-client.Organization.Members.Roles.List(
-        context.TODO(),
-        "user_id",
-        request,
-    )
+    From: myorganization.String(
+        "from",
+    ),
+    Take: myorganization.Int(
+        1,
+    ),
 }
+client.Organization.Members.Roles.List(
+    context.TODO(),
+    "user_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2655,16 +2628,15 @@ Assign roles to a member specified by ID for this Organization.
 
 ```go
 request := &myorganization.OrganizationMemberRolesChangeRequestContent{
-        RoleIDs: []myorganization.RoleID{
-            "rol_SO2j0sFo9NFa3F9w",
-        },
-    }
-client.Organization.Members.Roles.Assign(
-        context.TODO(),
-        "user_id",
-        request,
-    )
+    RoleIDs: []myorganization.RoleID{
+        "rol_SO2j0sFo9NFa3F9w",
+    },
 }
+client.Organization.Members.Roles.Assign(
+    context.TODO(),
+    "user_id",
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2727,16 +2699,15 @@ Remove roles from a member specified by ID for this Organization.
 
 ```go
 request := &myorganization.OrganizationMemberRolesChangeRequestContent{
-        RoleIDs: []myorganization.RoleID{
-            "rol_SO2j0sFo9NFa3F9w",
-        },
-    }
-client.Organization.Members.Roles.Unassign(
-        context.TODO(),
-        "user_id",
-        request,
-    )
+    RoleIDs: []myorganization.RoleID{
+        "rol_SO2j0sFo9NFa3F9w",
+    },
 }
+client.Organization.Members.Roles.Unassign(
+    context.TODO(),
+    "user_id",
+    request,
+)
 ```
 </dd>
 </dl>

@@ -3,6 +3,9 @@
 package client
 
 import (
+	fmt "fmt"
+
+	myorganization "github.com/auth0/myorganization-go/v2"
 	core "github.com/auth0/myorganization-go/v2/core"
 	internal "github.com/auth0/myorganization-go/v2/internal"
 	option "github.com/auth0/myorganization-go/v2/option"
@@ -21,6 +24,19 @@ type MyOrganization struct {
 
 func NewWithOptions(opts ...option.RequestOption) *MyOrganization {
 	options := core.NewRequestOptions(opts...)
+	if options.TenantDomain != "" {
+		tenantDomain := options.TenantDomain
+		if tenantDomain == "" {
+			tenantDomain = "{TENANT}.auth0.com"
+		}
+		switch options.BaseURL {
+		case "", myorganization.Environments.Default:
+			options.BaseURL = fmt.Sprintf(
+				"https://%s/my-org/v1",
+				tenantDomain,
+			)
+		}
+	}
 	return &MyOrganization{
 		OrganizationDetails: organizationdetails.NewClient(options),
 		Organization:        client.NewClient(options),
@@ -28,8 +44,9 @@ func NewWithOptions(opts ...option.RequestOption) *MyOrganization {
 		baseURL:             options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}

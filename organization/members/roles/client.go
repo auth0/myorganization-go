@@ -27,14 +27,31 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve a list of roles assigned to a member specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.ListOrgMemberRolesRequestParameters{
+//	    From: myorganization.String(
+//	        "from",
+//	    ),
+//	    Take: myorganization.Int(
+//	        1,
+//	    ),
+//	}
+//	client.Organization.Members.Roles.List(
+//	    context.TODO(),
+//	    "user_id",
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	userID myorganization.OrgMemberID,
@@ -77,6 +94,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +110,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -104,6 +122,19 @@ func (c *Client) List(
 }
 
 // Assign roles to a member specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.OrganizationMemberRolesChangeRequestContent{
+//	    RoleIDs: []myorganization.RoleID{
+//	        "rol_SO2j0sFo9NFa3F9w",
+//	    },
+//	}
+//	client.Organization.Members.Roles.Assign(
+//	    context.TODO(),
+//	    "user_id",
+//	    request,
+//	)
 func (c *Client) Assign(
 	ctx context.Context,
 	userID myorganization.OrgMemberID,
@@ -123,6 +154,19 @@ func (c *Client) Assign(
 }
 
 // Remove roles from a member specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.OrganizationMemberRolesChangeRequestContent{
+//	    RoleIDs: []myorganization.RoleID{
+//	        "rol_SO2j0sFo9NFa3F9w",
+//	    },
+//	}
+//	client.Organization.Members.Roles.Unassign(
+//	    context.TODO(),
+//	    "user_id",
+//	    request,
+//	)
 func (c *Client) Unassign(
 	ctx context.Context,
 	userID myorganization.OrgMemberID,

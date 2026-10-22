@@ -29,14 +29,22 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Provisioning.Get(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -54,6 +62,13 @@ func (c *Client) Get(
 }
 
 // Create a new Provisioning Configuration for an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Provisioning.Create(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -71,6 +86,13 @@ func (c *Client) Create(
 }
 
 // Delete the Provisioning Configuration for an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Provisioning.Delete(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -88,6 +110,17 @@ func (c *Client) Delete(
 }
 
 // Refresh the attribute mapping for the Provisioning Configuration of an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
+//
+// Example:
+//
+//	request := map[string]any{
+//	    "key": "value",
+//	}
+//	client.Organization.IdentityProviders.Provisioning.UpdateAttributes(
+//	    context.TODO(),
+//	    "idp_id",
+//	    request,
+//	)
 func (c *Client) UpdateAttributes(
 	ctx context.Context,
 	idpID myorganization.IdpID,

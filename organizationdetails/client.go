@@ -26,14 +26,21 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Permanently delete this Organization.
+//
+// Example:
+//
+//	client.OrganizationDetails.Delete(
+//	    context.TODO(),
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -49,6 +56,12 @@ func (c *Client) Delete(
 }
 
 // Retrieve details for this Organization, including display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
+//
+// Example:
+//
+//	client.OrganizationDetails.Get(
+//	    context.TODO(),
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -64,6 +77,30 @@ func (c *Client) Get(
 }
 
 // Update details for this Organization, such as display name and branding options. To learn more about Auth0 Organizations, read [Organizations](https://auth0.com/docs/manage-users/organizations).
+//
+// Example:
+//
+//	request := &myorganization.OrgDetails{
+//	    Name: myorganization.String(
+//	        "testorg",
+//	    ),
+//	    DisplayName: myorganization.String(
+//	        "Test Organization",
+//	    ),
+//	    Branding: &myorganization.OrgBranding{
+//	        LogoURL: myorganization.String(
+//	            "https://example.com/logo.png",
+//	        ),
+//	        Colors: &myorganization.OrgBrandingColors{
+//	            Primary: "#000000",
+//	            PageBackground: "#FFFFFF",
+//	        },
+//	    },
+//	}
+//	client.OrganizationDetails.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request myorganization.UpdateOrganizationDetailsRequestContent,

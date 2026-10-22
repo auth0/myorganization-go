@@ -26,14 +26,22 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve a list of [SCIM tokens](https://auth0.com/docs/authenticate/protocols/scim/configure-inbound-scim#scim-endpoints-and-tokens) for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Provisioning.SCIMTokens.List(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -51,6 +59,19 @@ func (c *Client) List(
 }
 
 // Create a new SCIM token for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.CreateIdpProvisioningSCIMTokenRequestContent{
+//	    TokenLifetime: myorganization.Int(
+//	        86400,
+//	    ),
+//	}
+//	client.Organization.IdentityProviders.Provisioning.SCIMTokens.Create(
+//	    context.TODO(),
+//	    "idp_id",
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -70,6 +91,14 @@ func (c *Client) Create(
 }
 
 // Revoke a SCIM token specified by token ID for the Provisioning Configuration of an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Provisioning.SCIMTokens.Delete(
+//	    context.TODO(),
+//	    "idp_id",
+//	    "idp_scim_token_id",
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,

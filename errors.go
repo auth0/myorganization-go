@@ -31,6 +31,13 @@ func (b *BadRequestError) Unwrap() error {
 	return b.APIError
 }
 
+func (b *BadRequestError) GetBody() any {
+	if b == nil {
+		return nil
+	}
+	return b.Body
+}
+
 // Domain name already exists.
 type ConflictError struct {
 	*core.APIError
@@ -53,6 +60,13 @@ func (c *ConflictError) MarshalJSON() ([]byte, error) {
 
 func (c *ConflictError) Unwrap() error {
 	return c.APIError
+}
+
+func (c *ConflictError) GetBody() *ErrorResponseContent {
+	if c == nil {
+		return nil
+	}
+	return c.Body
 }
 
 // Insufficient scope.
@@ -79,6 +93,13 @@ func (f *ForbiddenError) Unwrap() error {
 	return f.APIError
 }
 
+func (f *ForbiddenError) GetBody() *ErrorResponseContent {
+	if f == nil {
+		return nil
+	}
+	return f.Body
+}
+
 // Organization not found.
 type NotFoundError struct {
 	*core.APIError
@@ -101,6 +122,13 @@ func (n *NotFoundError) MarshalJSON() ([]byte, error) {
 
 func (n *NotFoundError) Unwrap() error {
 	return n.APIError
+}
+
+func (n *NotFoundError) GetBody() *ErrorResponseContent {
+	if n == nil {
+		return nil
+	}
+	return n.Body
 }
 
 // Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers.
@@ -127,6 +155,13 @@ func (t *TooManyRequestsError) Unwrap() error {
 	return t.APIError
 }
 
+func (t *TooManyRequestsError) GetBody() *ErrorResponseContent {
+	if t == nil {
+		return nil
+	}
+	return t.Body
+}
+
 // Unauthorized: token missing, invalid or expired.
 type UnauthorizedError struct {
 	*core.APIError
@@ -149,4 +184,11 @@ func (u *UnauthorizedError) MarshalJSON() ([]byte, error) {
 
 func (u *UnauthorizedError) Unwrap() error {
 	return u.APIError
+}
+
+func (u *UnauthorizedError) GetBody() *ErrorResponseContent {
+	if u == nil {
+		return nil
+	}
+	return u.Body
 }

@@ -21,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -91,7 +105,7 @@ func TestOrganizationIdentityProvidersListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrganizationIdentityProvidersListWithWireMock", "GET", "/identity-providers", map[string]string{"member_access_level": "none", "is_enabled": "true"}, 1)
+	VerifyRequestCount(t, "TestOrganizationIdentityProvidersListWithWireMock", "GET", "/identity-providers", map[string]interface{}{"member_access_level": "none", "is_enabled": "true"}, 1)
 }
 
 func TestOrganizationIdentityProvidersCreateWithWireMock(
@@ -106,7 +120,16 @@ func TestOrganizationIdentityProvidersCreateWithWireMock(
 		option.WithToken("test-token"),
 	)
 	request := &myorganization.IdpKnownRequest{
-		IdpAdfsRequest: &myorganization.IdpAdfsRequest{
+		IdpOidcRequest: &myorganization.IdpOidcRequest{
+			Strategy: myorganization.IdpOidcRequestStrategyOidc,
+			Options: &myorganization.IdpOidcOptionsRequest{
+				Type:     myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+				ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+				ClientSecret: myorganization.String(
+					"KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
+				),
+				DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
+			},
 			Name: "oidcIdp",
 			Domains: []string{
 				"mydomain.com",
@@ -123,9 +146,6 @@ func TestOrganizationIdentityProvidersCreateWithWireMock(
 			IsEnabled: myorganization.Bool(
 				true,
 			),
-			Options: &myorganization.IdpAdfsOptionsRequest{
-				IdpAdfsOptionsRequestAdfsServer: &myorganization.IdpAdfsOptionsRequestAdfsServer{},
-			},
 		},
 	}
 	_, invocationErr := client.Organization.IdentityProviders.Create(
@@ -198,7 +218,7 @@ func TestOrganizationIdentityProvidersUpdateWithWireMock(
 		option.WithToken("test-token"),
 	)
 	request := &myorganization.IdpUpdateKnownRequest{
-		IdpAdfsUpdateRequest: &myorganization.IdpAdfsUpdateRequest{
+		IdpOidcUpdateRequest: &myorganization.IdpOidcUpdateRequest{
 			DisplayName: myorganization.String(
 				"OIDC IdP",
 			),
@@ -211,8 +231,13 @@ func TestOrganizationIdentityProvidersUpdateWithWireMock(
 			IsEnabled: myorganization.Bool(
 				true,
 			),
-			Options: &myorganization.IdpAdfsOptionsRequest{
-				IdpAdfsOptionsRequestAdfsServer: &myorganization.IdpAdfsOptionsRequestAdfsServer{},
+			Options: &myorganization.IdpOidcOptionsRequest{
+				Type:     myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+				ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+				ClientSecret: myorganization.String(
+					"KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
+				),
+				DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
 			},
 		},
 	}

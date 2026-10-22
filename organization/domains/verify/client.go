@@ -26,14 +26,22 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Initiate the verification process for a domain specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.Domains.Verify.Create(
+//	    context.TODO(),
+//	    "domain_id",
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,

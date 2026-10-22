@@ -32,14 +32,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve the comprehensive list of identity providers and their respective configurations associated with an Auth0 Organization.
+//
+// Example:
+//
+//	request := &myorganization.ListOrganizationIdentityProvidersRequestParameters{
+//	    MemberAccessLevel: []*myorganization.OrganizationAccessLevelEnum{
+//	        myorganization.OrganizationAccessLevelEnumNone.Ptr(),
+//	    },
+//	    IsEnabled: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.IdentityProviders.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *myorganization.ListOrganizationIdentityProvidersRequestParameters,
@@ -57,6 +73,42 @@ func (c *Client) List(
 }
 
 // Create a new enterprise Identity Provider utilizing the specified configuration settings and details for this Auth0 Organization.
+//
+// Example:
+//
+//	request := &myorganization.IdpKnownRequest{
+//	    IdpOidcRequest: &myorganization.IdpOidcRequest{
+//	        Strategy: myorganization.IdpOidcRequestStrategyOidc,
+//	        Options: &myorganization.IdpOidcOptionsRequest{
+//	            Type: myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+//	            ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+//	            ClientSecret: myorganization.String(
+//	                "KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
+//	            ),
+//	            DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
+//	        },
+//	        Name: "oidcIdp",
+//	        Domains: []string{
+//	            "mydomain.com",
+//	        },
+//	        DisplayName: myorganization.String(
+//	            "OIDC IdP",
+//	        ),
+//	        ShowAsButton: myorganization.Bool(
+//	            true,
+//	        ),
+//	        AssignMembershipOnLogin: myorganization.Bool(
+//	            false,
+//	        ),
+//	        IsEnabled: myorganization.Bool(
+//	            true,
+//	        ),
+//	    },
+//	}
+//	client.Organization.IdentityProviders.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request myorganization.CreateIdentityProviderRequestContent,
@@ -74,6 +126,13 @@ func (c *Client) Create(
 }
 
 // Retrieve details of an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Get(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -91,6 +150,13 @@ func (c *Client) Get(
 }
 
 // Delete an Identity Provider specified by ID from this Organization. This will remove the association and delete the underlying Identity Provider. Members will no longer be able to authenticate using this Identity Provider.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Delete(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -108,6 +174,38 @@ func (c *Client) Delete(
 }
 
 // Update the details of an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.IdpUpdateKnownRequest{
+//	    IdpOidcUpdateRequest: &myorganization.IdpOidcUpdateRequest{
+//	        DisplayName: myorganization.String(
+//	            "OIDC IdP",
+//	        ),
+//	        ShowAsButton: myorganization.Bool(
+//	            true,
+//	        ),
+//	        AssignMembershipOnLogin: myorganization.Bool(
+//	            false,
+//	        ),
+//	        IsEnabled: myorganization.Bool(
+//	            true,
+//	        ),
+//	        Options: &myorganization.IdpOidcOptionsRequest{
+//	            Type: myorganization.IdpOidcOptionsTypeEnumFrontChannel,
+//	            ClientID: "a8f3b2e7-5d1c-4f9a-8b0d-2e1c3a5b6f7d",
+//	            ClientSecret: myorganization.String(
+//	                "KzQp2sVxR8nTgMjFhYcEWuLoIbDvUoC6A9B1zX7yWqFjHkGrP5sQdLmNp",
+//	            ),
+//	            DiscoveryURL: "https://{yourDomain}/.well-known/openid-configuration",
+//	        },
+//	    },
+//	}
+//	client.Organization.IdentityProviders.Update(
+//	    context.TODO(),
+//	    "idp_id",
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -127,6 +225,17 @@ func (c *Client) Update(
 }
 
 // Refresh the attribute mapping for an Identity Provider specified by ID for this Organization. Mappings are reset to the admin-defined defaults.
+//
+// Example:
+//
+//	request := map[string]any{
+//	    "key": "value",
+//	}
+//	client.Organization.IdentityProviders.UpdateAttributes(
+//	    context.TODO(),
+//	    "idp_id",
+//	    request,
+//	)
 func (c *Client) UpdateAttributes(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -146,6 +255,13 @@ func (c *Client) UpdateAttributes(
 }
 
 // Remove an Identity Provider specified by ID from this Organization. This only removes the association; the underlying Identity Provider is not deleted. Members will no longer be able to authenticate using this Identity Provider.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Detach(
+//	    context.TODO(),
+//	    "idp_id",
+//	)
 func (c *Client) Detach(
 	ctx context.Context,
 	idpID myorganization.IdpID,

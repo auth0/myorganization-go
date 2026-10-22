@@ -26,14 +26,26 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Associate a domain with an Identity Provider specified by ID for this Organization. The domain must be claimed and verified.
+//
+// Example:
+//
+//	request := &myorganization.CreateIdpDomainRequestContent{
+//	    Domain: "my-domain.com",
+//	}
+//	client.Organization.IdentityProviders.Domains.Create(
+//	    context.TODO(),
+//	    "idp_id",
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	idpID myorganization.IdpID,
@@ -53,6 +65,14 @@ func (c *Client) Create(
 }
 
 // Remove a domain specified by name from an Identity Provider specified by ID for this Organization.
+//
+// Example:
+//
+//	client.Organization.IdentityProviders.Domains.Delete(
+//	    context.TODO(),
+//	    "idp_id",
+//	    "domain",
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	idpID myorganization.IdpID,

@@ -32,6 +32,38 @@ func (b *BadRequestErrorBody) GetValidationErrorResponseContent() *ValidationErr
 }
 
 func (b *BadRequestErrorBody) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"type", "status", "title", "detail"}, []string{"type", "status", "title", "detail"}) {
+		valueErrorResponseContent := new(ErrorResponseContent)
+		if err := json.Unmarshal(data, &valueErrorResponseContent); err == nil {
+			b.typ = "ErrorResponseContent"
+			b.ErrorResponseContent = valueErrorResponseContent
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"type", "status", "title", "validation_errors"}, []string{"type", "status", "title", "validation_errors"}) {
+		valueValidationErrorResponseContent := new(ValidationErrorResponseContent)
+		if err := json.Unmarshal(data, &valueValidationErrorResponseContent); err == nil {
+			b.typ = "ValidationErrorResponseContent"
+			b.ValidationErrorResponseContent = valueValidationErrorResponseContent
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"type", "status", "title", "detail"}) {
+		valueErrorResponseContent := new(ErrorResponseContent)
+		if err := json.Unmarshal(data, &valueErrorResponseContent); err == nil {
+			b.typ = "ErrorResponseContent"
+			b.ErrorResponseContent = valueErrorResponseContent
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"type", "status", "title", "validation_errors"}) {
+		valueValidationErrorResponseContent := new(ValidationErrorResponseContent)
+		if err := json.Unmarshal(data, &valueValidationErrorResponseContent); err == nil {
+			b.typ = "ValidationErrorResponseContent"
+			b.ValidationErrorResponseContent = valueValidationErrorResponseContent
+			return nil
+		}
+	}
 	valueErrorResponseContent := new(ErrorResponseContent)
 	if err := json.Unmarshal(data, &valueErrorResponseContent); err == nil {
 		b.typ = "ErrorResponseContent"
@@ -152,10 +184,12 @@ func (b *BaseUserAttributeMapItem) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BaseUserAttributeMapItem) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
@@ -336,10 +370,12 @@ func (c *CreateIDPProvisioningConfigResponseContent) GetExtraProperties() map[st
 }
 
 func (c *CreateIDPProvisioningConfigResponseContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdentityProviderID sets the IdentityProviderID field and marks it as non-optional;
@@ -485,10 +521,12 @@ func (c *CreateIdpDomainResponseContent) GetExtraProperties() map[string]interfa
 }
 
 func (c *CreateIdpDomainResponseContent) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -543,6 +581,191 @@ func (c *CreateIdpDomainResponseContent) String() string {
 type CreateIdpProvisioningSCIMTokenResponseContent = *IdpSCIMTokenCreate
 
 var (
+	createIdpTestResponseContentFieldStatus    = big.NewInt(1 << 0)
+	createIdpTestResponseContentFieldTestURL   = big.NewInt(1 << 1)
+	createIdpTestResponseContentFieldID        = big.NewInt(1 << 2)
+	createIdpTestResponseContentFieldCreatedAt = big.NewInt(1 << 3)
+	createIdpTestResponseContentFieldExpiresAt = big.NewInt(1 << 4)
+)
+
+// The newly created Identity Provider test. Its status is always `in_progress` at creation.
+type CreateIdpTestResponseContent struct {
+	Status CreateIdpTestResponseContentStatus `json:"status" url:"status"`
+	// Short-lived Auth0-hosted URL to open in a new tab; it redirects the administrator to the Identity Provider to sign in and complete the test. Returned only when the test is created. Open it immediately; to get a new URL, start a new test.
+	TestURL string    `json:"test_url" url:"test_url"`
+	ID      IdpTestID `json:"id" url:"id"`
+	// The ISO 8601 formatted timestamp representing the creation time of the test.
+	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	// The ISO 8601 formatted timestamp representing the expiration time of the test. After this time the test is no longer available.
+	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateIdpTestResponseContent) GetStatus() CreateIdpTestResponseContentStatus {
+	if c == nil {
+		return ""
+	}
+	return c.Status
+}
+
+func (c *CreateIdpTestResponseContent) GetTestURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.TestURL
+}
+
+func (c *CreateIdpTestResponseContent) GetID() IdpTestID {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CreateIdpTestResponseContent) GetCreatedAt() time.Time {
+	if c == nil {
+		return time.Time{}
+	}
+	return c.CreatedAt
+}
+
+func (c *CreateIdpTestResponseContent) GetExpiresAt() time.Time {
+	if c == nil {
+		return time.Time{}
+	}
+	return c.ExpiresAt
+}
+
+func (c *CreateIdpTestResponseContent) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateIdpTestResponseContent) require(field *big.Int) {
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
+	}
+	next.Or(next, field)
+	c.explicitFields = next
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpTestResponseContent) SetStatus(status CreateIdpTestResponseContentStatus) {
+	c.Status = status
+	c.require(createIdpTestResponseContentFieldStatus)
+}
+
+// SetTestURL sets the TestURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpTestResponseContent) SetTestURL(testURL string) {
+	c.TestURL = testURL
+	c.require(createIdpTestResponseContentFieldTestURL)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpTestResponseContent) SetID(id IdpTestID) {
+	c.ID = id
+	c.require(createIdpTestResponseContentFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpTestResponseContent) SetCreatedAt(createdAt time.Time) {
+	c.CreatedAt = createdAt
+	c.require(createIdpTestResponseContentFieldCreatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateIdpTestResponseContent) SetExpiresAt(expiresAt time.Time) {
+	c.ExpiresAt = expiresAt
+	c.require(createIdpTestResponseContentFieldExpiresAt)
+}
+
+func (c *CreateIdpTestResponseContent) UnmarshalJSON(data []byte) error {
+	type embed CreateIdpTestResponseContent
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = CreateIdpTestResponseContent(unmarshaler.embed)
+	c.CreatedAt = unmarshaler.CreatedAt.Time()
+	c.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateIdpTestResponseContent) MarshalJSON() ([]byte, error) {
+	type embed CreateIdpTestResponseContent
+	var marshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed:     embed(*c),
+		CreatedAt: internal.NewDateTime(c.CreatedAt),
+		ExpiresAt: internal.NewDateTime(c.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateIdpTestResponseContent) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CreateIdpTestResponseContentStatus string
+
+const (
+	CreateIdpTestResponseContentStatusInProgress CreateIdpTestResponseContentStatus = "in_progress"
+)
+
+func NewCreateIdpTestResponseContentStatusFromString(s string) (CreateIdpTestResponseContentStatus, error) {
+	switch s {
+	case "in_progress":
+		return CreateIdpTestResponseContentStatusInProgress, nil
+	}
+	var t CreateIdpTestResponseContentStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CreateIdpTestResponseContentStatus) Ptr() *CreateIdpTestResponseContentStatus {
+	return &c
+}
+
+var (
 	createMemberInvitationInviteeFieldEmail = big.NewInt(1 << 0)
 	createMemberInvitationInviteeFieldRoles = big.NewInt(1 << 1)
 )
@@ -582,10 +805,12 @@ func (c *CreateMemberInvitationInvitee) GetExtraProperties() map[string]interfac
 }
 
 func (c *CreateMemberInvitationInvitee) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -648,11 +873,11 @@ type CreateMemberInvitationResponseContent = []*MemberInvitation
 
 type CreateOrganizationDomainResponseContent = *OrgDomain
 
-// Cross-app access resource application configuration.
 var (
 	crossAppAccessResourceAppFieldStatus = big.NewInt(1 << 0)
 )
 
+// Cross-app access resource application configuration.
 type CrossAppAccessResourceApp struct {
 	// The status of the cross-app access resource application role. To enable the cross-app access resource application role, OIDC issuer domain must be a verified domain for the organization.
 	Status CrossAppAccessResourceAppStatusEnum `json:"status" url:"status"`
@@ -679,10 +904,12 @@ func (c *CrossAppAccessResourceApp) GetExtraProperties() map[string]interface{} 
 }
 
 func (c *CrossAppAccessResourceApp) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetStatus sets the Status field and marks it as non-optional;
@@ -734,11 +961,11 @@ func (c *CrossAppAccessResourceApp) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the allowed behavior of the `cross_app_access_resource_app` field on identity providers.
 var (
 	crossAppAccessResourceAppConfigFieldStatus = big.NewInt(1 << 0)
 )
 
+// Defines the allowed behavior of the `cross_app_access_resource_app` field on identity providers.
 type CrossAppAccessResourceAppConfig struct {
 	Status *CrossAppAccessResourceAppStatusConfig `json:"status" url:"status"`
 
@@ -764,10 +991,12 @@ func (c *CrossAppAccessResourceAppConfig) GetExtraProperties() map[string]interf
 }
 
 func (c *CrossAppAccessResourceAppConfig) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetStatus sets the Status field and marks it as non-optional;
@@ -859,10 +1088,12 @@ func (c *CrossAppAccessResourceAppStatusConfig) GetExtraProperties() map[string]
 }
 
 func (c *CrossAppAccessResourceAppStatusConfig) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetDefaultValue sets the DefaultValue field and marks it as non-optional;
@@ -1016,10 +1247,12 @@ func (d *DomainIdp) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DomainIdp) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1145,10 +1378,12 @@ func (e *ErrorResponseContent) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *ErrorResponseContent) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -1222,16 +1457,18 @@ func (e *ErrorResponseContent) String() string {
 }
 
 var (
-	getConfigurationResponseContentFieldAllowedStrategies          = big.NewInt(1 << 0)
-	getConfigurationResponseContentFieldConnectionDeletionBehavior = big.NewInt(1 << 1)
-	getConfigurationResponseContentFieldThirdPartyClientAccess     = big.NewInt(1 << 2)
+	getConfigurationResponseContentFieldAllowedStrategies            = big.NewInt(1 << 0)
+	getConfigurationResponseContentFieldConnectionDeletionBehavior   = big.NewInt(1 << 1)
+	getConfigurationResponseContentFieldOrganizationDeletionBehavior = big.NewInt(1 << 2)
+	getConfigurationResponseContentFieldThirdPartyClientAccess       = big.NewInt(1 << 3)
 )
 
 type GetConfigurationResponseContent struct {
 	// Array of supported strategies
-	AllowedStrategies          []IdpStrategyEnum                  `json:"allowed_strategies,omitempty" url:"allowed_strategies,omitempty"`
-	ConnectionDeletionBehavior *IdpConnectionDeletionBehaviorEnum `json:"connection_deletion_behavior,omitempty" url:"connection_deletion_behavior,omitempty"`
-	ThirdPartyClientAccess     *OrgThirdPartyClientAccessConfig   `json:"third_party_client_access,omitempty" url:"third_party_client_access,omitempty"`
+	AllowedStrategies            []IdpStrategyEnum                  `json:"allowed_strategies,omitempty" url:"allowed_strategies,omitempty"`
+	ConnectionDeletionBehavior   *IdpConnectionDeletionBehaviorEnum `json:"connection_deletion_behavior,omitempty" url:"connection_deletion_behavior,omitempty"`
+	OrganizationDeletionBehavior *OrganizationDeletionBehaviorEnum  `json:"organization_deletion_behavior,omitempty" url:"organization_deletion_behavior,omitempty"`
+	ThirdPartyClientAccess       *OrgThirdPartyClientAccessConfig   `json:"third_party_client_access,omitempty" url:"third_party_client_access,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1254,6 +1491,13 @@ func (g *GetConfigurationResponseContent) GetConnectionDeletionBehavior() IdpCon
 	return *g.ConnectionDeletionBehavior
 }
 
+func (g *GetConfigurationResponseContent) GetOrganizationDeletionBehavior() OrganizationDeletionBehaviorEnum {
+	if g == nil || g.OrganizationDeletionBehavior == nil {
+		return ""
+	}
+	return *g.OrganizationDeletionBehavior
+}
+
 func (g *GetConfigurationResponseContent) GetThirdPartyClientAccess() OrgThirdPartyClientAccessConfig {
 	if g == nil || g.ThirdPartyClientAccess == nil {
 		return OrgThirdPartyClientAccessConfig{}
@@ -1269,10 +1513,12 @@ func (g *GetConfigurationResponseContent) GetExtraProperties() map[string]interf
 }
 
 func (g *GetConfigurationResponseContent) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetAllowedStrategies sets the AllowedStrategies field and marks it as non-optional;
@@ -1287,6 +1533,13 @@ func (g *GetConfigurationResponseContent) SetAllowedStrategies(allowedStrategies
 func (g *GetConfigurationResponseContent) SetConnectionDeletionBehavior(connectionDeletionBehavior *IdpConnectionDeletionBehaviorEnum) {
 	g.ConnectionDeletionBehavior = connectionDeletionBehavior
 	g.require(getConfigurationResponseContentFieldConnectionDeletionBehavior)
+}
+
+// SetOrganizationDeletionBehavior sets the OrganizationDeletionBehavior field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetConfigurationResponseContent) SetOrganizationDeletionBehavior(organizationDeletionBehavior *OrganizationDeletionBehaviorEnum) {
+	g.OrganizationDeletionBehavior = organizationDeletionBehavior
+	g.require(getConfigurationResponseContentFieldOrganizationDeletionBehavior)
 }
 
 // SetThirdPartyClientAccess sets the ThirdPartyClientAccess field and marks it as non-optional;
@@ -1432,10 +1685,12 @@ func (g *GetIDPProvisioningConfigResponseContent) GetExtraProperties() map[strin
 }
 
 func (g *GetIDPProvisioningConfigResponseContent) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetIdentityProviderID sets the IdentityProviderID field and marks it as non-optional;
@@ -1583,10 +1838,12 @@ func (g *GetMemberInvitationRolesResponseContent) GetExtraProperties() map[strin
 }
 
 func (g *GetMemberInvitationRolesResponseContent) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetRoles sets the Roles field and marks it as non-optional;
@@ -1681,10 +1938,12 @@ func (g *GetOrganizationMemberRolesResponseContent) GetExtraProperties() map[str
 }
 
 func (g *GetOrganizationMemberRolesResponseContent) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetNext sets the Next field and marks it as non-optional;
@@ -1754,6 +2013,11 @@ var (
 	identityProviderConfigOidcFieldCrossAppAccessResourceApp = big.NewInt(1 << 3)
 )
 
+// identityProviderConfigOidcNullableFields maps the wire names of IdentityProviderConfigOidc's nullable fields (required or optional) to their field bits.
+var identityProviderConfigOidcNullableFields = map[string]*big.Int{
+	"provisioning": identityProviderConfigOidcFieldProvisioning,
+}
+
 type IdentityProviderConfigOidc struct {
 	// Enabled features for a connections profile strategy override.
 	EnabledFeatures           []IdentityProvidersConfigEnabledFeaturesEnum      `json:"enabled_features" url:"enabled_features"`
@@ -1804,10 +2068,12 @@ func (i *IdentityProviderConfigOidc) GetExtraProperties() map[string]interface{}
 }
 
 func (i *IdentityProviderConfigOidc) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEnabledFeatures sets the EnabledFeatures field and marks it as non-optional;
@@ -1850,6 +2116,13 @@ func (i *IdentityProviderConfigOidc) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProviderConfigOidcNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1886,6 +2159,11 @@ var (
 	identityProviderConfigOktaFieldProvisioning              = big.NewInt(1 << 2)
 	identityProviderConfigOktaFieldCrossAppAccessResourceApp = big.NewInt(1 << 3)
 )
+
+// identityProviderConfigOktaNullableFields maps the wire names of IdentityProviderConfigOkta's nullable fields (required or optional) to their field bits.
+var identityProviderConfigOktaNullableFields = map[string]*big.Int{
+	"provisioning": identityProviderConfigOktaFieldProvisioning,
+}
 
 type IdentityProviderConfigOkta struct {
 	// Enabled features for a connections profile strategy override.
@@ -1937,10 +2215,12 @@ func (i *IdentityProviderConfigOkta) GetExtraProperties() map[string]interface{}
 }
 
 func (i *IdentityProviderConfigOkta) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEnabledFeatures sets the EnabledFeatures field and marks it as non-optional;
@@ -1983,6 +2263,13 @@ func (i *IdentityProviderConfigOkta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProviderConfigOktaNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2021,6 +2308,11 @@ var (
 	identityProviderConfigSamlpFieldProvisioning              = big.NewInt(1 << 2)
 	identityProviderConfigSamlpFieldCrossAppAccessResourceApp = big.NewInt(1 << 3)
 )
+
+// identityProviderConfigSamlpNullableFields maps the wire names of IdentityProviderConfigSamlp's nullable fields (required or optional) to their field bits.
+var identityProviderConfigSamlpNullableFields = map[string]*big.Int{
+	"provisioning": identityProviderConfigSamlpFieldProvisioning,
+}
 
 type IdentityProviderConfigSamlp struct {
 	// Enabled features for a connections profile strategy override.
@@ -2072,10 +2364,12 @@ func (i *IdentityProviderConfigSamlp) GetExtraProperties() map[string]interface{
 }
 
 func (i *IdentityProviderConfigSamlp) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEnabledFeatures sets the EnabledFeatures field and marks it as non-optional;
@@ -2118,6 +2412,13 @@ func (i *IdentityProviderConfigSamlp) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProviderConfigSamlpNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2188,10 +2489,12 @@ func (i *IdentityProvidersConfig) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdentityProvidersConfig) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetOrganization sets the Organization field and marks it as non-optional;
@@ -2273,12 +2576,12 @@ func (i IdentityProvidersConfigEnabledFeaturesEnum) Ptr() *IdentityProvidersConf
 	return &i
 }
 
-// The organization config for identity providers.
 var (
 	identityProvidersConfigOrganizationFieldCanSetShowAsButton            = big.NewInt(1 << 0)
 	identityProvidersConfigOrganizationFieldCanSetAssignMembershipOnLogin = big.NewInt(1 << 1)
 )
 
+// The organization config for identity providers.
 type IdentityProvidersConfigOrganization struct {
 	// If Org Admin can set show_as_button
 	CanSetShowAsButton bool `json:"can_set_show_as_button" url:"can_set_show_as_button"`
@@ -2314,10 +2617,12 @@ func (i *IdentityProvidersConfigOrganization) GetExtraProperties() map[string]in
 }
 
 func (i *IdentityProvidersConfigOrganization) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetCanSetShowAsButton sets the CanSetShowAsButton field and marks it as non-optional;
@@ -2376,15 +2681,23 @@ func (i *IdentityProvidersConfigOrganization) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// The provisioning configuration supported by the identity provider
 var (
-	identityProvidersConfigProvisioningConfigurationFieldOnLogin = big.NewInt(1 << 0)
-	identityProvidersConfigProvisioningConfigurationFieldSCIM    = big.NewInt(1 << 1)
+	identityProvidersConfigProvisioningConfigurationFieldOnLogin         = big.NewInt(1 << 0)
+	identityProvidersConfigProvisioningConfigurationFieldSCIM            = big.NewInt(1 << 1)
+	identityProvidersConfigProvisioningConfigurationFieldGoogleWorkspace = big.NewInt(1 << 2)
 )
 
+// identityProvidersConfigProvisioningConfigurationNullableFields maps the wire names of IdentityProvidersConfigProvisioningConfiguration's nullable fields (required or optional) to their field bits.
+var identityProvidersConfigProvisioningConfigurationNullableFields = map[string]*big.Int{
+	"scim":             identityProvidersConfigProvisioningConfigurationFieldSCIM,
+	"google_workspace": identityProvidersConfigProvisioningConfigurationFieldGoogleWorkspace,
+}
+
+// The provisioning configuration supported by the identity provider
 type IdentityProvidersConfigProvisioningConfiguration struct {
-	OnLogin *IdentityProvidersConfigProvisioningConfigurationOnLogin `json:"on_login,omitempty" url:"on_login,omitempty"`
-	SCIM    *IdentityProvidersConfigProvisioningConfigurationSCIM    `json:"scim,omitempty" url:"scim,omitempty"`
+	OnLogin         *IdentityProvidersConfigProvisioningConfigurationOnLogin         `json:"on_login,omitempty" url:"on_login,omitempty"`
+	SCIM            *IdentityProvidersConfigProvisioningConfigurationSCIM            `json:"scim,omitempty" url:"scim,omitempty"`
+	GoogleWorkspace *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace `json:"google_workspace,omitempty" url:"google_workspace,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2407,6 +2720,13 @@ func (i *IdentityProvidersConfigProvisioningConfiguration) GetSCIM() IdentityPro
 	return *i.SCIM
 }
 
+func (i *IdentityProvidersConfigProvisioningConfiguration) GetGoogleWorkspace() IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace {
+	if i == nil || i.GoogleWorkspace == nil {
+		return IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace{}
+	}
+	return *i.GoogleWorkspace
+}
+
 func (i *IdentityProvidersConfigProvisioningConfiguration) GetExtraProperties() map[string]interface{} {
 	if i == nil {
 		return nil
@@ -2415,10 +2735,12 @@ func (i *IdentityProvidersConfigProvisioningConfiguration) GetExtraProperties() 
 }
 
 func (i *IdentityProvidersConfigProvisioningConfiguration) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetOnLogin sets the OnLogin field and marks it as non-optional;
@@ -2435,6 +2757,13 @@ func (i *IdentityProvidersConfigProvisioningConfiguration) SetSCIM(scim *Identit
 	i.require(identityProvidersConfigProvisioningConfigurationFieldSCIM)
 }
 
+// SetGoogleWorkspace sets the GoogleWorkspace field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdentityProvidersConfigProvisioningConfiguration) SetGoogleWorkspace(googleWorkspace *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) {
+	i.GoogleWorkspace = googleWorkspace
+	i.require(identityProvidersConfigProvisioningConfigurationFieldGoogleWorkspace)
+}
+
 func (i *IdentityProvidersConfigProvisioningConfiguration) UnmarshalJSON(data []byte) error {
 	type unmarshaler IdentityProvidersConfigProvisioningConfiguration
 	var value unmarshaler
@@ -2447,6 +2776,13 @@ func (i *IdentityProvidersConfigProvisioningConfiguration) UnmarshalJSON(data []
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProvidersConfigProvisioningConfigurationNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2463,6 +2799,94 @@ func (i *IdentityProvidersConfigProvisioningConfiguration) MarshalJSON() ([]byte
 }
 
 func (i *IdentityProvidersConfigProvisioningConfiguration) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+var (
+	identityProvidersConfigProvisioningConfigurationGoogleWorkspaceFieldSyncUsers = big.NewInt(1 << 0)
+)
+
+// Provisioning configuration for Google Workspace Directory Sync
+type IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace struct {
+	// Whether the connection is authorized to run Google Workspace user provisioning.
+	SyncUsers bool `json:"sync_users" url:"sync_users"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) GetSyncUsers() bool {
+	if i == nil {
+		return false
+	}
+	return i.SyncUsers
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetSyncUsers sets the SyncUsers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) SetSyncUsers(syncUsers bool) {
+	i.SyncUsers = syncUsers
+	i.require(identityProvidersConfigProvisioningConfigurationGoogleWorkspaceFieldSyncUsers)
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) UnmarshalJSON(data []byte) error {
+	type unmarshaler IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) MarshalJSON() ([]byte, error) {
+	type embed IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdentityProvidersConfigProvisioningConfigurationGoogleWorkspace) String() string {
 	if i == nil {
 		return "<nil>"
 	}
@@ -2502,11 +2926,11 @@ func (i IdentityProvidersConfigProvisioningConfigurationOnLogin) Ptr() *Identity
 	return &i
 }
 
-// Provisioning configuration for SCIM
 var (
 	identityProvidersConfigProvisioningConfigurationSCIMFieldTokens = big.NewInt(1 << 0)
 )
 
+// Provisioning configuration for SCIM
 type IdentityProvidersConfigProvisioningConfigurationSCIM struct {
 	Tokens *IdentityProvidersConfigProvisioningConfigurationSCIMTokens `json:"tokens" url:"tokens"`
 
@@ -2532,10 +2956,12 @@ func (i *IdentityProvidersConfigProvisioningConfigurationSCIM) GetExtraPropertie
 }
 
 func (i *IdentityProvidersConfigProvisioningConfigurationSCIM) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetTokens sets the Tokens field and marks it as non-optional;
@@ -2593,6 +3019,12 @@ var (
 	identityProvidersConfigProvisioningConfigurationSCIMTokensFieldMaxAllowedExpiry = big.NewInt(1 << 2)
 )
 
+// identityProvidersConfigProvisioningConfigurationSCIMTokensNullableFields maps the wire names of IdentityProvidersConfigProvisioningConfigurationSCIMTokens's nullable fields (required or optional) to their field bits.
+var identityProvidersConfigProvisioningConfigurationSCIMTokensNullableFields = map[string]*big.Int{
+	"default_expiry":     identityProvidersConfigProvisioningConfigurationSCIMTokensFieldDefaultExpiry,
+	"max_allowed_expiry": identityProvidersConfigProvisioningConfigurationSCIMTokensFieldMaxAllowedExpiry,
+}
+
 type IdentityProvidersConfigProvisioningConfigurationSCIMTokens struct {
 	Scopes           *IdentityProvidersConfigProvisioningConfigurationSCIMTokensScopes `json:"scopes,omitempty" url:"scopes,omitempty"`
 	DefaultExpiry    *int                                                              `json:"default_expiry,omitempty" url:"default_expiry,omitempty"`
@@ -2634,10 +3066,12 @@ func (i *IdentityProvidersConfigProvisioningConfigurationSCIMTokens) GetExtraPro
 }
 
 func (i *IdentityProvidersConfigProvisioningConfigurationSCIMTokens) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetScopes sets the Scopes field and marks it as non-optional;
@@ -2673,6 +3107,13 @@ func (i *IdentityProvidersConfigProvisioningConfigurationSCIMTokens) UnmarshalJS
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProvidersConfigProvisioningConfigurationSCIMTokensNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2740,13 +3181,16 @@ func (i IdentityProvidersConfigProvisioningConfigurationSCIMTokensScopesEnum) Pt
 type IdentityProvidersConfigProvisioningMethodsEnum string
 
 const (
-	IdentityProvidersConfigProvisioningMethodsEnumSCIM IdentityProvidersConfigProvisioningMethodsEnum = "scim"
+	IdentityProvidersConfigProvisioningMethodsEnumSCIM            IdentityProvidersConfigProvisioningMethodsEnum = "scim"
+	IdentityProvidersConfigProvisioningMethodsEnumGoogleWorkspace IdentityProvidersConfigProvisioningMethodsEnum = "google_workspace"
 )
 
 func NewIdentityProvidersConfigProvisioningMethodsEnumFromString(s string) (IdentityProvidersConfigProvisioningMethodsEnum, error) {
 	switch s {
 	case "scim":
 		return IdentityProvidersConfigProvisioningMethodsEnumSCIM, nil
+	case "google_workspace":
+		return IdentityProvidersConfigProvisioningMethodsEnumGoogleWorkspace, nil
 	}
 	var t IdentityProvidersConfigProvisioningMethodsEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2756,13 +3200,18 @@ func (i IdentityProvidersConfigProvisioningMethodsEnum) Ptr() *IdentityProviders
 	return &i
 }
 
-// Identity providers strategy configs
 var (
 	identityProvidersConfigStrategyBaseFieldEnabledFeatures     = big.NewInt(1 << 0)
 	identityProvidersConfigStrategyBaseFieldProvisioningMethods = big.NewInt(1 << 1)
 	identityProvidersConfigStrategyBaseFieldProvisioning        = big.NewInt(1 << 2)
 )
 
+// identityProvidersConfigStrategyBaseNullableFields maps the wire names of IdentityProvidersConfigStrategyBase's nullable fields (required or optional) to their field bits.
+var identityProvidersConfigStrategyBaseNullableFields = map[string]*big.Int{
+	"provisioning": identityProvidersConfigStrategyBaseFieldProvisioning,
+}
+
+// Identity providers strategy configs
 type IdentityProvidersConfigStrategyBase struct {
 	// Enabled features for a connections profile strategy override.
 	EnabledFeatures     []IdentityProvidersConfigEnabledFeaturesEnum      `json:"enabled_features" url:"enabled_features"`
@@ -2805,10 +3254,12 @@ func (i *IdentityProvidersConfigStrategyBase) GetExtraProperties() map[string]in
 }
 
 func (i *IdentityProvidersConfigStrategyBase) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEnabledFeatures sets the EnabledFeatures field and marks it as non-optional;
@@ -2844,6 +3295,13 @@ func (i *IdentityProvidersConfigStrategyBase) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, identityProvidersConfigStrategyBaseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2874,7 +3332,6 @@ func (i *IdentityProvidersConfigStrategyBase) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Strategy-specific overrides for identity providers
 var (
 	identityProvidersConfigStrategyOverrideFieldAdfs         = big.NewInt(1 << 0)
 	identityProvidersConfigStrategyOverrideFieldGoogleapps   = big.NewInt(1 << 1)
@@ -2885,6 +3342,7 @@ var (
 	identityProvidersConfigStrategyOverrideFieldWaad         = big.NewInt(1 << 6)
 )
 
+// Strategy-specific overrides for identity providers
 type IdentityProvidersConfigStrategyOverride struct {
 	Adfs         *IdentityProviderConfigAdfs         `json:"adfs,omitempty" url:"adfs,omitempty"`
 	Googleapps   *IdentityProviderConfigGoogleApps   `json:"googleapps,omitempty" url:"googleapps,omitempty"`
@@ -2958,10 +3416,12 @@ func (i *IdentityProvidersConfigStrategyOverride) GetExtraProperties() map[strin
 }
 
 func (i *IdentityProvidersConfigStrategyOverride) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetAdfs sets the Adfs field and marks it as non-optional;
@@ -3077,6 +3537,38 @@ func (i *IdpAdfsOptionsRequest) GetIdpAdfsOptionsRequestFedMetadataXML() *IdpAdf
 }
 
 func (i *IdpAdfsOptionsRequest) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"adfs_server"}, []string{"adfs_server"}) {
+		valueIdpAdfsOptionsRequestAdfsServer := new(IdpAdfsOptionsRequestAdfsServer)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsRequestAdfsServer); err == nil {
+			i.typ = "IdpAdfsOptionsRequestAdfsServer"
+			i.IdpAdfsOptionsRequestAdfsServer = valueIdpAdfsOptionsRequestAdfsServer
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"fedMetadataXml"}, []string{"fedMetadataXml"}) {
+		valueIdpAdfsOptionsRequestFedMetadataXML := new(IdpAdfsOptionsRequestFedMetadataXML)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsRequestFedMetadataXML); err == nil {
+			i.typ = "IdpAdfsOptionsRequestFedMetadataXML"
+			i.IdpAdfsOptionsRequestFedMetadataXML = valueIdpAdfsOptionsRequestFedMetadataXML
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"adfs_server"}) {
+		valueIdpAdfsOptionsRequestAdfsServer := new(IdpAdfsOptionsRequestAdfsServer)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsRequestAdfsServer); err == nil {
+			i.typ = "IdpAdfsOptionsRequestAdfsServer"
+			i.IdpAdfsOptionsRequestAdfsServer = valueIdpAdfsOptionsRequestAdfsServer
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"fedMetadataXml"}) {
+		valueIdpAdfsOptionsRequestFedMetadataXML := new(IdpAdfsOptionsRequestFedMetadataXML)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsRequestFedMetadataXML); err == nil {
+			i.typ = "IdpAdfsOptionsRequestFedMetadataXML"
+			i.IdpAdfsOptionsRequestFedMetadataXML = valueIdpAdfsOptionsRequestFedMetadataXML
+			return nil
+		}
+	}
 	valueIdpAdfsOptionsRequestAdfsServer := new(IdpAdfsOptionsRequestAdfsServer)
 	if err := json.Unmarshal(data, &valueIdpAdfsOptionsRequestAdfsServer); err == nil {
 		i.typ = "IdpAdfsOptionsRequestAdfsServer"
@@ -3147,10 +3639,12 @@ func (i *IdpAdfsOptionsRequestAdfsServer) GetExtraProperties() map[string]interf
 }
 
 func (i *IdpAdfsOptionsRequestAdfsServer) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetAdfsServer sets the AdfsServer field and marks it as non-optional;
@@ -3232,10 +3726,12 @@ func (i *IdpAdfsOptionsRequestFedMetadataXML) GetExtraProperties() map[string]in
 }
 
 func (i *IdpAdfsOptionsRequestFedMetadataXML) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetFedMetadataXML sets the FedMetadataXML field and marks it as non-optional;
@@ -3309,6 +3805,22 @@ func (i *IdpAdfsOptionsResponse) GetIdpAdfsOptionsResponseFedMetadataXML() *IdpA
 }
 
 func (i *IdpAdfsOptionsResponse) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"adfs_server"}, []string{}) {
+		valueIdpAdfsOptionsResponseAdfsServer := new(IdpAdfsOptionsResponseAdfsServer)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsResponseAdfsServer); err == nil {
+			i.typ = "IdpAdfsOptionsResponseAdfsServer"
+			i.IdpAdfsOptionsResponseAdfsServer = valueIdpAdfsOptionsResponseAdfsServer
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"fedMetadataXml"}, []string{}) {
+		valueIdpAdfsOptionsResponseFedMetadataXML := new(IdpAdfsOptionsResponseFedMetadataXML)
+		if err := json.Unmarshal(data, &valueIdpAdfsOptionsResponseFedMetadataXML); err == nil {
+			i.typ = "IdpAdfsOptionsResponseFedMetadataXML"
+			i.IdpAdfsOptionsResponseFedMetadataXML = valueIdpAdfsOptionsResponseFedMetadataXML
+			return nil
+		}
+	}
 	valueIdpAdfsOptionsResponseAdfsServer := new(IdpAdfsOptionsResponseAdfsServer)
 	if err := json.Unmarshal(data, &valueIdpAdfsOptionsResponseAdfsServer); err == nil {
 		i.typ = "IdpAdfsOptionsResponseAdfsServer"
@@ -3379,10 +3891,12 @@ func (i *IdpAdfsOptionsResponseAdfsServer) GetExtraProperties() map[string]inter
 }
 
 func (i *IdpAdfsOptionsResponseAdfsServer) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetAdfsServer sets the AdfsServer field and marks it as non-optional;
@@ -3464,10 +3978,12 @@ func (i *IdpAdfsOptionsResponseFedMetadataXML) GetExtraProperties() map[string]i
 }
 
 func (i *IdpAdfsOptionsResponseFedMetadataXML) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetFedMetadataXML sets the FedMetadataXML field and marks it as non-optional;
@@ -3519,27 +4035,24 @@ func (i *IdpAdfsOptionsResponseFedMetadataXML) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpAdfsRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpAdfsRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpAdfsRequestFieldID                           = big.NewInt(1 << 2)
-	idpAdfsRequestFieldName                         = big.NewInt(1 << 3)
-	idpAdfsRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpAdfsRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpAdfsRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpAdfsRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpAdfsRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpAdfsRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpAdfsRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpAdfsRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpAdfsRequestFieldName                         = big.NewInt(1 << 2)
+	idpAdfsRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpAdfsRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpAdfsRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpAdfsRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpAdfsRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpAdfsRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpAdfsRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpAdfsRequest struct {
 	Strategy IdpAdfsRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpAdfsOptionsRequest `json:"options" url:"options"`
-	ID      *IdpID                 `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -3551,8 +4064,7 @@ type IdpAdfsRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -3577,13 +4089,6 @@ func (i *IdpAdfsRequest) GetOptions() *IdpAdfsOptionsRequest {
 		return nil
 	}
 	return i.Options
-}
-
-func (i *IdpAdfsRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpAdfsRequest) GetName() string {
@@ -3628,13 +4133,6 @@ func (i *IdpAdfsRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpAdfsRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpAdfsRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -3657,10 +4155,12 @@ func (i *IdpAdfsRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpAdfsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -3675,13 +4175,6 @@ func (i *IdpAdfsRequest) SetStrategy(strategy IdpAdfsRequestStrategy) {
 func (i *IdpAdfsRequest) SetOptions(options *IdpAdfsOptionsRequest) {
 	i.Options = options
 	i.require(idpAdfsRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpAdfsRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpAdfsRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -3724,13 +4217,6 @@ func (i *IdpAdfsRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *boo
 func (i *IdpAdfsRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpAdfsRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpAdfsRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpAdfsRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -3808,7 +4294,6 @@ func (i IdpAdfsRequestStrategy) Ptr() *IdpAdfsRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpAdfsResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpAdfsResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -3825,6 +4310,12 @@ var (
 	idpAdfsResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 12)
 )
 
+// idpAdfsResponseNullableFields maps the wire names of IdpAdfsResponse's nullable fields (required or optional) to their field bits.
+var idpAdfsResponseNullableFields = map[string]*big.Int{
+	"name": idpAdfsResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpAdfsResponse struct {
 	Strategy IdpAdfsResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -3956,10 +4447,12 @@ func (i *IdpAdfsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpAdfsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -4065,6 +4558,13 @@ func (i *IdpAdfsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpAdfsResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4204,10 +4704,12 @@ func (i *IdpAdfsUpdateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpAdfsUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -4410,10 +4912,12 @@ func (i *IdpBaseRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpBaseRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -4535,6 +5039,11 @@ var (
 	idpBaseResponseFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
 	idpBaseResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
 )
+
+// idpBaseResponseNullableFields maps the wire names of IdpBaseResponse's nullable fields (required or optional) to their field bits.
+var idpBaseResponseNullableFields = map[string]*big.Int{
+	"name": idpBaseResponseFieldName,
+}
 
 type IdpBaseResponse struct {
 	ID *IdpID `json:"id,omitempty" url:"id,omitempty"`
@@ -4658,10 +5167,12 @@ func (i *IdpBaseResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpBaseResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -4760,6 +5271,13 @@ func (i *IdpBaseResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpBaseResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4873,10 +5391,12 @@ func (i *IdpGoogleAppsOptionsRequest) GetExtraProperties() map[string]interface{
 }
 
 func (i *IdpGoogleAppsOptionsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -4999,10 +5519,12 @@ func (i *IdpGoogleAppsOptionsResponse) GetExtraProperties() map[string]interface
 }
 
 func (i *IdpGoogleAppsOptionsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -5068,27 +5590,24 @@ func (i *IdpGoogleAppsOptionsResponse) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpGoogleAppsRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpGoogleAppsRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpGoogleAppsRequestFieldID                           = big.NewInt(1 << 2)
-	idpGoogleAppsRequestFieldName                         = big.NewInt(1 << 3)
-	idpGoogleAppsRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpGoogleAppsRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpGoogleAppsRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpGoogleAppsRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpGoogleAppsRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpGoogleAppsRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpGoogleAppsRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpGoogleAppsRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpGoogleAppsRequestFieldName                         = big.NewInt(1 << 2)
+	idpGoogleAppsRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpGoogleAppsRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpGoogleAppsRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpGoogleAppsRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpGoogleAppsRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpGoogleAppsRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpGoogleAppsRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpGoogleAppsRequest struct {
 	Strategy IdpGoogleAppsRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpGoogleAppsOptionsRequest `json:"options,omitempty" url:"options,omitempty"`
-	ID      *IdpID                       `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -5100,8 +5619,7 @@ type IdpGoogleAppsRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -5126,13 +5644,6 @@ func (i *IdpGoogleAppsRequest) GetOptions() IdpGoogleAppsOptionsRequest {
 		return IdpGoogleAppsOptionsRequest{}
 	}
 	return *i.Options
-}
-
-func (i *IdpGoogleAppsRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpGoogleAppsRequest) GetName() string {
@@ -5177,13 +5688,6 @@ func (i *IdpGoogleAppsRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpGoogleAppsRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpGoogleAppsRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -5206,10 +5710,12 @@ func (i *IdpGoogleAppsRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpGoogleAppsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -5224,13 +5730,6 @@ func (i *IdpGoogleAppsRequest) SetStrategy(strategy IdpGoogleAppsRequestStrategy
 func (i *IdpGoogleAppsRequest) SetOptions(options *IdpGoogleAppsOptionsRequest) {
 	i.Options = options
 	i.require(idpGoogleAppsRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpGoogleAppsRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpGoogleAppsRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -5273,13 +5772,6 @@ func (i *IdpGoogleAppsRequest) SetAssignMembershipOnLogin(assignMembershipOnLogi
 func (i *IdpGoogleAppsRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpGoogleAppsRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpGoogleAppsRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpGoogleAppsRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -5357,7 +5849,6 @@ func (i IdpGoogleAppsRequestStrategy) Ptr() *IdpGoogleAppsRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpGoogleAppsResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpGoogleAppsResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -5374,6 +5865,12 @@ var (
 	idpGoogleAppsResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 12)
 )
 
+// idpGoogleAppsResponseNullableFields maps the wire names of IdpGoogleAppsResponse's nullable fields (required or optional) to their field bits.
+var idpGoogleAppsResponseNullableFields = map[string]*big.Int{
+	"name": idpGoogleAppsResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpGoogleAppsResponse struct {
 	Strategy IdpGoogleAppsResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -5505,10 +6002,12 @@ func (i *IdpGoogleAppsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpGoogleAppsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -5614,6 +6113,13 @@ func (i *IdpGoogleAppsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpGoogleAppsResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5663,7 +6169,6 @@ func (i IdpGoogleAppsResponseStrategy) Ptr() *IdpGoogleAppsResponseStrategy {
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpGoogleAppsUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpGoogleAppsUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -5674,6 +6179,7 @@ var (
 	idpGoogleAppsUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpGoogleAppsUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -5754,10 +6260,12 @@ func (i *IdpGoogleAppsUpdateRequest) GetExtraProperties() map[string]interface{}
 }
 
 func (i *IdpGoogleAppsUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -5916,6 +6424,118 @@ func (i *IdpKnownRequest) GetIdpWaadRequest() *IdpWaadRequest {
 }
 
 func (i *IdpKnownRequest) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "options", "name"}) {
+		valueIdpAdfsRequest := new(IdpAdfsRequest)
+		if err := json.Unmarshal(data, &valueIdpAdfsRequest); err == nil {
+			i.typ = "IdpAdfsRequest"
+			i.IdpAdfsRequest = valueIdpAdfsRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "name"}) {
+		valueIdpGoogleAppsRequest := new(IdpGoogleAppsRequest)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsRequest); err == nil {
+			i.typ = "IdpGoogleAppsRequest"
+			i.IdpGoogleAppsRequest = valueIdpGoogleAppsRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "name"}) {
+		valueIdpOidcRequest := new(IdpOidcRequest)
+		if err := json.Unmarshal(data, &valueIdpOidcRequest); err == nil {
+			i.typ = "IdpOidcRequest"
+			i.IdpOidcRequest = valueIdpOidcRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "options", "name"}) {
+		valueIdpOktaRequest := new(IdpOktaRequest)
+		if err := json.Unmarshal(data, &valueIdpOktaRequest); err == nil {
+			i.typ = "IdpOktaRequest"
+			i.IdpOktaRequest = valueIdpOktaRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "options", "name"}) {
+		valueIdpPingFederateRequest := new(IdpPingFederateRequest)
+		if err := json.Unmarshal(data, &valueIdpPingFederateRequest); err == nil {
+			i.typ = "IdpPingFederateRequest"
+			i.IdpPingFederateRequest = valueIdpPingFederateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "options", "name"}) {
+		valueIdpSamlpRequest := new(IdpSamlpRequest)
+		if err := json.Unmarshal(data, &valueIdpSamlpRequest); err == nil {
+			i.typ = "IdpSamlpRequest"
+			i.IdpSamlpRequest = valueIdpSamlpRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy", "options", "name"}) {
+		valueIdpWaadRequest := new(IdpWaadRequest)
+		if err := json.Unmarshal(data, &valueIdpWaadRequest); err == nil {
+			i.typ = "IdpWaadRequest"
+			i.IdpWaadRequest = valueIdpWaadRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "options", "name"}) {
+		valueIdpAdfsRequest := new(IdpAdfsRequest)
+		if err := json.Unmarshal(data, &valueIdpAdfsRequest); err == nil {
+			i.typ = "IdpAdfsRequest"
+			i.IdpAdfsRequest = valueIdpAdfsRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "name"}) {
+		valueIdpGoogleAppsRequest := new(IdpGoogleAppsRequest)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsRequest); err == nil {
+			i.typ = "IdpGoogleAppsRequest"
+			i.IdpGoogleAppsRequest = valueIdpGoogleAppsRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "name"}) {
+		valueIdpOidcRequest := new(IdpOidcRequest)
+		if err := json.Unmarshal(data, &valueIdpOidcRequest); err == nil {
+			i.typ = "IdpOidcRequest"
+			i.IdpOidcRequest = valueIdpOidcRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "options", "name"}) {
+		valueIdpOktaRequest := new(IdpOktaRequest)
+		if err := json.Unmarshal(data, &valueIdpOktaRequest); err == nil {
+			i.typ = "IdpOktaRequest"
+			i.IdpOktaRequest = valueIdpOktaRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "options", "name"}) {
+		valueIdpPingFederateRequest := new(IdpPingFederateRequest)
+		if err := json.Unmarshal(data, &valueIdpPingFederateRequest); err == nil {
+			i.typ = "IdpPingFederateRequest"
+			i.IdpPingFederateRequest = valueIdpPingFederateRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "options", "name"}) {
+		valueIdpSamlpRequest := new(IdpSamlpRequest)
+		if err := json.Unmarshal(data, &valueIdpSamlpRequest); err == nil {
+			i.typ = "IdpSamlpRequest"
+			i.IdpSamlpRequest = valueIdpSamlpRequest
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy", "options", "name"}) {
+		valueIdpWaadRequest := new(IdpWaadRequest)
+		if err := json.Unmarshal(data, &valueIdpWaadRequest); err == nil {
+			i.typ = "IdpWaadRequest"
+			i.IdpWaadRequest = valueIdpWaadRequest
+			return nil
+		}
+	}
 	valueIdpAdfsRequest := new(IdpAdfsRequest)
 	if err := json.Unmarshal(data, &valueIdpAdfsRequest); err == nil {
 		i.typ = "IdpAdfsRequest"
@@ -6083,6 +6703,118 @@ func (i *IdpKnownResponse) GetIdpWaadResponse() *IdpWaadResponse {
 }
 
 func (i *IdpKnownResponse) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpAdfsResponse := new(IdpAdfsResponse)
+		if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
+			i.typ = "IdpAdfsResponse"
+			i.IdpAdfsResponse = valueIdpAdfsResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpGoogleAppsResponse := new(IdpGoogleAppsResponse)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsResponse); err == nil {
+			i.typ = "IdpGoogleAppsResponse"
+			i.IdpGoogleAppsResponse = valueIdpGoogleAppsResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpOidcResponse := new(IdpOidcResponse)
+		if err := json.Unmarshal(data, &valueIdpOidcResponse); err == nil {
+			i.typ = "IdpOidcResponse"
+			i.IdpOidcResponse = valueIdpOidcResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpOktaResponse := new(IdpOktaResponse)
+		if err := json.Unmarshal(data, &valueIdpOktaResponse); err == nil {
+			i.typ = "IdpOktaResponse"
+			i.IdpOktaResponse = valueIdpOktaResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpPingFederateResponse := new(IdpPingFederateResponse)
+		if err := json.Unmarshal(data, &valueIdpPingFederateResponse); err == nil {
+			i.typ = "IdpPingFederateResponse"
+			i.IdpPingFederateResponse = valueIdpPingFederateResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpSamlpResponse := new(IdpSamlpResponse)
+		if err := json.Unmarshal(data, &valueIdpSamlpResponse); err == nil {
+			i.typ = "IdpSamlpResponse"
+			i.IdpSamlpResponse = valueIdpSamlpResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpWaadResponse := new(IdpWaadResponse)
+		if err := json.Unmarshal(data, &valueIdpWaadResponse); err == nil {
+			i.typ = "IdpWaadResponse"
+			i.IdpWaadResponse = valueIdpWaadResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpAdfsResponse := new(IdpAdfsResponse)
+		if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
+			i.typ = "IdpAdfsResponse"
+			i.IdpAdfsResponse = valueIdpAdfsResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpGoogleAppsResponse := new(IdpGoogleAppsResponse)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsResponse); err == nil {
+			i.typ = "IdpGoogleAppsResponse"
+			i.IdpGoogleAppsResponse = valueIdpGoogleAppsResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpOidcResponse := new(IdpOidcResponse)
+		if err := json.Unmarshal(data, &valueIdpOidcResponse); err == nil {
+			i.typ = "IdpOidcResponse"
+			i.IdpOidcResponse = valueIdpOidcResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpOktaResponse := new(IdpOktaResponse)
+		if err := json.Unmarshal(data, &valueIdpOktaResponse); err == nil {
+			i.typ = "IdpOktaResponse"
+			i.IdpOktaResponse = valueIdpOktaResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpPingFederateResponse := new(IdpPingFederateResponse)
+		if err := json.Unmarshal(data, &valueIdpPingFederateResponse); err == nil {
+			i.typ = "IdpPingFederateResponse"
+			i.IdpPingFederateResponse = valueIdpPingFederateResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpSamlpResponse := new(IdpSamlpResponse)
+		if err := json.Unmarshal(data, &valueIdpSamlpResponse); err == nil {
+			i.typ = "IdpSamlpResponse"
+			i.IdpSamlpResponse = valueIdpSamlpResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpWaadResponse := new(IdpWaadResponse)
+		if err := json.Unmarshal(data, &valueIdpWaadResponse); err == nil {
+			i.typ = "IdpWaadResponse"
+			i.IdpWaadResponse = valueIdpWaadResponse
+			return nil
+		}
+	}
 	valueIdpAdfsResponse := new(IdpAdfsResponse)
 	if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
 		i.typ = "IdpAdfsResponse"
@@ -6247,10 +6979,12 @@ func (i *IdpOidcOptionsRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOidcOptionsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -6372,10 +7106,12 @@ func (i *IdpOidcOptionsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOidcOptionsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -6464,27 +7200,24 @@ func (i IdpOidcOptionsTypeEnum) Ptr() *IdpOidcOptionsTypeEnum {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpOidcRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpOidcRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpOidcRequestFieldID                           = big.NewInt(1 << 2)
-	idpOidcRequestFieldName                         = big.NewInt(1 << 3)
-	idpOidcRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpOidcRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpOidcRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpOidcRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpOidcRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpOidcRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpOidcRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpOidcRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpOidcRequestFieldName                         = big.NewInt(1 << 2)
+	idpOidcRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpOidcRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpOidcRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpOidcRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpOidcRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpOidcRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpOidcRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpOidcRequest struct {
 	Strategy IdpOidcRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpOidcOptionsRequest `json:"options,omitempty" url:"options,omitempty"`
-	ID      *IdpID                 `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -6496,8 +7229,7 @@ type IdpOidcRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -6522,13 +7254,6 @@ func (i *IdpOidcRequest) GetOptions() IdpOidcOptionsRequest {
 		return IdpOidcOptionsRequest{}
 	}
 	return *i.Options
-}
-
-func (i *IdpOidcRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpOidcRequest) GetName() string {
@@ -6573,13 +7298,6 @@ func (i *IdpOidcRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpOidcRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpOidcRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -6602,10 +7320,12 @@ func (i *IdpOidcRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOidcRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -6620,13 +7340,6 @@ func (i *IdpOidcRequest) SetStrategy(strategy IdpOidcRequestStrategy) {
 func (i *IdpOidcRequest) SetOptions(options *IdpOidcOptionsRequest) {
 	i.Options = options
 	i.require(idpOidcRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpOidcRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpOidcRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -6669,13 +7382,6 @@ func (i *IdpOidcRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *boo
 func (i *IdpOidcRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpOidcRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpOidcRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpOidcRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -6753,7 +7459,6 @@ func (i IdpOidcRequestStrategy) Ptr() *IdpOidcRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpOidcResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpOidcResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -6771,6 +7476,12 @@ var (
 	idpOidcResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 13)
 )
 
+// idpOidcResponseNullableFields maps the wire names of IdpOidcResponse's nullable fields (required or optional) to their field bits.
+var idpOidcResponseNullableFields = map[string]*big.Int{
+	"name": idpOidcResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpOidcResponse struct {
 	Strategy IdpOidcResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -6910,10 +7621,12 @@ func (i *IdpOidcResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOidcResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -7026,6 +7739,13 @@ func (i *IdpOidcResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpOidcResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7075,7 +7795,6 @@ func (i IdpOidcResponseStrategy) Ptr() *IdpOidcResponseStrategy {
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpOidcUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpOidcUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -7086,6 +7805,7 @@ var (
 	idpOidcUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpOidcUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -7166,10 +7886,12 @@ func (i *IdpOidcUpdateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOidcUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -7323,10 +8045,12 @@ func (i *IdpOktaOptionsRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOktaOptionsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -7449,10 +8173,12 @@ func (i *IdpOktaOptionsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOktaOptionsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -7518,27 +8244,24 @@ func (i *IdpOktaOptionsResponse) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpOktaRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpOktaRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpOktaRequestFieldID                           = big.NewInt(1 << 2)
-	idpOktaRequestFieldName                         = big.NewInt(1 << 3)
-	idpOktaRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpOktaRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpOktaRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpOktaRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpOktaRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpOktaRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpOktaRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpOktaRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpOktaRequestFieldName                         = big.NewInt(1 << 2)
+	idpOktaRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpOktaRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpOktaRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpOktaRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpOktaRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpOktaRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpOktaRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpOktaRequest struct {
 	Strategy IdpOktaRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpOktaOptionsRequest `json:"options" url:"options"`
-	ID      *IdpID                 `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -7550,8 +8273,7 @@ type IdpOktaRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -7576,13 +8298,6 @@ func (i *IdpOktaRequest) GetOptions() *IdpOktaOptionsRequest {
 		return nil
 	}
 	return i.Options
-}
-
-func (i *IdpOktaRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpOktaRequest) GetName() string {
@@ -7627,13 +8342,6 @@ func (i *IdpOktaRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpOktaRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpOktaRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -7656,10 +8364,12 @@ func (i *IdpOktaRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOktaRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -7674,13 +8384,6 @@ func (i *IdpOktaRequest) SetStrategy(strategy IdpOktaRequestStrategy) {
 func (i *IdpOktaRequest) SetOptions(options *IdpOktaOptionsRequest) {
 	i.Options = options
 	i.require(idpOktaRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpOktaRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpOktaRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -7723,13 +8426,6 @@ func (i *IdpOktaRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *boo
 func (i *IdpOktaRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpOktaRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpOktaRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpOktaRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -7807,7 +8503,6 @@ func (i IdpOktaRequestStrategy) Ptr() *IdpOktaRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpOktaResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpOktaResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -7825,6 +8520,12 @@ var (
 	idpOktaResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 13)
 )
 
+// idpOktaResponseNullableFields maps the wire names of IdpOktaResponse's nullable fields (required or optional) to their field bits.
+var idpOktaResponseNullableFields = map[string]*big.Int{
+	"name": idpOktaResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpOktaResponse struct {
 	Strategy IdpOktaResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -7964,10 +8665,12 @@ func (i *IdpOktaResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOktaResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -8080,6 +8783,13 @@ func (i *IdpOktaResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpOktaResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8129,7 +8839,6 @@ func (i IdpOktaResponseStrategy) Ptr() *IdpOktaResponseStrategy {
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpOktaUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpOktaUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -8140,6 +8849,7 @@ var (
 	idpOktaUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpOktaUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -8220,10 +8930,12 @@ func (i *IdpOktaUpdateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOktaUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -8317,7 +9029,6 @@ func (i *IdpOktaUpdateRequest) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// An object containing configuration details for Identity Provider (IdP) initiated single sign-on flows
 var (
 	idpOptionsIdpInitiatedFieldEnabled              = big.NewInt(1 << 0)
 	idpOptionsIdpInitiatedFieldClientID             = big.NewInt(1 << 1)
@@ -8325,6 +9036,7 @@ var (
 	idpOptionsIdpInitiatedFieldClientAuthorizequery = big.NewInt(1 << 3)
 )
 
+// An object containing configuration details for Identity Provider (IdP) initiated single sign-on flows
 type IdpOptionsIdpInitiated struct {
 	// A flag indicating whether IdP-initiated SSO is enabled for this connection
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
@@ -8378,10 +9090,12 @@ func (i *IdpOptionsIdpInitiated) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpOptionsIdpInitiated) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;
@@ -8541,10 +9255,12 @@ func (i *IdpPingFederateOptionsRequest) GetExtraProperties() map[string]interfac
 }
 
 func (i *IdpPingFederateOptionsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetSignatureAlgorithm sets the SignatureAlgorithm field and marks it as non-optional;
@@ -8725,10 +9441,12 @@ func (i *IdpPingFederateOptionsResponse) GetExtraProperties() map[string]interfa
 }
 
 func (i *IdpPingFederateOptionsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetSignatureAlgorithm sets the SignatureAlgorithm field and marks it as non-optional;
@@ -8822,27 +9540,24 @@ func (i *IdpPingFederateOptionsResponse) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpPingFederateRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpPingFederateRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpPingFederateRequestFieldID                           = big.NewInt(1 << 2)
-	idpPingFederateRequestFieldName                         = big.NewInt(1 << 3)
-	idpPingFederateRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpPingFederateRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpPingFederateRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpPingFederateRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpPingFederateRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpPingFederateRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpPingFederateRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpPingFederateRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpPingFederateRequestFieldName                         = big.NewInt(1 << 2)
+	idpPingFederateRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpPingFederateRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpPingFederateRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpPingFederateRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpPingFederateRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpPingFederateRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpPingFederateRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpPingFederateRequest struct {
 	Strategy IdpPingFederateRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpPingFederateOptionsRequest `json:"options" url:"options"`
-	ID      *IdpID                         `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -8854,8 +9569,7 @@ type IdpPingFederateRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -8880,13 +9594,6 @@ func (i *IdpPingFederateRequest) GetOptions() *IdpPingFederateOptionsRequest {
 		return nil
 	}
 	return i.Options
-}
-
-func (i *IdpPingFederateRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpPingFederateRequest) GetName() string {
@@ -8931,13 +9638,6 @@ func (i *IdpPingFederateRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpPingFederateRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpPingFederateRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -8960,10 +9660,12 @@ func (i *IdpPingFederateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpPingFederateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -8978,13 +9680,6 @@ func (i *IdpPingFederateRequest) SetStrategy(strategy IdpPingFederateRequestStra
 func (i *IdpPingFederateRequest) SetOptions(options *IdpPingFederateOptionsRequest) {
 	i.Options = options
 	i.require(idpPingFederateRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpPingFederateRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpPingFederateRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -9027,13 +9722,6 @@ func (i *IdpPingFederateRequest) SetAssignMembershipOnLogin(assignMembershipOnLo
 func (i *IdpPingFederateRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpPingFederateRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpPingFederateRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpPingFederateRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -9111,7 +9799,6 @@ func (i IdpPingFederateRequestStrategy) Ptr() *IdpPingFederateRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpPingFederateResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpPingFederateResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -9128,6 +9815,12 @@ var (
 	idpPingFederateResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 12)
 )
 
+// idpPingFederateResponseNullableFields maps the wire names of IdpPingFederateResponse's nullable fields (required or optional) to their field bits.
+var idpPingFederateResponseNullableFields = map[string]*big.Int{
+	"name": idpPingFederateResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpPingFederateResponse struct {
 	Strategy IdpPingFederateResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -9259,10 +9952,12 @@ func (i *IdpPingFederateResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpPingFederateResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -9368,6 +10063,13 @@ func (i *IdpPingFederateResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpPingFederateResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9417,7 +10119,6 @@ func (i IdpPingFederateResponseStrategy) Ptr() *IdpPingFederateResponseStrategy 
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpPingFederateUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpPingFederateUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -9428,6 +10129,7 @@ var (
 	idpPingFederateUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpPingFederateUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -9508,10 +10210,12 @@ func (i *IdpPingFederateUpdateRequest) GetExtraProperties() map[string]interface
 }
 
 func (i *IdpPingFederateUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -9704,10 +10408,12 @@ func (i *IdpProvisioningConfig) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpProvisioningConfig) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetIdentityProviderID sets the IdentityProviderID field and marks it as non-optional;
@@ -9910,10 +10616,12 @@ func (i *IdpProvisioningUserAttributeMapItem) GetExtraProperties() map[string]in
 }
 
 func (i *IdpProvisioningUserAttributeMapItem) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
@@ -10029,6 +10737,38 @@ func (i *IdpSamlpOptionsRequest) GetIdpSamlpOptionsRequestSignInEndpoint() *IdpS
 }
 
 func (i *IdpSamlpOptionsRequest) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"metadataUrl", "signSAMLRequest", "signatureAlgorithm", "digestAlgorithm", "protocolBinding", "bindingMethod", "signingCert", "idpInitiated", "icon_url", "discovery_url"}, []string{"metadataUrl", "signSAMLRequest"}) {
+		valueIdpSamlpOptionsRequestMetadataURL := new(IdpSamlpOptionsRequestMetadataURL)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsRequestMetadataURL); err == nil {
+			i.typ = "IdpSamlpOptionsRequestMetadataURL"
+			i.IdpSamlpOptionsRequestMetadataURL = valueIdpSamlpOptionsRequestMetadataURL
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"signInEndpoint", "signingCert", "signSAMLRequest", "signatureAlgorithm", "digestAlgorithm", "protocolBinding", "bindingMethod", "idpInitiated", "icon_url", "discovery_url"}, []string{"signInEndpoint", "signingCert", "signSAMLRequest"}) {
+		valueIdpSamlpOptionsRequestSignInEndpoint := new(IdpSamlpOptionsRequestSignInEndpoint)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsRequestSignInEndpoint); err == nil {
+			i.typ = "IdpSamlpOptionsRequestSignInEndpoint"
+			i.IdpSamlpOptionsRequestSignInEndpoint = valueIdpSamlpOptionsRequestSignInEndpoint
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"metadataUrl", "signSAMLRequest"}) {
+		valueIdpSamlpOptionsRequestMetadataURL := new(IdpSamlpOptionsRequestMetadataURL)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsRequestMetadataURL); err == nil {
+			i.typ = "IdpSamlpOptionsRequestMetadataURL"
+			i.IdpSamlpOptionsRequestMetadataURL = valueIdpSamlpOptionsRequestMetadataURL
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"signInEndpoint", "signingCert", "signSAMLRequest"}) {
+		valueIdpSamlpOptionsRequestSignInEndpoint := new(IdpSamlpOptionsRequestSignInEndpoint)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsRequestSignInEndpoint); err == nil {
+			i.typ = "IdpSamlpOptionsRequestSignInEndpoint"
+			i.IdpSamlpOptionsRequestSignInEndpoint = valueIdpSamlpOptionsRequestSignInEndpoint
+			return nil
+		}
+	}
 	valueIdpSamlpOptionsRequestMetadataURL := new(IdpSamlpOptionsRequestMetadataURL)
 	if err := json.Unmarshal(data, &valueIdpSamlpOptionsRequestMetadataURL); err == nil {
 		i.typ = "IdpSamlpOptionsRequestMetadataURL"
@@ -10185,10 +10925,12 @@ func (i *IdpSamlpOptionsRequestMetadataURL) GetExtraProperties() map[string]inte
 }
 
 func (i *IdpSamlpOptionsRequestMetadataURL) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetMetadataURL sets the MetadataURL field and marks it as non-optional;
@@ -10419,10 +11161,12 @@ func (i *IdpSamlpOptionsRequestSignInEndpoint) GetExtraProperties() map[string]i
 }
 
 func (i *IdpSamlpOptionsRequestSignInEndpoint) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetSignInEndpoint sets the SignInEndpoint field and marks it as non-optional;
@@ -10559,6 +11303,22 @@ func (i *IdpSamlpOptionsResponse) GetIdpSamlpOptionsResponseSignInEndpoint() *Id
 }
 
 func (i *IdpSamlpOptionsResponse) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"metadataUrl", "signSAMLRequest", "signatureAlgorithm", "digestAlgorithm", "protocolBinding", "bindingMethod", "cert", "idpInitiated", "icon_url", "discovery_url"}, []string{}) {
+		valueIdpSamlpOptionsResponseMetadataURL := new(IdpSamlpOptionsResponseMetadataURL)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsResponseMetadataURL); err == nil {
+			i.typ = "IdpSamlpOptionsResponseMetadataURL"
+			i.IdpSamlpOptionsResponseMetadataURL = valueIdpSamlpOptionsResponseMetadataURL
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"signInEndpoint", "cert", "signSAMLRequest", "signatureAlgorithm", "digestAlgorithm", "protocolBinding", "bindingMethod", "idpInitiated", "icon_url", "discovery_url"}, []string{}) {
+		valueIdpSamlpOptionsResponseSignInEndpoint := new(IdpSamlpOptionsResponseSignInEndpoint)
+		if err := json.Unmarshal(data, &valueIdpSamlpOptionsResponseSignInEndpoint); err == nil {
+			i.typ = "IdpSamlpOptionsResponseSignInEndpoint"
+			i.IdpSamlpOptionsResponseSignInEndpoint = valueIdpSamlpOptionsResponseSignInEndpoint
+			return nil
+		}
+	}
 	valueIdpSamlpOptionsResponseMetadataURL := new(IdpSamlpOptionsResponseMetadataURL)
 	if err := json.Unmarshal(data, &valueIdpSamlpOptionsResponseMetadataURL); err == nil {
 		i.typ = "IdpSamlpOptionsResponseMetadataURL"
@@ -10715,10 +11475,12 @@ func (i *IdpSamlpOptionsResponseMetadataURL) GetExtraProperties() map[string]int
 }
 
 func (i *IdpSamlpOptionsResponseMetadataURL) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetMetadataURL sets the MetadataURL field and marks it as non-optional;
@@ -10949,10 +11711,12 @@ func (i *IdpSamlpOptionsResponseSignInEndpoint) GetExtraProperties() map[string]
 }
 
 func (i *IdpSamlpOptionsResponseSignInEndpoint) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetSignInEndpoint sets the SignInEndpoint field and marks it as non-optional;
@@ -11067,27 +11831,24 @@ func (i *IdpSamlpOptionsResponseSignInEndpoint) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpSamlpRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpSamlpRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpSamlpRequestFieldID                           = big.NewInt(1 << 2)
-	idpSamlpRequestFieldName                         = big.NewInt(1 << 3)
-	idpSamlpRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpSamlpRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpSamlpRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpSamlpRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpSamlpRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpSamlpRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpSamlpRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpSamlpRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpSamlpRequestFieldName                         = big.NewInt(1 << 2)
+	idpSamlpRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpSamlpRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpSamlpRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpSamlpRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpSamlpRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpSamlpRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpSamlpRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpSamlpRequest struct {
 	Strategy IdpSamlpRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpSamlpOptionsRequest `json:"options" url:"options"`
-	ID      *IdpID                  `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -11099,8 +11860,7 @@ type IdpSamlpRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -11125,13 +11885,6 @@ func (i *IdpSamlpRequest) GetOptions() *IdpSamlpOptionsRequest {
 		return nil
 	}
 	return i.Options
-}
-
-func (i *IdpSamlpRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpSamlpRequest) GetName() string {
@@ -11176,13 +11929,6 @@ func (i *IdpSamlpRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpSamlpRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpSamlpRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -11205,10 +11951,12 @@ func (i *IdpSamlpRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpSamlpRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -11223,13 +11971,6 @@ func (i *IdpSamlpRequest) SetStrategy(strategy IdpSamlpRequestStrategy) {
 func (i *IdpSamlpRequest) SetOptions(options *IdpSamlpOptionsRequest) {
 	i.Options = options
 	i.require(idpSamlpRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpSamlpRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpSamlpRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -11272,13 +12013,6 @@ func (i *IdpSamlpRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *bo
 func (i *IdpSamlpRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpSamlpRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpSamlpRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpSamlpRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -11356,7 +12090,6 @@ func (i IdpSamlpRequestStrategy) Ptr() *IdpSamlpRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpSamlpResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpSamlpResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -11374,6 +12107,12 @@ var (
 	idpSamlpResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 13)
 )
 
+// idpSamlpResponseNullableFields maps the wire names of IdpSamlpResponse's nullable fields (required or optional) to their field bits.
+var idpSamlpResponseNullableFields = map[string]*big.Int{
+	"name": idpSamlpResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpSamlpResponse struct {
 	Strategy IdpSamlpResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -11513,10 +12252,12 @@ func (i *IdpSamlpResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpSamlpResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -11629,6 +12370,13 @@ func (i *IdpSamlpResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpSamlpResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11678,7 +12426,6 @@ func (i IdpSamlpResponseStrategy) Ptr() *IdpSamlpResponseStrategy {
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpSamlpUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpSamlpUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -11689,6 +12436,7 @@ var (
 	idpSamlpUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpSamlpUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -11769,10 +12517,12 @@ func (i *IdpSamlpUpdateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpSamlpUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -11926,10 +12676,12 @@ func (i *IdpSCIMTokenBase) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpSCIMTokenBase) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetTokenID sets the TokenID field and marks it as non-optional;
@@ -12084,10 +12836,12 @@ func (i *IdpSCIMTokenCreate) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpSCIMTokenCreate) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetTokenID sets the TokenID field and marks it as non-optional;
@@ -12266,6 +13020,810 @@ func (i IdpStrategyEnum) Ptr() *IdpStrategyEnum {
 }
 
 var (
+	idpTestBaseResponseFieldID        = big.NewInt(1 << 0)
+	idpTestBaseResponseFieldStatus    = big.NewInt(1 << 1)
+	idpTestBaseResponseFieldCreatedAt = big.NewInt(1 << 2)
+	idpTestBaseResponseFieldExpiresAt = big.NewInt(1 << 3)
+)
+
+type IdpTestBaseResponse struct {
+	ID     IdpTestID         `json:"id" url:"id"`
+	Status IdpTestStatusEnum `json:"status" url:"status"`
+	// The ISO 8601 formatted timestamp representing the creation time of the test.
+	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	// The ISO 8601 formatted timestamp representing the expiration time of the test. After this time the test is no longer available.
+	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdpTestBaseResponse) GetID() IdpTestID {
+	if i == nil {
+		return ""
+	}
+	return i.ID
+}
+
+func (i *IdpTestBaseResponse) GetStatus() IdpTestStatusEnum {
+	if i == nil {
+		return ""
+	}
+	return i.Status
+}
+
+func (i *IdpTestBaseResponse) GetCreatedAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.CreatedAt
+}
+
+func (i *IdpTestBaseResponse) GetExpiresAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.ExpiresAt
+}
+
+func (i *IdpTestBaseResponse) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdpTestBaseResponse) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestBaseResponse) SetID(id IdpTestID) {
+	i.ID = id
+	i.require(idpTestBaseResponseFieldID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestBaseResponse) SetStatus(status IdpTestStatusEnum) {
+	i.Status = status
+	i.require(idpTestBaseResponseFieldStatus)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestBaseResponse) SetCreatedAt(createdAt time.Time) {
+	i.CreatedAt = createdAt
+	i.require(idpTestBaseResponseFieldCreatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestBaseResponse) SetExpiresAt(expiresAt time.Time) {
+	i.ExpiresAt = expiresAt
+	i.require(idpTestBaseResponseFieldExpiresAt)
+}
+
+func (i *IdpTestBaseResponse) UnmarshalJSON(data []byte) error {
+	type embed IdpTestBaseResponse
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = IdpTestBaseResponse(unmarshaler.embed)
+	i.CreatedAt = unmarshaler.CreatedAt.Time()
+	i.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdpTestBaseResponse) MarshalJSON() ([]byte, error) {
+	type embed IdpTestBaseResponse
+	var marshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed:     embed(*i),
+		CreatedAt: internal.NewDateTime(i.CreatedAt),
+		ExpiresAt: internal.NewDateTime(i.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdpTestBaseResponse) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+var (
+	idpTestErrorFieldStatus    = big.NewInt(1 << 0)
+	idpTestErrorFieldError     = big.NewInt(1 << 1)
+	idpTestErrorFieldID        = big.NewInt(1 << 2)
+	idpTestErrorFieldCreatedAt = big.NewInt(1 << 3)
+	idpTestErrorFieldExpiresAt = big.NewInt(1 << 4)
+)
+
+// The test failed.
+type IdpTestError struct {
+	Status IdpTestErrorStatus  `json:"status" url:"status"`
+	Error  *IdpTestErrorDetail `json:"error" url:"error"`
+	ID     IdpTestID           `json:"id" url:"id"`
+	// The ISO 8601 formatted timestamp representing the creation time of the test.
+	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	// The ISO 8601 formatted timestamp representing the expiration time of the test. After this time the test is no longer available.
+	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdpTestError) GetStatus() IdpTestErrorStatus {
+	if i == nil {
+		return ""
+	}
+	return i.Status
+}
+
+func (i *IdpTestError) GetError() *IdpTestErrorDetail {
+	if i == nil {
+		return nil
+	}
+	return i.Error
+}
+
+func (i *IdpTestError) GetID() IdpTestID {
+	if i == nil {
+		return ""
+	}
+	return i.ID
+}
+
+func (i *IdpTestError) GetCreatedAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.CreatedAt
+}
+
+func (i *IdpTestError) GetExpiresAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.ExpiresAt
+}
+
+func (i *IdpTestError) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdpTestError) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestError) SetStatus(status IdpTestErrorStatus) {
+	i.Status = status
+	i.require(idpTestErrorFieldStatus)
+}
+
+// SetError sets the Error field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestError) SetError(error_ *IdpTestErrorDetail) {
+	i.Error = error_
+	i.require(idpTestErrorFieldError)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestError) SetID(id IdpTestID) {
+	i.ID = id
+	i.require(idpTestErrorFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestError) SetCreatedAt(createdAt time.Time) {
+	i.CreatedAt = createdAt
+	i.require(idpTestErrorFieldCreatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestError) SetExpiresAt(expiresAt time.Time) {
+	i.ExpiresAt = expiresAt
+	i.require(idpTestErrorFieldExpiresAt)
+}
+
+func (i *IdpTestError) UnmarshalJSON(data []byte) error {
+	type embed IdpTestError
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = IdpTestError(unmarshaler.embed)
+	i.CreatedAt = unmarshaler.CreatedAt.Time()
+	i.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdpTestError) MarshalJSON() ([]byte, error) {
+	type embed IdpTestError
+	var marshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed:     embed(*i),
+		CreatedAt: internal.NewDateTime(i.CreatedAt),
+		ExpiresAt: internal.NewDateTime(i.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdpTestError) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+var (
+	idpTestErrorDetailFieldMessage = big.NewInt(1 << 0)
+)
+
+// Details of a failed Identity Provider test.
+type IdpTestErrorDetail struct {
+	// Human-readable description of the failure. Not intended to be parsed.
+	Message string `json:"message" url:"message"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdpTestErrorDetail) GetMessage() string {
+	if i == nil {
+		return ""
+	}
+	return i.Message
+}
+
+func (i *IdpTestErrorDetail) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdpTestErrorDetail) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestErrorDetail) SetMessage(message string) {
+	i.Message = message
+	i.require(idpTestErrorDetailFieldMessage)
+}
+
+func (i *IdpTestErrorDetail) UnmarshalJSON(data []byte) error {
+	type unmarshaler IdpTestErrorDetail
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IdpTestErrorDetail(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdpTestErrorDetail) MarshalJSON() ([]byte, error) {
+	type embed IdpTestErrorDetail
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdpTestErrorDetail) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type IdpTestErrorStatus string
+
+const (
+	IdpTestErrorStatusError IdpTestErrorStatus = "error"
+)
+
+func NewIdpTestErrorStatusFromString(s string) (IdpTestErrorStatus, error) {
+	switch s {
+	case "error":
+		return IdpTestErrorStatusError, nil
+	}
+	var t IdpTestErrorStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IdpTestErrorStatus) Ptr() *IdpTestErrorStatus {
+	return &i
+}
+
+// Identity Provider test identifier.
+type IdpTestID = string
+
+var (
+	idpTestInProgressFieldStatus    = big.NewInt(1 << 0)
+	idpTestInProgressFieldID        = big.NewInt(1 << 1)
+	idpTestInProgressFieldCreatedAt = big.NewInt(1 << 2)
+	idpTestInProgressFieldExpiresAt = big.NewInt(1 << 3)
+)
+
+// The test has not completed yet.
+type IdpTestInProgress struct {
+	Status IdpTestInProgressStatus `json:"status" url:"status"`
+	ID     IdpTestID               `json:"id" url:"id"`
+	// The ISO 8601 formatted timestamp representing the creation time of the test.
+	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	// The ISO 8601 formatted timestamp representing the expiration time of the test. After this time the test is no longer available.
+	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdpTestInProgress) GetStatus() IdpTestInProgressStatus {
+	if i == nil {
+		return ""
+	}
+	return i.Status
+}
+
+func (i *IdpTestInProgress) GetID() IdpTestID {
+	if i == nil {
+		return ""
+	}
+	return i.ID
+}
+
+func (i *IdpTestInProgress) GetCreatedAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.CreatedAt
+}
+
+func (i *IdpTestInProgress) GetExpiresAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.ExpiresAt
+}
+
+func (i *IdpTestInProgress) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdpTestInProgress) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestInProgress) SetStatus(status IdpTestInProgressStatus) {
+	i.Status = status
+	i.require(idpTestInProgressFieldStatus)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestInProgress) SetID(id IdpTestID) {
+	i.ID = id
+	i.require(idpTestInProgressFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestInProgress) SetCreatedAt(createdAt time.Time) {
+	i.CreatedAt = createdAt
+	i.require(idpTestInProgressFieldCreatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestInProgress) SetExpiresAt(expiresAt time.Time) {
+	i.ExpiresAt = expiresAt
+	i.require(idpTestInProgressFieldExpiresAt)
+}
+
+func (i *IdpTestInProgress) UnmarshalJSON(data []byte) error {
+	type embed IdpTestInProgress
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = IdpTestInProgress(unmarshaler.embed)
+	i.CreatedAt = unmarshaler.CreatedAt.Time()
+	i.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdpTestInProgress) MarshalJSON() ([]byte, error) {
+	type embed IdpTestInProgress
+	var marshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed:     embed(*i),
+		CreatedAt: internal.NewDateTime(i.CreatedAt),
+		ExpiresAt: internal.NewDateTime(i.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdpTestInProgress) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type IdpTestInProgressStatus string
+
+const (
+	IdpTestInProgressStatusInProgress IdpTestInProgressStatus = "in_progress"
+)
+
+func NewIdpTestInProgressStatusFromString(s string) (IdpTestInProgressStatus, error) {
+	switch s {
+	case "in_progress":
+		return IdpTestInProgressStatusInProgress, nil
+	}
+	var t IdpTestInProgressStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IdpTestInProgressStatus) Ptr() *IdpTestInProgressStatus {
+	return &i
+}
+
+// Identity Provider test status. `in_progress`: the test has not completed yet. `success`: the test completed successfully. `error`: the test failed.
+type IdpTestStatusEnum string
+
+const (
+	IdpTestStatusEnumInProgress IdpTestStatusEnum = "in_progress"
+	IdpTestStatusEnumSuccess    IdpTestStatusEnum = "success"
+	IdpTestStatusEnumError      IdpTestStatusEnum = "error"
+)
+
+func NewIdpTestStatusEnumFromString(s string) (IdpTestStatusEnum, error) {
+	switch s {
+	case "in_progress":
+		return IdpTestStatusEnumInProgress, nil
+	case "success":
+		return IdpTestStatusEnumSuccess, nil
+	case "error":
+		return IdpTestStatusEnumError, nil
+	}
+	var t IdpTestStatusEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IdpTestStatusEnum) Ptr() *IdpTestStatusEnum {
+	return &i
+}
+
+var (
+	idpTestSuccessFieldStatus    = big.NewInt(1 << 0)
+	idpTestSuccessFieldUser      = big.NewInt(1 << 1)
+	idpTestSuccessFieldID        = big.NewInt(1 << 2)
+	idpTestSuccessFieldCreatedAt = big.NewInt(1 << 3)
+	idpTestSuccessFieldExpiresAt = big.NewInt(1 << 4)
+)
+
+// The administrator signed in with the Identity Provider successfully.
+type IdpTestSuccess struct {
+	Status IdpTestSuccessStatus `json:"status" url:"status"`
+	User   IdpTestUser          `json:"user" url:"user"`
+	ID     IdpTestID            `json:"id" url:"id"`
+	// The ISO 8601 formatted timestamp representing the creation time of the test.
+	CreatedAt time.Time `json:"created_at" url:"created_at"`
+	// The ISO 8601 formatted timestamp representing the expiration time of the test. After this time the test is no longer available.
+	ExpiresAt time.Time `json:"expires_at" url:"expires_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IdpTestSuccess) GetStatus() IdpTestSuccessStatus {
+	if i == nil {
+		return ""
+	}
+	return i.Status
+}
+
+func (i *IdpTestSuccess) GetUser() IdpTestUser {
+	if i == nil {
+		return nil
+	}
+	return i.User
+}
+
+func (i *IdpTestSuccess) GetID() IdpTestID {
+	if i == nil {
+		return ""
+	}
+	return i.ID
+}
+
+func (i *IdpTestSuccess) GetCreatedAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.CreatedAt
+}
+
+func (i *IdpTestSuccess) GetExpiresAt() time.Time {
+	if i == nil {
+		return time.Time{}
+	}
+	return i.ExpiresAt
+}
+
+func (i *IdpTestSuccess) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IdpTestSuccess) require(field *big.Int) {
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
+	}
+	next.Or(next, field)
+	i.explicitFields = next
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestSuccess) SetStatus(status IdpTestSuccessStatus) {
+	i.Status = status
+	i.require(idpTestSuccessFieldStatus)
+}
+
+// SetUser sets the User field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestSuccess) SetUser(user IdpTestUser) {
+	i.User = user
+	i.require(idpTestSuccessFieldUser)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestSuccess) SetID(id IdpTestID) {
+	i.ID = id
+	i.require(idpTestSuccessFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestSuccess) SetCreatedAt(createdAt time.Time) {
+	i.CreatedAt = createdAt
+	i.require(idpTestSuccessFieldCreatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IdpTestSuccess) SetExpiresAt(expiresAt time.Time) {
+	i.ExpiresAt = expiresAt
+	i.require(idpTestSuccessFieldExpiresAt)
+}
+
+func (i *IdpTestSuccess) UnmarshalJSON(data []byte) error {
+	type embed IdpTestSuccess
+	var unmarshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = IdpTestSuccess(unmarshaler.embed)
+	i.CreatedAt = unmarshaler.CreatedAt.Time()
+	i.ExpiresAt = unmarshaler.ExpiresAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IdpTestSuccess) MarshalJSON() ([]byte, error) {
+	type embed IdpTestSuccess
+	var marshaler = struct {
+		embed
+		CreatedAt *internal.DateTime `json:"created_at"`
+		ExpiresAt *internal.DateTime `json:"expires_at"`
+	}{
+		embed:     embed(*i),
+		CreatedAt: internal.NewDateTime(i.CreatedAt),
+		ExpiresAt: internal.NewDateTime(i.ExpiresAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IdpTestSuccess) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type IdpTestSuccessStatus string
+
+const (
+	IdpTestSuccessStatusSuccess IdpTestSuccessStatus = "success"
+)
+
+func NewIdpTestSuccessStatusFromString(s string) (IdpTestSuccessStatus, error) {
+	switch s {
+	case "success":
+		return IdpTestSuccessStatusSuccess, nil
+	}
+	var t IdpTestSuccessStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IdpTestSuccessStatus) Ptr() *IdpTestSuccessStatus {
+	return &i
+}
+
+// User profile received from the Identity Provider during the test, as processed by Auth0. Token attributes are removed. The available attributes depend on the Identity Provider strategy and configuration.
+type IdpTestUser = map[string]any
+
+var (
 	idpUpdateBaseFieldDisplayName                  = big.NewInt(1 << 0)
 	idpUpdateBaseFieldShowAsButton                 = big.NewInt(1 << 1)
 	idpUpdateBaseFieldAssignMembershipOnLogin      = big.NewInt(1 << 2)
@@ -12345,10 +13903,12 @@ func (i *IdpUpdateBase) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpUpdateBase) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -12497,6 +14057,62 @@ func (i *IdpUpdateKnownRequest) GetIdpWaadUpdateRequest() *IdpWaadUpdateRequest 
 }
 
 func (i *IdpUpdateKnownRequest) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpAdfsUpdateRequest := new(IdpAdfsUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpAdfsUpdateRequest); err == nil {
+			i.typ = "IdpAdfsUpdateRequest"
+			i.IdpAdfsUpdateRequest = valueIdpAdfsUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpGoogleAppsUpdateRequest := new(IdpGoogleAppsUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsUpdateRequest); err == nil {
+			i.typ = "IdpGoogleAppsUpdateRequest"
+			i.IdpGoogleAppsUpdateRequest = valueIdpGoogleAppsUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpOidcUpdateRequest := new(IdpOidcUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpOidcUpdateRequest); err == nil {
+			i.typ = "IdpOidcUpdateRequest"
+			i.IdpOidcUpdateRequest = valueIdpOidcUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpOktaUpdateRequest := new(IdpOktaUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpOktaUpdateRequest); err == nil {
+			i.typ = "IdpOktaUpdateRequest"
+			i.IdpOktaUpdateRequest = valueIdpOktaUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpPingFederateUpdateRequest := new(IdpPingFederateUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpPingFederateUpdateRequest); err == nil {
+			i.typ = "IdpPingFederateUpdateRequest"
+			i.IdpPingFederateUpdateRequest = valueIdpPingFederateUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpSamlpUpdateRequest := new(IdpSamlpUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpSamlpUpdateRequest); err == nil {
+			i.typ = "IdpSamlpUpdateRequest"
+			i.IdpSamlpUpdateRequest = valueIdpSamlpUpdateRequest
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "use_for_third_party_client_access", "cross_app_access_resource_app", "options"}, []string{}) {
+		valueIdpWaadUpdateRequest := new(IdpWaadUpdateRequest)
+		if err := json.Unmarshal(data, &valueIdpWaadUpdateRequest); err == nil {
+			i.typ = "IdpWaadUpdateRequest"
+			i.IdpWaadUpdateRequest = valueIdpWaadUpdateRequest
+			return nil
+		}
+	}
 	valueIdpAdfsUpdateRequest := new(IdpAdfsUpdateRequest)
 	if err := json.Unmarshal(data, &valueIdpAdfsUpdateRequest); err == nil {
 		i.typ = "IdpAdfsUpdateRequest"
@@ -12664,6 +14280,118 @@ func (i *IdpUpdateKnownResponse) GetIdpWaadResponse() *IdpWaadResponse {
 }
 
 func (i *IdpUpdateKnownResponse) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpAdfsResponse := new(IdpAdfsResponse)
+		if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
+			i.typ = "IdpAdfsResponse"
+			i.IdpAdfsResponse = valueIdpAdfsResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpGoogleAppsResponse := new(IdpGoogleAppsResponse)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsResponse); err == nil {
+			i.typ = "IdpGoogleAppsResponse"
+			i.IdpGoogleAppsResponse = valueIdpGoogleAppsResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpOidcResponse := new(IdpOidcResponse)
+		if err := json.Unmarshal(data, &valueIdpOidcResponse); err == nil {
+			i.typ = "IdpOidcResponse"
+			i.IdpOidcResponse = valueIdpOidcResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpOktaResponse := new(IdpOktaResponse)
+		if err := json.Unmarshal(data, &valueIdpOktaResponse); err == nil {
+			i.typ = "IdpOktaResponse"
+			i.IdpOktaResponse = valueIdpOktaResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpPingFederateResponse := new(IdpPingFederateResponse)
+		if err := json.Unmarshal(data, &valueIdpPingFederateResponse); err == nil {
+			i.typ = "IdpPingFederateResponse"
+			i.IdpPingFederateResponse = valueIdpPingFederateResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "attributes", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpSamlpResponse := new(IdpSamlpResponse)
+		if err := json.Unmarshal(data, &valueIdpSamlpResponse); err == nil {
+			i.typ = "IdpSamlpResponse"
+			i.IdpSamlpResponse = valueIdpSamlpResponse
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"strategy", "options", "id", "name", "domains", "display_name", "show_as_button", "assign_membership_on_login", "is_enabled", "access_level", "member_access_level", "use_for_third_party_client_access", "cross_app_access_resource_app"}, []string{"strategy"}) {
+		valueIdpWaadResponse := new(IdpWaadResponse)
+		if err := json.Unmarshal(data, &valueIdpWaadResponse); err == nil {
+			i.typ = "IdpWaadResponse"
+			i.IdpWaadResponse = valueIdpWaadResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpAdfsResponse := new(IdpAdfsResponse)
+		if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
+			i.typ = "IdpAdfsResponse"
+			i.IdpAdfsResponse = valueIdpAdfsResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpGoogleAppsResponse := new(IdpGoogleAppsResponse)
+		if err := json.Unmarshal(data, &valueIdpGoogleAppsResponse); err == nil {
+			i.typ = "IdpGoogleAppsResponse"
+			i.IdpGoogleAppsResponse = valueIdpGoogleAppsResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpOidcResponse := new(IdpOidcResponse)
+		if err := json.Unmarshal(data, &valueIdpOidcResponse); err == nil {
+			i.typ = "IdpOidcResponse"
+			i.IdpOidcResponse = valueIdpOidcResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpOktaResponse := new(IdpOktaResponse)
+		if err := json.Unmarshal(data, &valueIdpOktaResponse); err == nil {
+			i.typ = "IdpOktaResponse"
+			i.IdpOktaResponse = valueIdpOktaResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpPingFederateResponse := new(IdpPingFederateResponse)
+		if err := json.Unmarshal(data, &valueIdpPingFederateResponse); err == nil {
+			i.typ = "IdpPingFederateResponse"
+			i.IdpPingFederateResponse = valueIdpPingFederateResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpSamlpResponse := new(IdpSamlpResponse)
+		if err := json.Unmarshal(data, &valueIdpSamlpResponse); err == nil {
+			i.typ = "IdpSamlpResponse"
+			i.IdpSamlpResponse = valueIdpSamlpResponse
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"strategy"}) {
+		valueIdpWaadResponse := new(IdpWaadResponse)
+		if err := json.Unmarshal(data, &valueIdpWaadResponse); err == nil {
+			i.typ = "IdpWaadResponse"
+			i.IdpWaadResponse = valueIdpWaadResponse
+			return nil
+		}
+	}
 	valueIdpAdfsResponse := new(IdpAdfsResponse)
 	if err := json.Unmarshal(data, &valueIdpAdfsResponse); err == nil {
 		i.typ = "IdpAdfsResponse"
@@ -12859,10 +14587,12 @@ func (i *IdpUserAttributeMapItem) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpUserAttributeMapItem) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetUserAttribute sets the UserAttribute field and marks it as non-optional;
@@ -13016,10 +14746,12 @@ func (i *IdpWaadOptionsRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpWaadOptionsRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetTenantDomain sets the TenantDomain field and marks it as non-optional;
@@ -13142,10 +14874,12 @@ func (i *IdpWaadOptionsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpWaadOptionsResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetTenantDomain sets the TenantDomain field and marks it as non-optional;
@@ -13211,27 +14945,24 @@ func (i *IdpWaadOptionsResponse) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Identity provider specific options.
 var (
 	idpWaadRequestFieldStrategy                     = big.NewInt(1 << 0)
 	idpWaadRequestFieldOptions                      = big.NewInt(1 << 1)
-	idpWaadRequestFieldID                           = big.NewInt(1 << 2)
-	idpWaadRequestFieldName                         = big.NewInt(1 << 3)
-	idpWaadRequestFieldDomains                      = big.NewInt(1 << 4)
-	idpWaadRequestFieldDisplayName                  = big.NewInt(1 << 5)
-	idpWaadRequestFieldShowAsButton                 = big.NewInt(1 << 6)
-	idpWaadRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 7)
-	idpWaadRequestFieldIsEnabled                    = big.NewInt(1 << 8)
-	idpWaadRequestFieldAccessLevel                  = big.NewInt(1 << 9)
-	idpWaadRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 10)
-	idpWaadRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 11)
+	idpWaadRequestFieldName                         = big.NewInt(1 << 2)
+	idpWaadRequestFieldDomains                      = big.NewInt(1 << 3)
+	idpWaadRequestFieldDisplayName                  = big.NewInt(1 << 4)
+	idpWaadRequestFieldShowAsButton                 = big.NewInt(1 << 5)
+	idpWaadRequestFieldAssignMembershipOnLogin      = big.NewInt(1 << 6)
+	idpWaadRequestFieldIsEnabled                    = big.NewInt(1 << 7)
+	idpWaadRequestFieldUseForThirdPartyClientAccess = big.NewInt(1 << 8)
+	idpWaadRequestFieldCrossAppAccessResourceApp    = big.NewInt(1 << 9)
 )
 
+// Identity provider specific options.
 type IdpWaadRequest struct {
 	Strategy IdpWaadRequestStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
 	Options *IdpWaadOptionsRequest `json:"options" url:"options"`
-	ID      *IdpID                 `json:"id,omitempty" url:"id,omitempty"`
 	// The name of the identity provider
 	Name string `json:"name" url:"name"`
 	// List of domains for Home Realm Discovery (HRD)
@@ -13243,8 +14974,7 @@ type IdpWaadRequest struct {
 	// If true, the user will be made a member of the organization upon login.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty" url:"assign_membership_on_login,omitempty"`
 	// True if the identity provider is enabled for the organization.
-	IsEnabled   *bool                        `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
-	AccessLevel *OrganizationAccessLevelEnum `json:"access_level,omitempty" url:"access_level,omitempty"`
+	IsEnabled *bool `json:"is_enabled,omitempty" url:"is_enabled,omitempty"`
 	// True if third-party applications can use it. If false, only first-party applications with the connection enabled can use it. Defaults to false.
 	UseForThirdPartyClientAccess *bool `json:"use_for_third_party_client_access,omitempty" url:"use_for_third_party_client_access,omitempty"`
 	// Cross-app access resource application configuration. Only present when the cross-app access resource application feature is enabled for your organization.
@@ -13269,13 +14999,6 @@ func (i *IdpWaadRequest) GetOptions() *IdpWaadOptionsRequest {
 		return nil
 	}
 	return i.Options
-}
-
-func (i *IdpWaadRequest) GetID() IdpID {
-	if i == nil || i.ID == nil {
-		return ""
-	}
-	return *i.ID
 }
 
 func (i *IdpWaadRequest) GetName() string {
@@ -13320,13 +15043,6 @@ func (i *IdpWaadRequest) GetIsEnabled() bool {
 	return *i.IsEnabled
 }
 
-func (i *IdpWaadRequest) GetAccessLevel() OrganizationAccessLevelEnum {
-	if i == nil || i.AccessLevel == nil {
-		return ""
-	}
-	return *i.AccessLevel
-}
-
 func (i *IdpWaadRequest) GetUseForThirdPartyClientAccess() bool {
 	if i == nil || i.UseForThirdPartyClientAccess == nil {
 		return false
@@ -13349,10 +15065,12 @@ func (i *IdpWaadRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpWaadRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -13367,13 +15085,6 @@ func (i *IdpWaadRequest) SetStrategy(strategy IdpWaadRequestStrategy) {
 func (i *IdpWaadRequest) SetOptions(options *IdpWaadOptionsRequest) {
 	i.Options = options
 	i.require(idpWaadRequestFieldOptions)
-}
-
-// SetID sets the ID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpWaadRequest) SetID(id *IdpID) {
-	i.ID = id
-	i.require(idpWaadRequestFieldID)
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -13416,13 +15127,6 @@ func (i *IdpWaadRequest) SetAssignMembershipOnLogin(assignMembershipOnLogin *boo
 func (i *IdpWaadRequest) SetIsEnabled(isEnabled *bool) {
 	i.IsEnabled = isEnabled
 	i.require(idpWaadRequestFieldIsEnabled)
-}
-
-// SetAccessLevel sets the AccessLevel field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *IdpWaadRequest) SetAccessLevel(accessLevel *OrganizationAccessLevelEnum) {
-	i.AccessLevel = accessLevel
-	i.require(idpWaadRequestFieldAccessLevel)
 }
 
 // SetUseForThirdPartyClientAccess sets the UseForThirdPartyClientAccess field and marks it as non-optional;
@@ -13500,7 +15204,6 @@ func (i IdpWaadRequestStrategy) Ptr() *IdpWaadRequestStrategy {
 	return &i
 }
 
-// Identity provider specific options.
 var (
 	idpWaadResponseFieldStrategy                     = big.NewInt(1 << 0)
 	idpWaadResponseFieldOptions                      = big.NewInt(1 << 1)
@@ -13517,6 +15220,12 @@ var (
 	idpWaadResponseFieldCrossAppAccessResourceApp    = big.NewInt(1 << 12)
 )
 
+// idpWaadResponseNullableFields maps the wire names of IdpWaadResponse's nullable fields (required or optional) to their field bits.
+var idpWaadResponseNullableFields = map[string]*big.Int{
+	"name": idpWaadResponseFieldName,
+}
+
+// Identity provider specific options.
 type IdpWaadResponse struct {
 	Strategy IdpWaadResponseStrategy `json:"strategy" url:"strategy"`
 	// Identity provider specific options.
@@ -13648,10 +15357,12 @@ func (i *IdpWaadResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpWaadResponse) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetStrategy sets the Strategy field and marks it as non-optional;
@@ -13757,6 +15468,13 @@ func (i *IdpWaadResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, idpWaadResponseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13806,7 +15524,6 @@ func (i IdpWaadResponseStrategy) Ptr() *IdpWaadResponseStrategy {
 	return &i
 }
 
-// Identity provider specific options.  Requires access_level to be 'full'.
 var (
 	idpWaadUpdateRequestFieldDisplayName                  = big.NewInt(1 << 0)
 	idpWaadUpdateRequestFieldShowAsButton                 = big.NewInt(1 << 1)
@@ -13817,6 +15534,7 @@ var (
 	idpWaadUpdateRequestFieldOptions                      = big.NewInt(1 << 6)
 )
 
+// Identity provider specific options.  Requires access_level to be 'full'.
 type IdpWaadUpdateRequest struct {
 	// Identity provider name used on the login screen. Requires access_level to be 'full'
 	DisplayName *string `json:"display_name,omitempty" url:"display_name,omitempty"`
@@ -13897,10 +15615,12 @@ func (i *IdpWaadUpdateRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IdpWaadUpdateRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetDisplayName sets the DisplayName field and marks it as non-optional;
@@ -14026,10 +15746,12 @@ func (l *ListDomainIdentityProvidersResponseContent) GetExtraProperties() map[st
 }
 
 func (l *ListDomainIdentityProvidersResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetIdentityProviders sets the IdentityProviders field and marks it as non-optional;
@@ -14110,10 +15832,12 @@ func (l *ListIdentityProvidersResponseContent) GetExtraProperties() map[string]i
 }
 
 func (l *ListIdentityProvidersResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetIdentityProviders sets the IdentityProviders field and marks it as non-optional;
@@ -14194,10 +15918,12 @@ func (l *ListIdpProvisioningSCIMTokensResponseContent) GetExtraProperties() map[
 }
 
 func (l *ListIdpProvisioningSCIMTokensResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetSCIMTokens sets the SCIMTokens field and marks it as non-optional;
@@ -14308,10 +16034,12 @@ func (l *ListMembersInvitationsResponseContent) GetExtraProperties() map[string]
 }
 
 func (l *ListMembersInvitationsResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetNext sets the Next field and marks it as non-optional;
@@ -14423,10 +16151,12 @@ func (l *ListOrganizationDomainsResponseContent) GetExtraProperties() map[string
 }
 
 func (l *ListOrganizationDomainsResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetNext sets the Next field and marks it as non-optional;
@@ -14544,10 +16274,12 @@ func (l *ListOrganizationMembersResponseContent) GetExtraProperties() map[string
 }
 
 func (l *ListOrganizationMembersResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetNext sets the Next field and marks it as non-optional;
@@ -14659,10 +16391,12 @@ func (l *ListRolesResponseContent) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListRolesResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetRoles sets the Roles field and marks it as non-optional;
@@ -14750,10 +16484,12 @@ func (l *ListUserStoresResponseContent) GetExtraProperties() map[string]interfac
 }
 
 func (l *ListUserStoresResponseContent) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetUserStores sets the UserStores field and marks it as non-optional;
@@ -14928,10 +16664,12 @@ func (m *MemberInvitation) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *MemberInvitation) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -15095,10 +16833,12 @@ func (m *MemberInvitationInvitee) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *MemberInvitationInvitee) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -15180,10 +16920,12 @@ func (m *MemberInvitationInviter) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *MemberInvitationInviter) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -15274,6 +17016,10 @@ const (
 	OauthScopeReadMyOrgIdentityProvidersProvisioning OauthScope = "read:my_org:identity_providers_provisioning"
 	// Delete provisioning configuration for identity provider
 	OauthScopeDeleteMyOrgIdentityProvidersProvisioning OauthScope = "delete:my_org:identity_providers_provisioning"
+	// Start identity provider tests for organization
+	OauthScopeCreateMyOrgIdentityProvidersTests OauthScope = "create:my_org:identity_providers_tests"
+	// Read identity provider tests for organization
+	OauthScopeReadMyOrgIdentityProvidersTests OauthScope = "read:my_org:identity_providers_tests"
 	// Create a provisioning SCIM token for this identity provider
 	OauthScopeCreateMyOrgIdentityProvidersSCIMTokens OauthScope = "create:my_org:identity_providers_scim_tokens"
 	// List the provisioning SCIM tokens for this identity provider
@@ -15308,6 +17054,14 @@ const (
 	OauthScopeReadMyOrgUserStores OauthScope = "read:my_org:user_stores"
 	// Delete this organization
 	OauthScopeDeleteMyOrgOrganizations OauthScope = "delete:my_org:organizations"
+	// List connection groups for organization
+	OauthScopeReadMyOrgGroups OauthScope = "read:my_org:groups"
+	// List roles for a group in organization
+	OauthScopeReadMyOrgGroupRoles OauthScope = "read:my_org:group_roles"
+	// Assign roles to a group in organization
+	OauthScopeCreateMyOrgGroupRoles OauthScope = "create:my_org:group_roles"
+	// Remove roles from a group in organization
+	OauthScopeDeleteMyOrgGroupRoles OauthScope = "delete:my_org:group_roles"
 )
 
 func NewOauthScopeFromString(s string) (OauthScope, error) {
@@ -15348,6 +17102,10 @@ func NewOauthScopeFromString(s string) (OauthScope, error) {
 		return OauthScopeReadMyOrgIdentityProvidersProvisioning, nil
 	case "delete:my_org:identity_providers_provisioning":
 		return OauthScopeDeleteMyOrgIdentityProvidersProvisioning, nil
+	case "create:my_org:identity_providers_tests":
+		return OauthScopeCreateMyOrgIdentityProvidersTests, nil
+	case "read:my_org:identity_providers_tests":
+		return OauthScopeReadMyOrgIdentityProvidersTests, nil
 	case "create:my_org:identity_providers_scim_tokens":
 		return OauthScopeCreateMyOrgIdentityProvidersSCIMTokens, nil
 	case "read:my_org:identity_providers_scim_tokens":
@@ -15382,6 +17140,14 @@ func NewOauthScopeFromString(s string) (OauthScope, error) {
 		return OauthScopeReadMyOrgUserStores, nil
 	case "delete:my_org:organizations":
 		return OauthScopeDeleteMyOrgOrganizations, nil
+	case "read:my_org:groups":
+		return OauthScopeReadMyOrgGroups, nil
+	case "read:my_org:group_roles":
+		return OauthScopeReadMyOrgGroupRoles, nil
+	case "create:my_org:group_roles":
+		return OauthScopeCreateMyOrgGroupRoles, nil
+	case "delete:my_org:group_roles":
+		return OauthScopeDeleteMyOrgGroupRoles, nil
 	}
 	var t OauthScope
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -15467,10 +17233,12 @@ func (o *OrgDomain) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgDomain) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -15731,10 +17499,12 @@ func (o *OrgMember) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgMember) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -16008,10 +17778,12 @@ func (o *OrgMemberBase) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrgMemberBase) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -16155,12 +17927,12 @@ type OrgMemberID = string
 // The user ID.
 type OrgMemberIDReadOnly = string
 
-// Configuration for third-party client access
 var (
 	orgThirdPartyClientAccessConfigFieldDefaultValue  = big.NewInt(1 << 0)
 	orgThirdPartyClientAccessConfigFieldAllowedValues = big.NewInt(1 << 1)
 )
 
+// Configuration for third-party client access
 type OrgThirdPartyClientAccessConfig struct {
 	DefaultValue OrgThirdPartyClientAccessEnum `json:"default_value" url:"default_value"`
 	// Allowed third-party client access values
@@ -16195,10 +17967,12 @@ func (o *OrgThirdPartyClientAccessConfig) GetExtraProperties() map[string]interf
 }
 
 func (o *OrgThirdPartyClientAccessConfig) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetDefaultValue sets the DefaultValue field and marks it as non-optional;
@@ -16309,6 +18083,29 @@ func (o OrganizationAccessLevelEnum) Ptr() *OrganizationAccessLevelEnum {
 	return &o
 }
 
+// Specifies whether deletion of an organization is always allowed (`allow`), or only when the organization has no members other than the calling user (`allow_if_empty`). Defaults to `allow_if_empty` when not configured.
+type OrganizationDeletionBehaviorEnum string
+
+const (
+	OrganizationDeletionBehaviorEnumAllow        OrganizationDeletionBehaviorEnum = "allow"
+	OrganizationDeletionBehaviorEnumAllowIfEmpty OrganizationDeletionBehaviorEnum = "allow_if_empty"
+)
+
+func NewOrganizationDeletionBehaviorEnumFromString(s string) (OrganizationDeletionBehaviorEnum, error) {
+	switch s {
+	case "allow":
+		return OrganizationDeletionBehaviorEnumAllow, nil
+	case "allow_if_empty":
+		return OrganizationDeletionBehaviorEnumAllowIfEmpty, nil
+	}
+	var t OrganizationDeletionBehaviorEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrganizationDeletionBehaviorEnum) Ptr() *OrganizationDeletionBehaviorEnum {
+	return &o
+}
+
 // The Organization Member Access Level: what an Organization Administrator can do to members authenticated via this connection.
 type OrganizationMemberAccessLevelEnum string
 
@@ -16367,10 +18164,12 @@ func (o *OrganizationMemberRolesChangeRequestContent) GetExtraProperties() map[s
 }
 
 func (o *OrganizationMemberRolesChangeRequestContent) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetRoleIDs sets the RoleIDs field and marks it as non-optional;
@@ -16469,10 +18268,12 @@ func (r *Role) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *Role) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -16617,10 +18418,12 @@ func (u *UserAttributes) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UserAttributes) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -16779,10 +18582,12 @@ func (u *UserStore) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UserStore) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -16932,10 +18737,12 @@ func (v *ValidationErrorDetail) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *ValidationErrorDetail) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetDetail sets the Detail field and marks it as non-optional;
@@ -17067,10 +18874,12 @@ func (v *ValidationErrorResponseContent) GetExtraProperties() map[string]interfa
 }
 
 func (v *ValidationErrorResponseContent) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;

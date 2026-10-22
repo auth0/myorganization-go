@@ -32,8 +32,8 @@
       }
     },
     {
-      "id": "29a326c1-09e0-4f0b-8b3a-55872064dbed",
-      "name": "Get Organization details - default",
+      "id": "7e1a7c64-7b52-4634-91d9-6d6f54b94bff",
+      "name": "Get Organization details - getOrgDetailsResponseExample",
       "request": {
         "urlPathTemplate": "/details",
         "method": "GET",
@@ -50,7 +50,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "29a326c1-09e0-4f0b-8b3a-55872064dbed",
+      "uuid": "7e1a7c64-7b52-4634-91d9-6d6f54b94bff",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -64,8 +64,8 @@
       "postServeActions": []
     },
     {
-      "id": "175cc45b-1346-42bb-baab-e94c1318da4c",
-      "name": "Update Organization details - default",
+      "id": "1ef770f7-cd42-42cc-973f-f17501df9506",
+      "name": "Update Organization details - updateOrgDetailsResponseExample",
       "request": {
         "urlPathTemplate": "/details",
         "method": "PATCH",
@@ -82,7 +82,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "175cc45b-1346-42bb-baab-e94c1318da4c",
+      "uuid": "1ef770f7-cd42-42cc-973f-f17501df9506",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -95,8 +95,8 @@
       }
     },
     {
-      "id": "ddb32f2f-bb17-4551-8c51-a0f78dbb849f",
-      "name": "Get My Organization API configuration - default",
+      "id": "6408a1a2-98b8-4c29-b15f-17b2c9b9db75",
+      "name": "Get My Organization API configuration - getOrgDetailsResponseExample",
       "request": {
         "urlPathTemplate": "/config",
         "method": "GET",
@@ -108,12 +108,12 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\",\n  \"third_party_client_access\": {\n    \"default_value\": \"allow\",\n    \"allowed_values\": [\n      \"allow\"\n    ]\n  }\n}",
+        "body": "{\n  \"allowed_strategies\": [\n    \"adfs\",\n    \"pingfederate\"\n  ],\n  \"connection_deletion_behavior\": \"allow\",\n  \"organization_deletion_behavior\": \"allow_if_empty\",\n  \"third_party_client_access\": {\n    \"default_value\": \"allow\",\n    \"allowed_values\": [\n      \"allow\"\n    ]\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
       },
-      "uuid": "ddb32f2f-bb17-4551-8c51-a0f78dbb849f",
+      "uuid": "6408a1a2-98b8-4c29-b15f-17b2c9b9db75",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -127,8 +127,8 @@
       "postServeActions": []
     },
     {
-      "id": "ae9deb4a-5848-4ca1-b163-f6bcbafaa9e9",
-      "name": "List User Stores - default",
+      "id": "6122bec8-ad02-4575-8785-3354f98e4a55",
+      "name": "List User Stores - getUserStoresResponseExample",
       "request": {
         "urlPathTemplate": "/user-stores",
         "method": "GET",
@@ -138,6 +138,13 @@
           }
         },
         "queryParameters": {
+          "member_access_level": {
+            "hasExactly": [
+              {
+                "equalTo": "none"
+              }
+            ]
+          },
           "is_enabled": {
             "equalTo": "true"
           }
@@ -150,7 +157,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "ae9deb4a-5848-4ca1-b163-f6bcbafaa9e9",
+      "uuid": "6122bec8-ad02-4575-8785-3354f98e4a55",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -164,8 +171,8 @@
       "postServeActions": []
     },
     {
-      "id": "bd99fc7f-05db-4c0a-8386-d3665f0719ca",
-      "name": "List domains - default",
+      "id": "db02a313-8a43-4071-87d7-0d15bd2d26e0",
+      "name": "List domains - listOrgDomainsResponseExample",
       "request": {
         "urlPathTemplate": "/domains",
         "method": "GET",
@@ -190,7 +197,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "bd99fc7f-05db-4c0a-8386-d3665f0719ca",
+      "uuid": "db02a313-8a43-4071-87d7-0d15bd2d26e0",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -204,8 +211,8 @@
       "postServeActions": []
     },
     {
-      "id": "0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2",
-      "name": "Create a domain - default",
+      "id": "11952e27-c837-49f7-be35-80be3f545a8c",
+      "name": "Create a domain - createOrgDomainResponseExample",
       "request": {
         "urlPathTemplate": "/domains",
         "method": "POST",
@@ -222,7 +229,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "0d1dcca2-642a-4199-b3fe-00d5ec1c8bc2",
+      "uuid": "11952e27-c837-49f7-be35-80be3f545a8c",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -235,8 +242,8 @@
       }
     },
     {
-      "id": "a3c27ba8-01e3-4c19-8725-d3281492d7a6",
-      "name": "Get a domain - default",
+      "id": "4444919f-7bcd-4034-aa50-a59f14c9b216",
+      "name": "Get a domain - getOrgDomainResponseExample",
       "request": {
         "urlPathTemplate": "/domains/{domain_id}",
         "method": "GET",
@@ -258,7 +265,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "a3c27ba8-01e3-4c19-8725-d3281492d7a6",
+      "uuid": "4444919f-7bcd-4034-aa50-a59f14c9b216",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -307,8 +314,8 @@
       }
     },
     {
-      "id": "8b89e2ae-9635-46f3-b4e8-fc575b9b6157",
-      "name": "List Identity Providers - default",
+      "id": "11d47f7f-d5a5-43f5-aea7-569c6ce3bd63",
+      "name": "List Identity Providers - listIdPsResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers",
         "method": "GET",
@@ -318,6 +325,13 @@
           }
         },
         "queryParameters": {
+          "member_access_level": {
+            "hasExactly": [
+              {
+                "equalTo": "none"
+              }
+            ]
+          },
           "is_enabled": {
             "equalTo": "true"
           }
@@ -330,7 +344,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "8b89e2ae-9635-46f3-b4e8-fc575b9b6157",
+      "uuid": "11d47f7f-d5a5-43f5-aea7-569c6ce3bd63",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -344,8 +358,8 @@
       "postServeActions": []
     },
     {
-      "id": "3e11b717-d0f8-4c19-9f25-9aaba50cba21",
-      "name": "Create an Identity Provider - default",
+      "id": "a6f57fc1-f7ac-4b02-8f4d-bd3fe46eecd4",
+      "name": "Create an Identity Provider - createIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers",
         "method": "POST",
@@ -362,7 +376,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "3e11b717-d0f8-4c19-9f25-9aaba50cba21",
+      "uuid": "a6f57fc1-f7ac-4b02-8f4d-bd3fe46eecd4",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -375,8 +389,8 @@
       }
     },
     {
-      "id": "58ee7dab-8682-4472-892e-bd11d76b0671",
-      "name": "Get an Identity Provider - default",
+      "id": "ebff1d9b-9b46-4505-ad12-9dbda71462b0",
+      "name": "Get an Identity Provider - getIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}",
         "method": "GET",
@@ -398,7 +412,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "58ee7dab-8682-4472-892e-bd11d76b0671",
+      "uuid": "ebff1d9b-9b46-4505-ad12-9dbda71462b0",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -447,8 +461,8 @@
       }
     },
     {
-      "id": "97299d05-1531-4f32-8e96-5a64fc5751f8",
-      "name": "Update an Identity Provider - default",
+      "id": "44ef7b8f-877a-4ec9-8be1-7204c4c0c994",
+      "name": "Update an Identity Provider - updateIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}",
         "method": "PATCH",
@@ -470,7 +484,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "97299d05-1531-4f32-8e96-5a64fc5751f8",
+      "uuid": "44ef7b8f-877a-4ec9-8be1-7204c4c0c994",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -483,8 +497,8 @@
       }
     },
     {
-      "id": "9925321b-b5a5-4ccc-abb9-04139e218c65",
-      "name": "Refresh Identity Provider attribute mapping - default",
+      "id": "1e4d66ac-950b-4cd7-a16d-65e8adb4a94b",
+      "name": "Refresh Identity Provider attribute mapping - getIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/update-attributes",
         "method": "PUT",
@@ -506,7 +520,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "9925321b-b5a5-4ccc-abb9-04139e218c65",
+      "uuid": "1e4d66ac-950b-4cd7-a16d-65e8adb4a94b",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -555,8 +569,8 @@
       }
     },
     {
-      "id": "8a221b24-aed6-4bfe-bfdb-c4329d8e2181",
-      "name": "List members - default",
+      "id": "7d845899-c08f-4508-a7cb-134b5d39faca",
+      "name": "List members - listOrgDomainsResponseExample",
       "request": {
         "urlPathTemplate": "/members",
         "method": "GET",
@@ -590,7 +604,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "8a221b24-aed6-4bfe-bfdb-c4329d8e2181",
+      "uuid": "7d845899-c08f-4508-a7cb-134b5d39faca",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -604,8 +618,8 @@
       "postServeActions": []
     },
     {
-      "id": "fae3f220-6c07-455b-b799-d153a5d10715",
-      "name": "Get a member - default",
+      "id": "9a6aefd1-96f4-48e6-943b-0e62bf9cfd0c",
+      "name": "Get a member - listOrgDomainsResponseExample",
       "request": {
         "urlPathTemplate": "/members/{user_id}",
         "method": "GET",
@@ -635,7 +649,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "fae3f220-6c07-455b-b799-d153a5d10715",
+      "uuid": "9a6aefd1-96f4-48e6-943b-0e62bf9cfd0c",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -648,8 +662,8 @@
       }
     },
     {
-      "id": "615842a1-853a-4670-8ba3-e4825a6bd0af",
-      "name": "Delete memberships - default",
+      "id": "c6126f0a-ce12-4ccd-a21c-8313aebc991f",
+      "name": "Delete memberships - deleteOrganizationMembershipsRequestExample",
       "request": {
         "urlPathTemplate": "/delete-memberships",
         "method": "POST",
@@ -666,7 +680,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "615842a1-853a-4670-8ba3-e4825a6bd0af",
+      "uuid": "c6126f0a-ce12-4ccd-a21c-8313aebc991f",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -679,8 +693,8 @@
       }
     },
     {
-      "id": "78503755-437a-4f13-bb75-fbf050b174b1",
-      "name": "List member invitations - default",
+      "id": "4e72920b-af60-44e5-a6ba-aede11137221",
+      "name": "List member invitations - listMembersInvitationsResponseExample",
       "request": {
         "urlPathTemplate": "/member-invitations",
         "method": "GET",
@@ -717,7 +731,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "78503755-437a-4f13-bb75-fbf050b174b1",
+      "uuid": "4e72920b-af60-44e5-a6ba-aede11137221",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -731,8 +745,8 @@
       "postServeActions": []
     },
     {
-      "id": "55c94d5e-e08c-471f-b76f-111cd557f5ca",
-      "name": "Create member invitations - default",
+      "id": "81839c8d-109e-443d-835e-bd23c6354a48",
+      "name": "Create member invitations - listMembersInvitationsResponseExample",
       "request": {
         "urlPathTemplate": "/member-invitations",
         "method": "POST",
@@ -749,7 +763,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "55c94d5e-e08c-471f-b76f-111cd557f5ca",
+      "uuid": "81839c8d-109e-443d-835e-bd23c6354a48",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -762,8 +776,8 @@
       }
     },
     {
-      "id": "4ff79cd1-af44-44e4-89b7-a95ccbe9c6f3",
-      "name": "Revoke member invitations - default",
+      "id": "78f2977f-3fa4-424d-8018-d99dbc92c08a",
+      "name": "Revoke member invitations - deleteMemberInvitationsRequestExample",
       "request": {
         "urlPathTemplate": "/delete-member-invitations",
         "method": "POST",
@@ -780,7 +794,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "4ff79cd1-af44-44e4-89b7-a95ccbe9c6f3",
+      "uuid": "78f2977f-3fa4-424d-8018-d99dbc92c08a",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -793,8 +807,8 @@
       }
     },
     {
-      "id": "1a5a7d10-bc8e-44b0-ab8a-e611721f0d64",
-      "name": "Get a member invitation - default",
+      "id": "bf390045-ef2a-4a70-8a73-16e2fc5363e0",
+      "name": "Get a member invitation - GetMemberInvitationResponseExample",
       "request": {
         "urlPathTemplate": "/member-invitations/{invitation_id}",
         "method": "GET",
@@ -824,7 +838,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "1a5a7d10-bc8e-44b0-ab8a-e611721f0d64",
+      "uuid": "bf390045-ef2a-4a70-8a73-16e2fc5363e0",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -837,8 +851,8 @@
       }
     },
     {
-      "id": "d7eb85d6-a74e-47c7-b669-d9c33ad0aa81",
-      "name": "List roles - default",
+      "id": "7e78a97c-a095-412c-863f-ef31d9d6c7c0",
+      "name": "List roles - listRolesResponseExample",
       "request": {
         "urlPathTemplate": "/roles",
         "method": "GET",
@@ -866,7 +880,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "d7eb85d6-a74e-47c7-b669-d9c33ad0aa81",
+      "uuid": "7e78a97c-a095-412c-863f-ef31d9d6c7c0",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -880,8 +894,8 @@
       "postServeActions": []
     },
     {
-      "id": "a032561e-549d-47e8-8ebb-dad06d2a6ce4",
-      "name": "Get Identity Provider configuration - default",
+      "id": "8b9f07ca-37e5-4810-82fa-fe76436925f8",
+      "name": "Get Identity Provider configuration - getIdpConfigurationResponseExample",
       "request": {
         "urlPathTemplate": "/config/identity-providers",
         "method": "GET",
@@ -898,7 +912,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "a032561e-549d-47e8-8ebb-dad06d2a6ce4",
+      "uuid": "8b9f07ca-37e5-4810-82fa-fe76436925f8",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -912,8 +926,8 @@
       "postServeActions": []
     },
     {
-      "id": "1a6cb620-9021-415a-98b0-c777a13f658e",
-      "name": "Start domain verification - default",
+      "id": "071dc861-6513-45ca-bbde-07ee67629ad7",
+      "name": "Start domain verification - updateOrgDomainResponseExample",
       "request": {
         "urlPathTemplate": "/domains/{domain_id}/verify",
         "method": "POST",
@@ -935,7 +949,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "1a6cb620-9021-415a-98b0-c777a13f658e",
+      "uuid": "071dc861-6513-45ca-bbde-07ee67629ad7",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -948,8 +962,8 @@
       }
     },
     {
-      "id": "7c8ea4b7-2528-4c67-b0d6-336bbc4e6110",
-      "name": "List Identity Providers for a domain - default",
+      "id": "164da659-84d8-460d-9e8a-e2aa8206eb25",
+      "name": "List Identity Providers for a domain - getOrgDomainIdentityProvidersResponseExample",
       "request": {
         "urlPathTemplate": "/domains/{domain_id}/identity-providers",
         "method": "GET",
@@ -971,7 +985,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "7c8ea4b7-2528-4c67-b0d6-336bbc4e6110",
+      "uuid": "164da659-84d8-460d-9e8a-e2aa8206eb25",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -984,8 +998,8 @@
       }
     },
     {
-      "id": "79faaaa8-f657-4412-a338-31db2a0c22fc",
-      "name": "Associate a domain with an Identity Provider - default",
+      "id": "8d1092ea-dd63-4d47-be98-5400f6d5590b",
+      "name": "Associate a domain with an Identity Provider - createIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/domains",
         "method": "POST",
@@ -1007,7 +1021,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "79faaaa8-f657-4412-a338-31db2a0c22fc",
+      "uuid": "8d1092ea-dd63-4d47-be98-5400f6d5590b",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1059,8 +1073,8 @@
       }
     },
     {
-      "id": "3ef1a37b-4761-4156-9d5f-1330d174d47b",
-      "name": "Get a Provisioning Configuration - default",
+      "id": "c24355de-8f84-4694-bd72-97dd531392b5",
+      "name": "Get a Provisioning Configuration - getIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/provisioning",
         "method": "GET",
@@ -1082,7 +1096,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "3ef1a37b-4761-4156-9d5f-1330d174d47b",
+      "uuid": "c24355de-8f84-4694-bd72-97dd531392b5",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1095,8 +1109,8 @@
       }
     },
     {
-      "id": "a58b006c-012a-4283-b025-5b0fc5d9c644",
-      "name": "Create a Provisioning Configuration - default",
+      "id": "028859ea-0007-45a9-9463-044b0d9067e3",
+      "name": "Create a Provisioning Configuration - createIdPProvisioningResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/provisioning",
         "method": "POST",
@@ -1118,7 +1132,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "a58b006c-012a-4283-b025-5b0fc5d9c644",
+      "uuid": "028859ea-0007-45a9-9463-044b0d9067e3",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1167,8 +1181,8 @@
       }
     },
     {
-      "id": "b52f90fe-1fb8-43af-b6c6-92036c78eafd",
-      "name": "Refresh Provisioning Configuration attribute mapping - default",
+      "id": "98cc5ac5-93ef-4cdf-8ef0-9eac5d023886",
+      "name": "Refresh Provisioning Configuration attribute mapping - getIdPResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/update-attributes",
         "method": "PUT",
@@ -1190,7 +1204,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "b52f90fe-1fb8-43af-b6c6-92036c78eafd",
+      "uuid": "98cc5ac5-93ef-4cdf-8ef0-9eac5d023886",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1203,8 +1217,8 @@
       }
     },
     {
-      "id": "e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce",
-      "name": "List Provisioning SCIM tokens - default",
+      "id": "bcdcd71b-d2a7-4d9a-b4ab-22d5e5c95c46",
+      "name": "List Provisioning SCIM tokens - listOrgDomainsResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/scim-tokens",
         "method": "GET",
@@ -1226,7 +1240,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "e0c33ec4-40b3-42d5-8a5c-0dd959cdb9ce",
+      "uuid": "bcdcd71b-d2a7-4d9a-b4ab-22d5e5c95c46",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1239,8 +1253,8 @@
       }
     },
     {
-      "id": "97c46081-373a-430e-a4bb-91e718763cd8",
-      "name": "Create a Provisioning SCIM token - default",
+      "id": "1fc598f0-4985-4b9b-89cb-6ab5dc54325a",
+      "name": "Create a Provisioning SCIM token - createIdPProvisioningScimTokenResponseExample",
       "request": {
         "urlPathTemplate": "/identity-providers/{idp_id}/provisioning/scim-tokens",
         "method": "POST",
@@ -1262,7 +1276,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "97c46081-373a-430e-a4bb-91e718763cd8",
+      "uuid": "1fc598f0-4985-4b9b-89cb-6ab5dc54325a",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1314,8 +1328,8 @@
       }
     },
     {
-      "id": "78855d86-9c34-431d-9d2a-2cda50cd9271",
-      "name": "List roles for a member invitation - default",
+      "id": "d138cd8f-e92f-489d-87e8-76101146b933",
+      "name": "List roles for a member invitation - getMemberInvitationRolesResponseExample",
       "request": {
         "urlPathTemplate": "/member-invitations/{invitation_id}/roles",
         "method": "GET",
@@ -1337,7 +1351,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "78855d86-9c34-431d-9d2a-2cda50cd9271",
+      "uuid": "d138cd8f-e92f-489d-87e8-76101146b933",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1350,8 +1364,8 @@
       }
     },
     {
-      "id": "3b86d015-abf6-4c97-b708-237ed2ad30e3",
-      "name": "List member roles - default",
+      "id": "c8ae9a84-d822-47b5-8ec8-a500489495dc",
+      "name": "List member roles - listOrganizationMemberRolesResponseExample",
       "request": {
         "urlPathTemplate": "/members/{user_id}/roles",
         "method": "GET",
@@ -1381,7 +1395,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "3b86d015-abf6-4c97-b708-237ed2ad30e3",
+      "uuid": "c8ae9a84-d822-47b5-8ec8-a500489495dc",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1394,8 +1408,8 @@
       }
     },
     {
-      "id": "fc74ad7a-df90-438a-80ba-908648d37c76",
-      "name": "Assign roles to a member - default",
+      "id": "c3e57548-ed49-4b95-8fe8-a14e5e0c9492",
+      "name": "Assign roles to a member - assignOrganizationMemberRolesRequestExample",
       "request": {
         "urlPathTemplate": "/members/{user_id}/roles",
         "method": "POST",
@@ -1417,7 +1431,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "fc74ad7a-df90-438a-80ba-908648d37c76",
+      "uuid": "c3e57548-ed49-4b95-8fe8-a14e5e0c9492",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -1430,8 +1444,8 @@
       }
     },
     {
-      "id": "c5b1c25a-99e9-4641-859c-ae712240e6b7",
-      "name": "Remove roles from a member - default",
+      "id": "92fe0986-38e3-4b6b-a686-77bc46d724eb",
+      "name": "Remove roles from a member - unassignOrganizationMemberRolesRequestExample",
       "request": {
         "urlPathTemplate": "/members/{user_id}/unassign-roles",
         "method": "POST",
@@ -1453,7 +1467,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "c5b1c25a-99e9-4641-859c-ae712240e6b7",
+      "uuid": "92fe0986-38e3-4b6b-a686-77bc46d724eb",
       "persistent": true,
       "priority": 3,
       "metadata": {

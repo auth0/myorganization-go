@@ -30,14 +30,39 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve a list of all members for this Organization. The `roles` field is only included for each member when the token also carries the `read:my_org:member_roles` scope; without that scope the `roles` field is omitted from the response.
+//
+// Example:
+//
+//	request := &myorganization.ListOrganizationMembersRequestParameters{
+//	    Fields: myorganization.String(
+//	        "fields",
+//	    ),
+//	    IncludeFields: myorganization.Bool(
+//	        true,
+//	    ),
+//	    From: myorganization.String(
+//	        "from",
+//	    ),
+//	    Take: myorganization.Int(
+//	        1,
+//	    ),
+//	    IncludeTotals: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.Members.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *myorganization.ListOrganizationMembersRequestParameters,
@@ -78,6 +103,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -93,7 +119,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -105,6 +131,22 @@ func (c *Client) List(
 }
 
 // Retrieve details of a member specified by user ID for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.GetOrganizationMemberRequestParameters{
+//	    Fields: myorganization.String(
+//	        "fields",
+//	    ),
+//	    IncludeFields: myorganization.Bool(
+//	        true,
+//	    ),
+//	}
+//	client.Organization.Members.Get(
+//	    context.TODO(),
+//	    "user_id",
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	userID myorganization.OrgMemberID,

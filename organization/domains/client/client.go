@@ -33,14 +33,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:           options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieve a list of all pending and verified domains for this Organization.
+//
+// Example:
+//
+//	request := &myorganization.ListOrganizationDomainsRequestParameters{
+//	    From: myorganization.String(
+//	        "from",
+//	    ),
+//	    Take: myorganization.Int(
+//	        1,
+//	    ),
+//	}
+//	client.Organization.Domains.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *myorganization.ListOrganizationDomainsRequestParameters,
@@ -79,6 +95,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -94,7 +111,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,6 +123,16 @@ func (c *Client) List(
 }
 
 // Create a domain for an Auth0 Organization and optionally enable Organization Discovery for members during the user login flow
+//
+// Example:
+//
+//	request := &myorganization.CreateOrganizationDomainRequestContent{
+//	    Domain: "acme.com",
+//	}
+//	client.Organization.Domains.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *myorganization.CreateOrganizationDomainRequestContent,
@@ -123,6 +150,13 @@ func (c *Client) Create(
 }
 
 // Retrieve the details of an Auth0 Organization domain using its unique domain ID, including the domain name and its current verification status.
+//
+// Example:
+//
+//	client.Organization.Domains.Get(
+//	    context.TODO(),
+//	    "domain_id",
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,
@@ -140,6 +174,13 @@ func (c *Client) Get(
 }
 
 // Delete an Auth0 Organization domain using its unique domain ID, including all associated details and verification status.
+//
+// Example:
+//
+//	client.Organization.Domains.Delete(
+//	    context.TODO(),
+//	    "domain_id",
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	domainID myorganization.OrgDomainID,
